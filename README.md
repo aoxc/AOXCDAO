@@ -34,7 +34,7 @@ It blends compliance, transparency, and governance into a unified framework.
 | :--- | :--- | :--- |
 | **Level 1** | Core architecture & schematics | 🏗️ In progress |
 | Level 2 | Intelligence & analytics integration | 📅 Planned |
-| Level 3 | Federation launch | 🚀 Planned |
+| Level 3 | Network Activation  launch | 🚀 Planned |
 
 ---
 
