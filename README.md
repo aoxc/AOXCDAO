@@ -2,7 +2,9 @@
 
 ---
 
-![AOXCDAO Banner Logo](/image/aoxc_logo_001_2026.png)
+<p align="center">
+  <img src="/image/aoxc_logo_001_2026.png" alt="AOXCDAO Banner Logo" width="600"/>
+</p>
 
 ---
 
@@ -58,12 +60,3 @@ src/
 🛠️ Tooling: Foundry + Solidity 0.8.33 baseline
 
 "We build with patience, aiming for resilience and clarity."
-
-
-This release introduces a completely new structure:
-
-🖼️ Logo/banner is placed prominently at the top for clear identity.
-
-⚠️ Advisory section is icon-driven, concise, and easy to read.
-
-📑 Content is original, not a copy, and enriched with visual cues for clarity.
