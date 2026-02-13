@@ -32,11 +32,6 @@ import { IReputationManager } from "../interfaces/IReputationManager.sol";
 import { IMonitoringHub } from "../interfaces/IMonitoringHub.sol";
 import { AOXCErrors } from "../libraries/AOXCErrors.sol";
 
-/**
- * @title AOXCGovernor
- * @author AOXC Core Engineering
- * @notice Reputation-weighted DAO governance system with high-fidelity forensic logging.
- */
 contract AOXCGovernor is
     Initializable,
     GovernorUpgradeable,
@@ -47,11 +42,9 @@ contract AOXCGovernor is
     AccessControlUpgradeable,
     UUPSUpgradeable
 {
-    // --- Access Control Roles ---
     bytes32 public constant UPGRADER_ROLE = keccak256("UPGRADER_ROLE");
     bytes32 public constant VETO_ROLE = keccak256("VETO_ROLE");
 
-    // --- State Variables ---
     IReputationManager public reputationManager;
     IMonitoringHub public monitoringHub;
 
@@ -60,16 +53,13 @@ contract AOXCGovernor is
         _disableInitializers();
     }
 
-    /**
-     * @notice Bootstrap the governance ecosystem.
-     */
     function initialize(
         IVotes _token,
         TimelockControllerUpgradeable _timelock,
         address _admin,
         IReputationManager _reputationManager,
         IMonitoringHub _monitoringHub
-    ) public initializer {
+    ) public virtual initializer {
         if (_admin == address(0) || address(_monitoringHub) == address(0)) {
             revert AOXCErrors.ZeroAddressDetected();
         }
@@ -79,6 +69,7 @@ contract AOXCGovernor is
         __GovernorTimelockControl_init(_timelock);
         __AccessControl_init();
         __Pausable_init();
+        // NOT: OZ v5'te __UUPSUpgradeable_init() kaldırıldı, bu yüzden burası boş kalmalı.
 
         reputationManager = _reputationManager;
         monitoringHub = _monitoringHub;
@@ -86,19 +77,12 @@ contract AOXCGovernor is
         _grantRole(DEFAULT_ADMIN_ROLE, _admin);
         _grantRole(UPGRADER_ROLE, _admin);
         _grantRole(VETO_ROLE, _admin);
-
-        _logToHub(IMonitoringHub.Severity.INFO, "INITIALIZE", "Governance Consensus Layer Active");
     }
 
-    // --- Reputation-Weighted Logic ---
-
-    /**
-     * @dev Applies the reputation multiplier to raw token votes.
-     * Logic: (rawVotes * multiplier) / 100.
-     */
     function _getVotes(address account, uint256 timepoint, bytes memory params)
         internal
         view
+        virtual
         override(GovernorUpgradeable, GovernorVotesUpgradeable)
         returns (uint256)
     {
@@ -109,121 +93,7 @@ contract AOXCGovernor is
         return (rawVotes * multiplier) / 100;
     }
 
-    function _countVote(
-        uint256 proposalId,
-        address account,
-        uint8 support,
-        uint256 weight,
-        bytes memory params
-    )
-        internal
-        virtual
-        override(GovernorUpgradeable, GovernorCountingSimpleUpgradeable)
-        returns (uint256)
-    {
-        uint256 result = super._countVote(proposalId, account, support, weight, params);
-
-        // Participation Reward
-        try reputationManager.processAction(account, keccak256("GOVERNANCE_VOTE")) { } catch { }
-
-        _logToHub(IMonitoringHub.Severity.INFO, "VOTE_CAST", "Participation recorded");
-        return result;
-    }
-
-    // --- Mandatory Overrides & Forensics ---
-
-    function _queueOperations(
-        uint256 proposalId,
-        address[] memory targets,
-        uint256[] memory values,
-        bytes[] memory calldatas,
-        bytes32 descriptionHash
-    ) internal override(GovernorUpgradeable, GovernorTimelockControlUpgradeable) returns (uint48) {
-        _logToHub(IMonitoringHub.Severity.WARNING, "PROPOSAL_QUEUED", "Action entering Timelock");
-        return super._queueOperations(proposalId, targets, values, calldatas, descriptionHash);
-    }
-
-    function _executeOperations(
-        uint256 proposalId,
-        address[] memory targets,
-        uint256[] memory values,
-        bytes[] memory calldatas,
-        bytes32 descriptionHash
-    ) internal override(GovernorUpgradeable, GovernorTimelockControlUpgradeable) {
-        _logToHub(
-            IMonitoringHub.Severity.CRITICAL, "PROPOSAL_EXECUTED", "State modification finalized"
-        );
-        super._executeOperations(proposalId, targets, values, calldatas, descriptionHash);
-    }
-
-    /**
-     * @dev Standardized 26-channel forensic logging for Governance actions.
-     */
-    function _logToHub(
-        IMonitoringHub.Severity severity,
-        string memory action,
-        string memory details
-    ) internal {
-        if (address(monitoringHub) != address(0)) {
-            IMonitoringHub.ForensicLog memory log = IMonitoringHub.ForensicLog({
-                source: address(this),
-                actor: msg.sender,
-                origin: tx.origin,
-                related: address(0),
-                severity: severity,
-                category: "GOVERNANCE",
-                details: details,
-                riskScore: severity >= IMonitoringHub.Severity.WARNING ? 70 : 10,
-                nonce: 0,
-                chainId: block.chainid,
-                blockNumber: block.number,
-                timestamp: block.timestamp,
-                gasUsed: gasleft(),
-                value: 0,
-                stateRoot: bytes32(0),
-                txHash: bytes32(0),
-                selector: msg.sig,
-                version: 1,
-                actionReq: severity >= IMonitoringHub.Severity.CRITICAL,
-                isUpgraded: false,
-                environment: 0,
-                correlationId: bytes32(0),
-                policyHash: bytes32(0),
-                sequenceId: 0,
-                metadata: abi.encodePacked(action),
-                proof: ""
-            });
-
-            try monitoringHub.logForensic(log) { } catch { }
-        }
-    }
-
-    // --- Quorum & Thresholds ---
-
-    function quorum(
-        uint256 /* timepoint */
-    )
-        public
-        view
-        virtual
-        override
-        returns (uint256)
-    {
-        return 4_000_000e18; // 4% of 100M supply
-    }
-
-    function votingDelay() public pure override returns (uint256) {
-        return 7_200;
-    }
-
-    function votingPeriod() public pure override returns (uint256) {
-        return 50_400;
-    }
-
-    function proposalThreshold() public pure override returns (uint256) {
-        return 100_000e18;
-    }
-
+    // --- Zorunlu Override'lar ---
     function state(uint256 proposalId)
         public
         view
@@ -242,16 +112,20 @@ contract AOXCGovernor is
         return super.proposalNeedsQueuing(proposalId);
     }
 
-    function _cancel(
-        address[] memory targets,
-        uint256[] memory values,
-        bytes[] memory calldatas,
-        bytes32 descriptionHash
-    ) internal override(GovernorUpgradeable, GovernorTimelockControlUpgradeable) returns (uint256) {
-        _logToHub(
-            IMonitoringHub.Severity.WARNING, "PROPOSAL_CANCELLED", "Governance action revoked"
-        );
-        return super._cancel(targets, values, calldatas, descriptionHash);
+    function quorum(uint256 timepoint) public view virtual override returns (uint256) {
+        return (token().getPastTotalSupply(timepoint) * 4) / 100;
+    }
+
+    function votingDelay() public pure virtual override returns (uint256) {
+        return 7200;
+    }
+
+    function votingPeriod() public pure virtual override returns (uint256) {
+        return 50400;
+    }
+
+    function proposalThreshold() public pure virtual override returns (uint256) {
+        return 100000e18;
     }
 
     function _executor()
@@ -263,6 +137,35 @@ contract AOXCGovernor is
         return super._executor();
     }
 
+    function _executeOperations(
+        uint256 proposalId,
+        address[] memory targets,
+        uint256[] memory values,
+        bytes[] memory calldatas,
+        bytes32 descriptionHash
+    ) internal override(GovernorUpgradeable, GovernorTimelockControlUpgradeable) {
+        super._executeOperations(proposalId, targets, values, calldatas, descriptionHash);
+    }
+
+    function _queueOperations(
+        uint256 proposalId,
+        address[] memory targets,
+        uint256[] memory values,
+        bytes[] memory calldatas,
+        bytes32 descriptionHash
+    ) internal override(GovernorUpgradeable, GovernorTimelockControlUpgradeable) returns (uint48) {
+        return super._queueOperations(proposalId, targets, values, calldatas, descriptionHash);
+    }
+
+    function _cancel(
+        address[] memory targets,
+        uint256[] memory values,
+        bytes[] memory calldatas,
+        bytes32 descriptionHash
+    ) internal override(GovernorUpgradeable, GovernorTimelockControlUpgradeable) returns (uint256) {
+        return super._cancel(targets, values, calldatas, descriptionHash);
+    }
+
     function supportsInterface(bytes4 interfaceId)
         public
         view
@@ -272,9 +175,11 @@ contract AOXCGovernor is
         return super.supportsInterface(interfaceId);
     }
 
-    function _authorizeUpgrade(address) internal override onlyRole(UPGRADER_ROLE) {
-        _logToHub(IMonitoringHub.Severity.CRITICAL, "GOVERNOR_UPGRADE", "Infrastructure migration");
-    }
+    function _authorizeUpgrade(address newImplementation)
+        internal
+        override
+        onlyRole(UPGRADER_ROLE)
+    { }
 
     uint256[46] private _gap;
 }

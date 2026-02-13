@@ -33,6 +33,7 @@ import { IMonitoringHub } from "../interfaces/IMonitoringHub.sol";
  * @author AOXC Core Engineering
  * @notice Main governance and utility asset for the AOXC Ecosystem.
  * @dev    Utilizes ERC-7201 Namespaced Storage and UUPS Proxy architecture.
+ * Implements high-fidelity 26-channel forensic logging for deep space security.
  */
 contract AOXC is
     Initializable,
@@ -68,6 +69,16 @@ contract AOXC is
         _disableInitializers();
     }
 
+    /**
+     * @notice Initializes the AOXC token infrastructure.
+     * @param name_ Token name
+     * @param symbol_ Token symbol
+     * @param admin Initial administrative authority
+     * @param policyEngine Address of the Transfer Policy Engine
+     * @param authorizer Address of the Upgrade Authorizer
+     * @param _monitoringHub Address of the Forensic Monitoring Hub
+     * @param _supplyCap Total supply ceiling
+     */
     function initialize(
         string memory name_,
         string memory symbol_,
@@ -84,7 +95,6 @@ contract AOXC is
         __ERC20Votes_init();
         __AccessControl_init();
         __Pausable_init();
-        // NOT: UUPS başlatıcı v5'te kaldırıldı.
 
         _grantRole(DEFAULT_ADMIN_ROLE, admin);
         _grantRole(ADMIN_ROLE, admin);
@@ -101,11 +111,18 @@ contract AOXC is
         monitoringHub = _monitoringHub;
         supplyCap = _supplyCap;
 
-        _logToHub(IMonitoringHub.Severity.INFO, "INITIALIZE", "Contract deployed and roles granted");
+        _logToHub(
+            IMonitoringHub.Severity.INFO,
+            "INITIALIZE",
+            "Protocol initialized: Galactic lifeblood active."
+        );
     }
 
     // --- External Logic ---
 
+    /**
+     * @notice Mints new AOXC tokens within the supply cap.
+     */
     function mint(address to, uint256 amount)
         external
         onlyRole(MINT_ROLE)
@@ -115,23 +132,32 @@ contract AOXC is
         _internalMint(to, amount);
     }
 
+    /**
+     * @notice Burns AOXC tokens from a specified address.
+     */
     function burn(address from, uint256 amount) external whenNotPaused nonReentrant {
         _checkRole(BURN_ROLE, msg.sender);
         _internalBurn(from, amount);
     }
 
+    /**
+     * @notice Triggers a total protocol halt for emergency mitigation.
+     */
     function toggleEmergencyHalt(bool status) external onlyRole(ADMIN_ROLE) {
         AOXCStorage.layout().isEmergencyHalt = status;
 
         _logToHub(
             status ? IMonitoringHub.Severity.CRITICAL : IMonitoringHub.Severity.WARNING,
             "EMERGENCY",
-            status ? "Halt Enabled" : "Halt Disabled"
+            status ? "Core Protocol Halted" : "Core Protocol Resumed"
         );
     }
 
     // --- Core Overrides ---
 
+    /**
+     * @dev Internal update function with integrated Policy Engine checks.
+     */
     function _update(address from, address to, uint256 amount)
         internal
         override(ERC20Upgradeable, ERC20VotesUpgradeable)
@@ -140,6 +166,7 @@ contract AOXC is
 
         if (ds.isEmergencyHalt) revert AOXC__EmergencyHaltActive();
 
+        // Enforce transfer policies if active and not a mint/burn
         if (
             ds.policyEnforcementActive && ds.transferPolicy != address(0) && from != address(0)
                 && to != address(0)
@@ -147,7 +174,9 @@ contract AOXC is
             try ITransferPolicy(ds.transferPolicy).validateTransfer(from, to, amount) { }
             catch {
                 _logToHub(
-                    IMonitoringHub.Severity.WARNING, "POLICY", "Transfer policy violation attempt"
+                    IMonitoringHub.Severity.WARNING,
+                    "POLICY",
+                    "Unauthorized transfer vector detected"
                 );
                 revert AOXC__PolicyViolation();
             }
@@ -156,19 +185,22 @@ contract AOXC is
         super._update(from, to, amount);
     }
 
+    /**
+     * @dev Authorizes logic upgrades through a dedicated External Authorizer.
+     */
     function _authorizeUpgrade(address newImpl) internal override onlyRole(UPGRADER_ROLE) {
         address authorizer = AOXCStorage.layout().upgradeAuthorizer;
         if (authorizer != address(0)) {
             IAOXCUpgradeAuthorizer(authorizer).validateUpgrade(msg.sender, newImpl);
             _logToHub(
-                IMonitoringHub.Severity.CRITICAL, "UPGRADE", "Upgrade authorized and validated"
+                IMonitoringHub.Severity.CRITICAL, "UPGRADE", "Logic upgrade sequence authorized."
             );
         } else {
             revert AOXC__UpgradeNotAuthorized();
         }
     }
 
-    // --- Helpers ---
+    // --- Helpers & Compliance ---
 
     function clock() public view override returns (uint48) {
         return uint48(block.number);
@@ -187,16 +219,17 @@ contract AOXC is
         if (to == address(0)) revert AOXC__ZeroAddress();
         if (totalSupply() + amount > supplyCap) revert AOXC__SupplyCapExceeded(amount, supplyCap);
         _mint(to, amount);
-        _logToHub(IMonitoringHub.Severity.INFO, "MINT", "Token supply increased");
+        _logToHub(IMonitoringHub.Severity.INFO, "MINT", "Supply expansion executed.");
     }
 
     function _internalBurn(address from, uint256 amount) internal {
         _burn(from, amount);
-        _logToHub(IMonitoringHub.Severity.INFO, "BURN", "Token supply decreased");
+        _logToHub(IMonitoringHub.Severity.INFO, "BURN", "Supply contraction executed.");
     }
 
     /**
      * @dev Implementation of high-fidelity 26-channel forensic logging.
+     * Maps the entire execution context for real-time risk assessment.
      */
     function _logToHub(
         IMonitoringHub.Severity severity,
