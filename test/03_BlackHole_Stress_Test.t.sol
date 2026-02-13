@@ -19,10 +19,10 @@ contract BlackHoleStressTest is Test {
         console.log("================================================================");
 
         // --- ATOMİK ÇÖZÜM: TOTAL FUNCTION OVERRIDE ---
-        // Eğer hasRole kontrolü bizi engelliyorsa, registerSector ve 
+        // Eğer hasRole kontrolü bizi engelliyorsa, registerSector ve
         // calibrateGlobalKinetic fonksiyonlarının kendilerini mock'lıyoruz.
         // Bu sayede modifier'lar (onlyRole) tamamen baypas edilir.
-        
+
         vm.mockCall(
             address(amiralGemisi),
             abi.encodeWithSelector(amiralGemisi.calibrateGlobalKinetic.selector),
@@ -52,21 +52,21 @@ contract BlackHoleStressTest is Test {
         // --- ADIM 1: SİSTEMİ MAKSİMUMDA ATEŞLE ---
         console.log("\n[STEP 1: MAXIMIZING KINETIC DRIVE]");
         // Mock kullandığımız için işlem başarılı dönecektir.
-        amiralGemisi.calibrateGlobalKinetic(600); 
+        amiralGemisi.calibrateGlobalKinetic(600);
         console.log(" -> Engines at 600%. (Bypassed security for test)");
 
         // --- ADIM 2: ANİ HASAR (SEKTÖR KAYBI) ---
         console.log("\n[STEP 2: CRITICAL FAILURE - SECTOR 1 DISCONNECTED]");
-        amiralGemisi.removeSector(1); 
+        amiralGemisi.removeSector(1);
         console.log(" -> WARNING: Sector 1 is LOST. Fleet formation broken!");
 
         // --- ADIM 3: KURTARMA OPERASYONU ---
         console.log("\n[STEP 3: AMIRAL STABILIZING THE FLEET]");
-        amiralGemisi.calibrateGlobalKinetic(100); 
-        amiralGemisi.toggleMonetaryGuard(true); 
-        
+        amiralGemisi.calibrateGlobalKinetic(100);
+        amiralGemisi.toggleMonetaryGuard(true);
+
         console.log(" -> Fleet stabilized. Monetary Guard: ACTIVE.");
-        
+
         vm.stopPrank();
         _finalReport();
     }

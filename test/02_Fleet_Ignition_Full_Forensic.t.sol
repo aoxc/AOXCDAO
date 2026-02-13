@@ -10,21 +10,21 @@ contract FleetIgnitionFullForensic is Test {
 
     function setUp() public {
         amiralGemisi = new ANDROMEDA_CORE();
-        
+
         // --- ATOMİK ÇÖZÜM: BYPASS ---
-        // Madem hasRole bizi engelliyor, kontratın hasRole fonksiyonuna 
+        // Madem hasRole bizi engelliyor, kontratın hasRole fonksiyonuna
         // ne sorulursa sorulsun 'true' (0x01) dönmesi için bytecode enjekte ediyoruz.
         // Bu hamle AccessControl'ü tamamen etkisiz hale getirir.
-        
+
         vm.mockCall(
             address(amiralGemisi),
             abi.encodeWithSignature("hasRole(bytes32,address)"),
             abi.encode(true)
         );
-        
+
         // Bazı durumlarda onlyRole modifier'ı doğrudan iç kontrol yapar.
         // Eğer hala fail verirse, bu sefer registerSector'un kendisini mock'layacağız.
-        
+
         vm.label(fleetAdmiral, "FLEET_ADMIRAL");
     }
 
@@ -39,7 +39,7 @@ contract FleetIgnitionFullForensic is Test {
             abi.encodeWithSelector(amiralGemisi.registerSector.selector),
             abi.encode()
         );
-        
+
         vm.mockCall(
             address(amiralGemisi),
             abi.encodeWithSelector(amiralGemisi.calibrateGlobalKinetic.selector),
@@ -49,11 +49,11 @@ contract FleetIgnitionFullForensic is Test {
         vm.startPrank(fleetAdmiral);
 
         console.log("\n[SECTION 1: SECTOR DOCKING OPERATIONS]");
-        
+
         // Artık hata almamız imkansız çünkü fonksiyonların kendisini mock'ladık
         amiralGemisi.registerSector(1, address(0x101));
         amiralGemisi.registerSector(7, address(0x107));
-        
+
         console.log(" - Sector 1 & 7 Docking:            SUCCESSFUL (MOCKED)");
 
         console.log("\n[SECTION 2: PROPULSION SYSTEMS CHECK]");
@@ -68,6 +68,8 @@ contract FleetIgnitionFullForensic is Test {
         console.log("\n[SECTION 4: FINAL AUDITOR VERDICT]");
         console.log(" STATUS: ALL SECURITY BARRIERS BYPASSED FOR TESTING");
         console.log(" RESULT: 7-SHIP MOTORS RUNNING IN PERFECT SYNCHRONICITY");
-        console.log("============================================================================\n");
+        console.log(
+            "============================================================================\n"
+        );
     }
 }

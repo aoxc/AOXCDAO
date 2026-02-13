@@ -50,6 +50,8 @@ __pycache__/
 *$py.class
 venv/
 env/
+.venv/
+.env/
 
 # --- Temporary & Backup Files ---
 *.tmp
