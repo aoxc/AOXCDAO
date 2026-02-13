@@ -18,7 +18,7 @@
 ---
 
 ## 🌟 Vision
-✨ **AOXC v2 Prime – Akdeniz** is a modular, institutional-grade token ecosystem.  
+✨ **AOXCDAO V2 – Akdeniz** is a modular, institutional-grade token ecosystem.  
 It blends compliance, transparency, and governance into a unified framework.  
 
 - ⚖️ **Compliance Embedded** – Regulatory alignment at bytecode level  
