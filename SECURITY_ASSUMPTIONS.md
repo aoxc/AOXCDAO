@@ -1,48 +1,55 @@
-# 🛡️ SECURITY ASSUMPTIONS: THE TRUST BOUNDARY FRAMEWORK
+# Security Assumptions: AOXC v2 Prime – Akdeniz
 
 ## 1. Purpose
-This document enumerates the explicit security assumptions of the **AOXC v2 Prime – Akdeniz** protocol. It defines the trust boundaries and the operational environment required for the system’s integrity. These assumptions serve as the baseline for our **Threat Model**.
+This document lists the main security assumptions for the **AOXC v2 Prime** protocol. It defines trust boundaries and the expected environment needed to keep the system reliable. These assumptions form the basis of the Threat Model.
 
 ---
 
-## 2. Governance & Consensus Assumptions
-* **Meritocratic Integrity:** A quorum of governance participants is assumed to act in the long-term strategic interest of the federation.
-* **Risk of Capture:** Governance capture is recognized as a systemic risk. It is mitigated by **$T_{delay}$ (Timelocks)** and strict role separation, rather than full elimination.
-* **Rationality:** Participants are assumed to prioritize protocol solvency over short-term personal gain.
+## 2. Governance & Consensus
+- Governance participants are expected to act in the long-term interest of the protocol.  
+- Governance capture is recognized as a risk; mitigated by timelocks and role separation.  
+- Participants are assumed to prioritize solvency over short-term gain.  
 
 ---
 
-## 3. Cryptographic & Key Management Assumptions
-* **Institutional Custody:** All privileged roles (`Governor`, `Guardian`, `Authorizer`) are assumed to be managed via **Multisignature Vaults** or Hardware Security Modules (HSM).
-* **Key Isolation:** Private keys are assumed to be stored in air-gapped environments or secure hardware wallets. Key compromise is treated as an operational failure, not a protocol design flaw.
+## 3. Cryptography & Key Management
+- Privileged roles (`Governor`, `Guardian`, `Authorizer`) should be managed via multisignature wallets or secure hardware.  
+- Private keys are expected to be stored in secure environments (HSM, hardware wallets).  
+- Key compromise is treated as an operational failure, not a protocol flaw.  
 
 ---
 
-## 4. Guardian & Emergency Response Assumptions
-* **Actor Independence:** Guardians are assumed to be non-colluding, independent entities.
-* **Trigger Conservatism:** The **Emergency Circuit Breaker** is assumed to be utilized only under verifiable threat conditions.
-* **Liveness:** Guardians are assumed to be monitoring the **ForensicPulse** signals and are capable of responding within defined SLA timeframes.
+## 4. Guardians & Emergency Response
+- Guardians are assumed to be independent and non-colluding.  
+- Emergency actions (circuit breakers, pauses) are expected to be used only under verified threats.  
+- Guardians are assumed to monitor signals (`monitoring/ForensicPulse.sol`) and respond within agreed timeframes.  
 
 ---
 
-## 5. External Infrastructure & Dependency Assumptions
-* **Oracle Reliability:** Off-chain data feeds (if applicable) are assumed to be resilient and correctly configured.
-* **Bridge Neutrality:** Cross-chain adapters are assumed to be isolated. A failure in an external bridge is assumed to be contained without mutating the **AOXC Core** state.
-* **Network Liveness:** The underlying EVM-compatible layer (X Layer) is assumed to be resistant to persistent 51% attacks.
+## 5. External Dependencies
+- Oracles (`infrastructure/PriceOracleAdapter.sol`) are assumed to be reliable and correctly configured.  
+- Bridges (`infrastructure/BridgeAdapter.sol`) are assumed to be isolated; external failures should not affect AOXC Core state.  
+- The underlying EVM-compatible layer is assumed to resist persistent consensus attacks.  
 
 ---
 
-## 6. Participant & End-User Assumptions
-* **Self-Custody Responsibility:** Users are assumed to be solely responsible for their private key security.
-* **Account Compromise:** Individual account breaches are considered out-of-scope and do not constitute a protocol-level incident.
+## 6. Participants & End-Users
+- Users are responsible for their own private key security.  
+- Individual account compromises are considered out-of-scope and not protocol-level incidents.  
 
 ---
 
-## 7. Residual Risk Statement
-Despite these rigorous assumptions, residual risks (e.g., zero-day compiler exploits, unforeseen economic attacks) remain. These risks are acknowledged as inherent to decentralized, upgradeable architectures and are managed through:
-1. Continuous **26-Channel Telemetry**.
-2. Proactive **Invariant Testing**.
-3. Periodic **Third-Party Security Audits**.
+## 7. Residual Risks
+Even with these assumptions, risks remain:
+- Zero-day compiler or library vulnerabilities  
+- Economic attacks not yet modeled  
+- Governance collusion beyond quorum thresholds  
+
+These are managed through:
+1. Continuous monitoring (`monitoring/SequenceManager.sol`, `monitoring/RiskSignals.sol`)  
+2. Invariant testing (`monitoring/AOXCInvariantChecker.sol`)  
+3. Periodic third-party audits  
 
 ---
-*"Security is not a state, but a continuous process of verification."*
+
+*"Security is not static; it requires ongoing verification."*
