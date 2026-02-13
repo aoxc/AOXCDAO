@@ -3,7 +3,7 @@
 ---
 
 <p align="center">
-  <img src="/image/aoxc_logo_002_2026.png" alt="AOXCDAO Banner Logo" width="100"/>
+  <img src="/image/aoxc_logo_001_2026.png" alt="AOXCDAO Banner Logo" width="150"/>
 </p>
 
 ---
