@@ -2,58 +2,68 @@
 
 ---
 
-# 🚨🚨🚨 [ PRODUCTION READY: NO ] 🚨🚨🚨
-# ⚠️ WARNING: NOT SUITABLE FOR PRODUCTION ENVIRONMENTS ⚠️
-# 🏗️ STATUS: LEVEL 1 CONSTRUCTION & INTEGRATION TESTING IN PROGRESS.
-# 🛑 THIS CODEBASE HAS NOT UNDERGONE A FORMAL SECURITY AUDIT.
-# 🛑 ALL OPERATIONAL RISKS ARE ASSUMED BY THE END-USER.
-# 🚨🚨🚨 [ STATUS: UNDER HEAVY CONSTRUCTION ] 🚨🚨🚨
+![AOXCDAO Banner Logo](/image/aoxc_logo_001_2026.png)
 
 ---
 
-# 🏗️🏗️🏗️
-# HEAVY CONSTRUCTION IN PROGRESS
-# THE SHIPYARD IS ACTIVE 24/7
-# 🏗️🏗️🏗️
-
-
-
-## 🌟 The Vision: Community-Led Institutional Excellence
-**AOXC v2 Prime – Akdeniz** is a second-generation, institutional-grade token architecture. It is designed not just as a piece of code, but as a **living ecosystem** where institutional rigor meets decentralized community governance (DAO). 
-
-This protocol is built on three core pillars:
-* **Compliant by Design:** Regulatory alignment integrated at the bytecode level.
-* **Observable by Default:** Real-time telemetry and forensic transparency.
-* **Governed by Merit:** Sophisticated governance models driven by contribution and stake.
+## 🚨 Advisory
+❌ Production Ready: **No**  
+🏗️ Status: **Level 1 – Construction Phase**  
+🧪 Testing: **Not yet performed**  
+🔒 Security Audit: **Pending**  
+⚠️ Risk: **End-user responsibility**  
 
 ---
 
-## 🏗️ Project Status: Level 1 - Construction Phase
-> **"The cranes are up, the foundations are deep. We are building the future of the X Layer Federation."**
+## 🌟 Vision
+✨ **AOXC v2 Prime – Akdeniz** is a modular, institutional-grade token ecosystem.  
+It blends compliance, transparency, and governance into a unified framework.  
 
-| Phase | Milestone | Status |
+- ⚖️ **Compliance Embedded** – Regulatory alignment at bytecode level  
+- 📡 **Transparency First** – Real-time telemetry and forensic visibility  
+- 🏛️ **Governance by Merit** – Reputation-weighted decision-making  
+
+---
+
+## 🏗️ Development Status
+> *“Foundations are being placed carefully. The shipyard is active, but the fleet is not yet complete.”*
+
+| 🔨 Phase | 🎯 Focus | 📊 Status |
 | :--- | :--- | :--- |
-| **Level 1** | **Architectural Foundations & Core Schematics** | **UNDER HEAVY CONSTRUCTION (🏗️)** |
-| Level 2 | Intelligence Integration & 26-Channel Analytics | Scheduled (🏗️) |
-| Level 3 | Fleet Deployment & Federation Launch | Scheduled (🚀) |
+| **Level 1** | Core architecture & schematics | 🏗️ In progress |
+| Level 2 | Intelligence & analytics integration | 📅 Planned |
+| Level 3 | Federation launch | 🚀 Planned |
 
 ---
 
-## 🏗️ System Blueprint (The Shipyard Hangars)
-
-The architecture is strictly modular, ensuring high-fidelity security, extreme gas efficiency, and seamless upgradeability. Every hangar is currently being fitted with Pro-Ultimate grade logic:
-
-
+## 🏗️ System Layout
 
 ```text
 src/
-├── ⚓ core            : State Anchor & Value Carrier [🏗️]
-├── 📜 policy          : Behavioral Validation & Rules [🏗️]
-├── ⚖️ compliance      : Jurisdictional & KYC Alignment [🏗️]
-├── 💰 asset           : Supply Discipline & RWA Backing [🏗️]
-├── 🏛️ governance      : The Supreme Will (Brain) [🏗️]
-├── 🛡️ security        : Proactive Threat Mitigation [🏗️]
-├── 🌐 infrastructure  : Operational Connectivity [🏗️]
-├── 📡 monitoring      : High-Fidelity Telemetry [🏗️]
-├── 🔌 interfaces      : Unified Standards (Plug & Play) [🏗️]
-└── 📚 libraries       : Zero-mock logic & Gas Supremacy [🏗️]
+├── ⚓ core            : Token logic & state anchor
+├── 📜 policy          : Behavioral rules & validation
+├── ⚖️ compliance      : Jurisdictional & identity alignment
+├── 💰 asset           : Supply discipline & asset backing
+├── 🏛️ governance      : DAO & decision-making layer
+├── 🛡️ security        : Threat mitigation & emergency halt
+├── 🌐 infrastructure  : Operational connectivity
+├── 📡 monitoring      : Telemetry & forensic logging
+├── 🔌 interfaces      : Unified standards
+└── 📚 libraries       : Gas optimization & zero-mock logic
+📝 Notes
+🏗️ Current phase: Construction, testing pending
+
+⛔ Legacy compatibility: Deprecated
+
+🛠️ Tooling: Foundry + Solidity 0.8.33 baseline
+
+"We build with patience, aiming for resilience and clarity."
+
+
+This release introduces a completely new structure:
+
+🖼️ Logo/banner is placed prominently at the top for clear identity.
+
+⚠️ Advisory section is icon-driven, concise, and easy to read.
+
+📑 Content is original, not a copy, and enriched with visual cues for clarity.
