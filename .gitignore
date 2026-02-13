@@ -1,0 +1,72 @@
+# 🏛️ AOXC v2 Prime | Enterprise-Grade Git Exclusion Policy
+
+# --- Foundry Build & Development ---
+out/
+cache/
+lib/
+# Keep libraries only if you are not using git submodules
+# !lib/forge-std
+
+# --- Local Environment & Security (CRITICAL) ---
+.env
+.env.*
+secrets.json
+*.pem
+*.key
+mnemonic.txt
+*password.txt
+# Prevent accidental leak of deployment private keys
+broadcast/
+cache/
+
+# --- Operating System Noise ---
+.DS_Store
+Thumbs.db
+.Spotlight-V100
+.Trashes
+
+# --- IDE & Editor Artifacts ---
+.vscode/
+!.vscode/extensions.json
+!.vscode/settings.json
+.idea/
+*.swp
+*.swo
+.project
+.settings/
+.classpath
+
+# --- Testing & Analysis Reports ---
+coverage/
+lcov.info
+gas-report.txt
+slither-reports/
+aderyn-report.json
+*.log
+
+# --- Python / Tooling Noise (if used for scripts) ---
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+env/
+
+# --- Temporary & Backup Files ---
+*.tmp
+*.bak
+*.old
+*.orig
+.cache/
+
+# --- Hardhat (Optional Compatibility) ---
+artifacts/
+typechain/
+typechain-types/
+
+---
+
+# 🚀 Next Step Recommendation:
+Bu dosyayı `.gitignore` adıyla ana dizine kaydettiğinde, tersanen dış dünyaya karşı tamamen izole ve güvenli hale gelecek. 
+
+Şimdi GitHub'a göndereceğimiz ilk "ağır" kod paketini hazırlayalım mı? 
+**`src/interfaces/`** klasörünün içine, manifestoda belirttiğimiz tüm modüllerin (Governance, Compliance, Monitoring) birbirleriyle konuşmasını sağlayacak **Full Interface Set**'i yazmamı ister misin?

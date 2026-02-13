@@ -1,0 +1,59 @@
+[profile.default]
+# --- PROJECT STRUCTURE ---
+src             = "src"
+out             = "out"
+libs            = ["lib"]
+test            = "test"
+script          = "script"
+cache_path      = "cache"
+
+# --- COMPILER SETTINGS (0.8.33 Prime) ---
+# Optimized for high-fidelity institutional deployment
+solc_version    = "0.8.33"
+via_ir          = true
+optimizer       = true
+optimizer_runs  = 1_000_000
+bytecode_hash   = "none"
+evm_version     = "cancun" # Fully compatible with X Layer
+
+# --- REMAPPINGS (Zero-Legacy Policy) ---
+# Removed upgradeable paths to prevent accidental use of old OpenZeppelin patterns
+remappings = [
+    "@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/",
+    "@interfaces/=src/interfaces/",
+    "@libraries/=src/libraries/",
+    "@core/=src/core/",
+    "forge-std/=lib/forge-std/src/"
+]
+# --- TEST AND FUZZING (Stress Test Level) ---
+[fuzz]
+runs              = 1000
+max_test_rejects  = 65536
+
+[invariant]
+runs             = 512      # Deep state exploration
+depth            = 32       # Complexity for long-running attack vectors
+fail_on_revert   = true     # Academic Rigor: No unexpected reverts allowed
+
+# --- FORMATTING (Institutional Standards) ---
+[fmt]
+line_length             = 100
+tab_width               = 4
+bracket_spacing         = true
+single_quote            = false
+check_functions_order   = true
+
+# --- NETWORK AND RPC (X Layer Infrastructure) ---
+[rpc_endpoints]
+xlayer_mainnet   = "https://xlayerrpc.okx.com"
+xlayer_testnet   = "https://testrpc.xlayer.okx.com"
+
+# --- VERIFICATION (OKLink API Integration) ---
+[etherscan]
+xlayer_mainnet   = { key = "${XLAYER_API_KEY}", url = "https://www.oklink.com/api/v5/explorer/xlayer/api" }
+xlayer_testnet   = { key = "${XLAYER_API_KEY}", url = "https://www.oklink.com/api/v5/explorer/xlayer-test/api" }
+
+# --- DEPENDENCIES (Single Source of Truth) ---
+# Using the stable 5.5.x branch for modular security
+[dependencies]
+openzeppelin-contracts = "5.5.0"
