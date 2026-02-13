@@ -1,9 +1,9 @@
-# 🏛️ AOXC v2 Prime – Akdeniz
+# 🏛️ AOXCDAO V2 – Akdeniz
 
 ---
 
 <p align="center">
-  <img src="/image/aoxc_logo_001_2026.png" alt="AOXCDAO Banner Logo" width="600"/>
+  <img src="/image/aoxc_logo_001_2026.png" alt="AOXCDAO Banner Logo" width="300"/>
 </p>
 
 ---
