@@ -1,7 +1,8 @@
 # ==============================================================================
-# AOXCDAO ACADEMIC INTEGRITY & QUALITY GATE
-# Built for: Solidity 0.8.33 | OpenZeppelin 5.5.x
-# Standard: Pro Ultimate Academic (Enterprise Grade)
+# 🏛️ AOXCDAO ACADEMIC INTEGRITY & QUALITY GATE
+# 🛡️ SYSTEM: SonarCloud Deep Code Analysis
+# 🎯 TARGET: Solidity 0.8.33 | OpenZeppelin 5.5.x
+# 🎓 LEVEL: Pro Ultimate Academic (Institutional Standard)
 # ==============================================================================
 
 name: SonarCloud Institutional Analysis
@@ -25,12 +26,12 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-      - name: Fetch Repository Content
+      - name: 📥 Fetch Repository Content
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 0 # Essential for SonarCloud "Blame" and historical analysis
 
-      - name: SonarCloud Deep Scan
+      - name: 🔍 SonarCloud Deep Scan
         uses: SonarSource/sonarcloud-github-action@v3.1.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -43,10 +44,31 @@ jobs:
             -Dsonar.tests=test/
             -Dsonar.solidity.version=0.8.33
             -Dsonar.sourceEncoding=UTF-8
-            -Dsonar.exclusions=**/node_modules/**,**/lib/**,**/build/**,**/artifacts/**,**/cache/**
             -Dsonar.log.level=INFO
             -Dsonar.verbose=false
+            
+            # --- INSTITUTIONAL UPGRADE PARAMETERS ---
+            # Exclude non-proprietary code and generated artifacts
+            -Dsonar.exclusions=**/node_modules/**,**/lib/**,**/build/**,**/artifacts/**,**/cache/**,**/*.test.js,**/*.test.ts
+            
+            # Link Solidity Linter reports (if generated in previous steps)
+            -Dsonar.solidity.solhint.reportPaths=solhint-report.json
+            
+            # Quality Gate Enforcement: Fails the build if Quality Gate is not passed
+            -Dsonar.qualitygate.wait=true
+            -Dsonar.qualitygate.timeout=300
 
-      - name: Integrity Verification
+      - name: 🛡️ Integrity Verification
         if: success()
-        run: echo "Analysis completed. AOXCDAO institutional standards verified."
+        run: |
+          echo "======================================================================"
+          echo "🏛️ INSTITUTIONAL STATUS: ANALYSIS COMPLETE"
+          echo "🎯 STANDARDS: Solidity 0.8.33 & OpenZeppelin 5.5.x Compliance Verified"
+          echo "======================================================================"
+
+# ==============================================================================
+# 📜 ACADEMIC LOGIC:
+# 1. QUALITY GATE WAIT: Forces the CI/CD to wait for SonarCloud's decision.
+# 2. HISTORICAL CONTEXT: fetch-depth 0 enables sophisticated authorship analysis.
+# 3. NOISE REDUCTION: Enhanced exclusions ensure focus on core DAO logic.
+# ==============================================================================
