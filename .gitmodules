@@ -1,24 +1,26 @@
 # ==============================================================================
 # 🏛️ AOXCDAO INSTITUTIONAL DEPENDENCY CONFIGURATION
-# 🛡️ FRAMEWORK: Foundry / Forge Standard Library
-# ⚖️ COMPLIANCE: OpenZeppelin 5.5.x Protocol Suite
-# 🎓 LEVEL: Pro Ultimate Academic
+# 🛡️ FRAMEWORK: Foundry Standard Library
+# ⚖️ COMPLIANCE: OpenZeppelin Contracts v5.5.0 (Pinned Tag)
+# 🎓 LEVEL: Institutional-Grade Deterministic Build
 # ==============================================================================
 
 [submodule "lib/forge-std"]
 	path = lib/forge-std
 	url = https://github.com/foundry-rs/forge-std
-	branch = master
-	description = "Institutional-grade testing utilities for Foundry environment."
 
 [submodule "lib/openzeppelin-contracts"]
 	path = lib/openzeppelin-contracts
 	url = https://github.com/OpenZeppelin/openzeppelin-contracts
-	branch = master
-	description = "Enterprise-standard smart contract libraries (v5.5.x baseline)."
+
+[submodule "lib/openzeppelin-contracts-upgradeable"]
+	path = lib/openzeppelin-contracts-upgradeable
+	url = https://github.com/OpenZeppelin/openzeppelin-contracts-upgradeable
 
 # ==============================================================================
 # 📜 AOXCDAO QUALITY GATE
-# All dependencies are tracked via secure submodules to ensure code immutability 
-# and verifiable provenance across the development lifecycle.
+# - All dependencies are pinned via Git submodule commit hashes.
+# - Version control is enforced via Forge tag installation (v5.5.0).
+# - No floating branches are permitted in production environments.
 # ==============================================================================
+
