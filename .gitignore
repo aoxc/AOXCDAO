@@ -1,13 +1,26 @@
-# 🏛️ AOXC v2 Prime | Enterprise-Grade Git Exclusion Policy
+# ==============================================================================
+# 🏛️ AOXCDAO INSTITUTIONAL GIT EXCLUSION POLICY
+# 🛡️ SCOPE: Solidity 0.8.33 | Foundry Framework | Enterprise Security
+# 🎓 LEVEL: Pro Ultimate Academic
+# ==============================================================================
 
-# --- Foundry Build & Development ---
+# --- 🏗️ COMPILATION & BUILD ARTIFACTS ---
+# Local build outputs and cached metadata
 out/
 cache/
+artifacts/
+typechain/
+typechain-types/
+
+# --- 📦 DEPENDENCY MANAGEMENT ---
+# External libraries are managed via git submodules or specific managers
 lib/
-# Keep libraries only if you are not using git submodules
+node_modules/
+# Keep forge-std for local consistency if necessary
 # !lib/forge-std
 
-# --- Local Environment & Security (CRITICAL) ---
+# --- 🔐 CRYPTOGRAPHIC & SENSITIVE DATA (CRITICAL) ---
+# Strict exclusion of private keys, environment variables, and mnemonics
 .env
 .env.*
 secrets.json
@@ -15,17 +28,22 @@ secrets.json
 *.key
 mnemonic.txt
 *password.txt
-# Prevent accidental leak of deployment private keys
+# Foundry deployment broadcast data (contains private key metadata)
 broadcast/
-cache/
 
-# --- Operating System Noise ---
-.DS_Store
-Thumbs.db
-.Spotlight-V100
-.Trashes
+# --- 🧪 ANALYSIS & TELEMETRY ---
+# Local testing coverage, gas metrics, and audit tool artifacts
+coverage/
+lcov.info
+gas-report.txt
+.gas-snapshot
+slither-reports/
+aderyn-report.json
+*.log
+slither.db.json
 
-# --- IDE & Editor Artifacts ---
+# --- 🛠️ IDE & WORKSPACE CONFIGURATION ---
+# Preventing local environment leakage into global history
 .vscode/
 !.vscode/extensions.json
 !.vscode/settings.json
@@ -36,15 +54,8 @@ Thumbs.db
 .settings/
 .classpath
 
-# --- Testing & Analysis Reports ---
-coverage/
-lcov.info
-gas-report.txt
-slither-reports/
-aderyn-report.json
-*.log
-
-# --- Python / Tooling Noise (if used for scripts) ---
+# --- 🐍 TOOLING & SCRIPTING (Python/Node) ---
+# Artifacts from auxiliary scripts or monitoring tools
 __pycache__/
 *.py[cod]
 *$py.class
@@ -53,22 +64,21 @@ env/
 .venv/
 .env/
 
-# --- Temporary & Backup Files ---
+# --- 🖥️ OPERATING SYSTEM ARTIFACTS ---
+.DS_Store
+Thumbs.db
+.Spotlight-V100
+.Trashes
+
+# --- ♻️ TEMPORARY & RECOVERY FILES ---
 *.tmp
 *.bak
 *.old
 *.orig
 .cache/
 
-# --- Hardhat (Optional Compatibility) ---
-artifacts/
-typechain/
-typechain-types/
-
----
-
-# 🚀 Next Step Recommendation:
-Bu dosyayı `.gitignore` adıyla ana dizine kaydettiğinde, tersanen dış dünyaya karşı tamamen izole ve güvenli hale gelecek. 
-
-Şimdi GitHub'a göndereceğimiz ilk "ağır" kod paketini hazırlayalım mı? 
-**`src/interfaces/`** klasörünün içine, manifestoda belirttiğimiz tüm modüllerin (Governance, Compliance, Monitoring) birbirleriyle konuşmasını sağlayacak **Full Interface Set**'i yazmamı ister misin?
+# ==============================================================================
+# 📜 AOXCDAO QUALITY GATE
+# This exclusion policy ensures that sensitive keys and local build noise 
+# never pollute the institutional ledger.
+# ==============================================================================
