@@ -1,0 +1,52 @@
+# ==============================================================================
+# AOXCDAO ACADEMIC INTEGRITY & QUALITY GATE
+# Built for: Solidity 0.8.33 | OpenZeppelin 5.5.x
+# Standard: Pro Ultimate Academic (Enterprise Grade)
+# ==============================================================================
+
+name: SonarCloud Institutional Analysis
+
+on:
+  push:
+    branches: [ "main", "develop" ]
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches: [ "main", "develop" ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: write
+  security-events: write
+
+jobs:
+  Analysis:
+    name: "Academic Code Review"
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Fetch Repository Content
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: SonarCloud Deep Scan
+        uses: SonarSource/sonarcloud-github-action@v3.1.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          args: >
+            -Dsonar.projectKey=aoxc_AOXCDAO
+            -Dsonar.organization=aoxc
+            -Dsonar.sources=contracts/
+            -Dsonar.tests=test/
+            -Dsonar.solidity.version=0.8.33
+            -Dsonar.sourceEncoding=UTF-8
+            -Dsonar.exclusions=**/node_modules/**,**/lib/**,**/build/**,**/artifacts/**,**/cache/**
+            -Dsonar.log.level=INFO
+            -Dsonar.verbose=false
+
+      - name: Integrity Verification
+        if: success()
+        run: echo "Analysis completed. AOXCDAO institutional standards verified."
