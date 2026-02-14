@@ -1,0 +1,60 @@
+name: "AOXCDAO Institutional Security"
+
+on:
+  push:
+    branches: [ "main", "develop" ]
+  pull_request:
+    branches: [ "main", "develop" ]
+
+jobs:
+  analyze-solidity:
+    name: "Solidity Security & Linting"
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js (For OpenZeppelin 5.5.x & Linting)
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Dependencies
+        run: |
+          npm install
+          # Ensure OpenZeppelin 5.5.x is present
+          npm list @openzeppelin/contracts | grep "5.5"
+
+      - name: Run Solhint (Academic Linting)
+        run: |
+          npx solhint 'contracts/**/*.sol'
+          # Bu adım lint hatası varsa workflow'u durdurur.
+
+      - name: Run Slither (Pro Static Analysis)
+        uses: crytic/slither-action@v0.4.0
+        with:
+          target: 'contracts/'
+          # Solidity 0.8.33 uyumluluğunu ve ReentrancyGuard kontrolünü yapar.
+
+  codeql-analysis:
+    name: "CodeQL Logic Analysis"
+    runs-on: ubuntu-latest
+    permissions:
+      security-events: write
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [ 'javascript-typescript' ] # Scriptler ve testler için
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: ${{ matrix.language }}
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
