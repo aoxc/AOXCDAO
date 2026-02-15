@@ -22,7 +22,7 @@ contract AOXC_V2 is AOXC {
      * @dev Gap updated to camelCase to satisfy Forge-Lint (mixed-case-variable).
      * Total storage integrity is maintained through ERC-7201.
      */
-    uint256[50] private _gapV2; 
+    uint256[50] private _gapV2;
 
     /**
      * @notice Updates the supply cap in V2 logic.
