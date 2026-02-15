@@ -1,10 +1,10 @@
 # ==============================================================================
 # 🏛️ AOXCDAO INSTITUTIONAL DEPENDENCY & BUILD GUARD
-# 🛡️ SCOPE: Solidity 0.8.33 / OpenZeppelin 5.5.x Compliance
+# 🛡️ ARCHITECTURE: Least Privilege / Deterministic Build / OZ v5.5 Enforcement
 # 🎓 LEVEL: Pro Ultimate Academic / Enterprise Grade
 # ==============================================================================
 
-name: "AOXCDAO Institutional Dependency & Build Guard"
+name: "🛡️ AOXCDAO Dependency & Build Guard"
 
 on:
   pull_request:
@@ -12,10 +12,21 @@ on:
   push:
     branches: [ develop ]
 
+# --- [GLOBAL SECURITY HARDENING] ---
+# Tüm workflow için yetkileri varsayılan olarak sıfırlıyoruz.
+# Sadece repoyu okuma izni veriyoruz (CWE-275 Fix).
+permissions:
+  contents: read
+
 jobs:
   deterministic-build:
     name: "Deterministic Build & Integrity"
     runs-on: ubuntu-latest
+    
+    # İş seviyesinde de yetkiyi kısıtlayarak güvenliği çift katmanlı yapıyoruz.
+    permissions:
+      contents: read
+      pull-requests: read
 
     steps:
       # -------------------------------------------------
@@ -28,12 +39,12 @@ jobs:
           fetch-depth: 0
 
       # -------------------------------------------------
-      # STABLE FOUNDRY INSTALLATION (FIXED)
+      # STABLE FOUNDRY INSTALLATION
       # -------------------------------------------------
       - name: 🛠️ Install Foundry (Institutional Latest)
         uses: foundry-rs/foundry-toolchain@v1
         with:
-          version: nightly # Hatalı tarihli sürüm yerine güncel nightly/stable kullanıldı
+          version: nightly
 
       - name: 🔍 Verify Forge Environment
         run: |
@@ -79,7 +90,10 @@ jobs:
       # -------------------------------------------------
       - name: 📐 Remappings & Format Integrity
         run: |
-          git diff --exit-code remappings.txt || (echo "❌ remappings.txt was modified" && exit 1)
+          # Remappings.txt kontrolü (eğer dosya mevcutsa)
+          if [ -f "remappings.txt" ]; then
+            git diff --exit-code remappings.txt || (echo "❌ remappings.txt was modified" && exit 1)
+          fi
           forge fmt --check
 
       # -------------------------------------------------
