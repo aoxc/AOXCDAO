@@ -7,7 +7,7 @@ import {
     AccessControlEnumerable
 } from "@openzeppelin/contracts/access/extensions/AccessControlEnumerable.sol";
 import { Pausable } from "@openzeppelin/contracts/utils/Pausable.sol";
-import { AOXCConstants } from "../libraries/AOXCConstants.sol";
+import { AOXCConstants } from "@libraries/AOXCConstants.sol";
 
 /**
  * @title AOXCAccessCoordinator

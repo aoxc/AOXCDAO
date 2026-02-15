@@ -2,17 +2,34 @@
   "name": "@aoxc/core",
   "version": "1.0.0",
   "description": "AOXC DAO Core Smart Contracts",
+  "author": "AOXC Academic Team",
+  "license": "MIT",
+  "private": true,
+  "packageManager": "yarn@4.12.0",
   "engines": {
     "node": ">=20.0.0"
   },
-  "scripts": {
-    "build": "forge build",
-    "test": "forge test",
-    "lint": "solhint 'src/**/*.sol'",
-    "version:major": "npm version major",
-    "version:minor": "npm version minor",
-    "version:patch": "npm version patch"
+  "dependencies": {
+    "@openzeppelin/contracts": "5.5.0",
+    "@openzeppelin/contracts-upgradeable": "5.5.0"
   },
-  "author": "AOXC Academic Team",
-  "license": "MIT"
+  "devDependencies": {
+    "prettier": "^3.2.5",
+    "prettier-plugin-solidity": "^1.4.1",
+    "solhint": "^4.5.0"
+  },
+  "scripts": {
+    "build": "forge build --silent",
+    "rebuild": "forge clean && forge build --silent",
+    "test": "forge test -vv",
+    "coverage": "forge coverage",
+    "gas": "forge test --gas-report",
+    "snapshot": "forge snapshot",
+    "lint": "yarn run solhint 'src/**/*.sol' --fix",
+    "format": "yarn exec prettier --write 'src/**/*.sol' --plugin=prettier-plugin-solidity",
+    "clean": "forge clean",
+    "version:major": "yarn version major",
+    "version:minor": "yarn version minor",
+    "version:patch": "yarn version patch"
+  }
 }

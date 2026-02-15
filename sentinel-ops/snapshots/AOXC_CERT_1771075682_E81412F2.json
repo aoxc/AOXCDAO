@@ -1,0 +1,61 @@
+{
+    "attestation": {
+        "fingerprint": "E81412F2462EE98C1606A6B8D964E9CF025CB806F67E1E728E30C4CD0997FAF3",
+        "notary_seal": "AOXC-V2-AKDENIZ-SUPREME-NOTARY",
+        "authority": "AOXC DAO",
+        "repository": "https://github.com/aoxc/AOXCDAO",
+        "contact": "aoxcdao@gmail.com",
+        "timestamp": "2026-02-14T13:28:02.966194",
+        "range": "52262911-52306141"
+    },
+    "payload": [
+        {
+            "address": "0xeB9580c3946BB47d73AAE1d4f7A94148B554b2F4",
+            "topics": [
+                "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef",
+                "0x000000000000000000000000360e68faccca8ca495c1b759fd9eee466db9fb32",
+                "0x000000000000000000000000d1b8997aac08c619d40be2e4284c9c72cab33954"
+            ],
+            "data": "0x0000000000000000000000000000000000000000000000000021329418f6fd8f",
+            "blockNumber": 52284763,
+            "transactionHash": "0xbf3104fe3704e59ce1038a292358c6e37613cf8f5c557788b70805acb83a7e42",
+            "transactionIndex": 1,
+            "blockHash": "0x8ddb0410f08d222489f8a6fe858fe027858bbd95c52e18c3bc211d90aaa8c442",
+            "blockTimestamp": "0x699022e7",
+            "logIndex": 4,
+            "removed": false
+        },
+        {
+            "address": "0xeB9580c3946BB47d73AAE1d4f7A94148B554b2F4",
+            "topics": [
+                "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef",
+                "0x000000000000000000000000d1b8997aac08c619d40be2e4284c9c72cab33954",
+                "0x0000000000000000000000000ad10d77ce1dc3b6f6e0baeb872bff525d81fe59"
+            ],
+            "data": "0x0000000000000000000000000000000000000000000000000021329418f6fd8f",
+            "blockNumber": 52284763,
+            "transactionHash": "0xbf3104fe3704e59ce1038a292358c6e37613cf8f5c557788b70805acb83a7e42",
+            "transactionIndex": 1,
+            "blockHash": "0x8ddb0410f08d222489f8a6fe858fe027858bbd95c52e18c3bc211d90aaa8c442",
+            "blockTimestamp": "0x699022e7",
+            "logIndex": 5,
+            "removed": false
+        },
+        {
+            "address": "0xeB9580c3946BB47d73AAE1d4f7A94148B554b2F4",
+            "topics": [
+                "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef",
+                "0x0000000000000000000000000ad10d77ce1dc3b6f6e0baeb872bff525d81fe59",
+                "0x000000000000000000000000360e68faccca8ca495c1b759fd9eee466db9fb32"
+            ],
+            "data": "0x0000000000000000000000000000000000000000000000000021329418f6fd8f",
+            "blockNumber": 52284763,
+            "transactionHash": "0xbf3104fe3704e59ce1038a292358c6e37613cf8f5c557788b70805acb83a7e42",
+            "transactionIndex": 1,
+            "blockHash": "0x8ddb0410f08d222489f8a6fe858fe027858bbd95c52e18c3bc211d90aaa8c442",
+            "blockTimestamp": "0x699022e7",
+            "logIndex": 6,
+            "removed": false
+        }
+    ]
+}

@@ -1,12 +1,12 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.33;
 
-import { IMonitoringHub } from "../interfaces/IMonitoringHub.sol";
-import { IEmergencyPauseGuard } from "../interfaces/IEmergencyPauseGuard.sol";
+import { IMonitoringHub } from "@interfaces/IMonitoringHub.sol";
+import { IEmergencyPauseGuard } from "@interfaces/IEmergencyPauseGuard.sol";
 import {
     AccessControlUpgradeable
 } from "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
-import { AOXCErrors } from "../libraries/AOXCErrors.sol";
+import { AOXCErrors } from "@libraries/AOXCErrors.sol";
 import { Initializable } from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 
 /**

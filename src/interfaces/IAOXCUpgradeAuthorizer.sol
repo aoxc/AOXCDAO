@@ -19,4 +19,3 @@ interface IAOXCUpgradeAuthorizer {
     function isUpgradeAuthorized(address implementation) external view returns (bool authorized);
     function getAuthorizerVersion() external pure returns (uint256 version);
 }
-

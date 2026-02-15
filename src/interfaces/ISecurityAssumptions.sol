@@ -13,4 +13,3 @@ interface ISecurityAssumptions {
     /// @notice External bridge infrastructure is assumed to validate messages correctly
     function assumesBridgeIntegrity() external pure returns (bool);
 }
-

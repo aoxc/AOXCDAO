@@ -13,8 +13,8 @@ import {
 } from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 import { ReentrancyGuard } from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
-import { IMonitoringHub } from "../interfaces/IMonitoringHub.sol";
-import { IReputationManager } from "../interfaces/IReputationManager.sol";
+import { IMonitoringHub } from "@interfaces/IMonitoringHub.sol";
+import { IReputationManager } from "@interfaces/IReputationManager.sol";
 
 /**
  * @title AssetBackingLedger

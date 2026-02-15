@@ -1,34 +1,79 @@
-# 🏛️ AOXC v2 Prime | Enterprise-Grade Git Exclusion Policy
+# ==============================================================================
+# 🏛️ AOXCDAO INSTITUTIONAL GIT EXCLUSION POLICY V5.0
+# 🛡️ ARCHITECTURE: Foundry Submodules / Yarn Berry / Hardhat Integration
+# 🎓 LEVEL: Pro Ultimate Academic (Enterprise Grade / 2026 Secured)
+# ==============================================================================
 
-# --- Foundry Build & Development ---
+# --- 🏗️ COMPILATION & BUILD ARTIFACTS ---
+# Eliminating all deterministic build leftovers
 out/
 cache/
-lib/
-# Keep libraries only if you are not using git submodules
-# !lib/forge-std
+artifacts/
+typechain/
+typechain-types/
+cache_hardhat/
+target/
 
-# --- Local Environment & Security (CRITICAL) ---
+# --- 📦 DEPENDENCY MANAGEMENT (YARN BERRY / NPM) ---
+# Enforcing 'Zero-Install' stability while ignoring bloat
+node_modules/
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+!.yarn/install-state.gz
+
+# --- 🧶 YARN SPECIFIC NOISE ---
+yarn-error.log
+yarn-debug.log*
+.eslintcache
+.stylelintcache
+*.tsbuildinfo
+
+# --- 🧪 FOUNDRY & ANALYSIS ARTIFACTS ---
+# Pro-Tip: We do NOT ignore 'lib/' entirely because AOXCDAO uses submodules.
+# We only ignore potential junk inside dependencies.
+lib/*/.git
+lib/*/.github
+lib/*/test
+lib/*/spec
+
+# Foundry specific snapshots and logs
+.gas-snapshot
+.forge-snapshot
+gas-report.txt
+coverage/
+lcov.info
+
+# --- 🔐 CRYPTOGRAPHIC & SENSITIVE DATA (CRITICAL) ---
+# Zero-tolerance policy for private key leaks
 .env
 .env.*
+.secrets
 secrets.json
 *.pem
 *.key
 mnemonic.txt
 *password.txt
-# Prevent accidental leak of deployment private keys
+# Critical: Forge broadcast logs contain deployment private keys/addresses
 broadcast/
-cache/
 
-# --- Operating System Noise ---
-.DS_Store
-Thumbs.db
-.Spotlight-V100
-.Trashes
+# --- 🔍 STATIC ANALYSIS & SECURITY AUDIT ---
+# Ignoring local scan databases and temporary reports
+slither-reports/
+slither.db.json
+aderyn-report.json
+mythril_reports/
+corpus/
+*.log
 
-# --- IDE & Editor Artifacts ---
-.vscode/
+# --- 🛠️ IDE & WORKSPACE CONFIGURATION ---
+# Preserving team extensions while ignoring user-specific state
+.vscode/*
 !.vscode/extensions.json
-!.vscode/settings.json
 .idea/
 *.swp
 *.swo
@@ -36,37 +81,22 @@ Thumbs.db
 .settings/
 .classpath
 
-# --- Testing & Analysis Reports ---
-coverage/
-lcov.info
-gas-report.txt
-slither-reports/
-aderyn-report.json
-*.log
+# --- 🖥️ OPERATING SYSTEM ARTIFACTS ---
+.DS_Store
+Thumbs.db
+.Spotlight-V100
+.Trashes
 
-# --- Python / Tooling Noise (if used for scripts) ---
-__pycache__/
-*.py[cod]
-*$py.class
-venv/
-env/
-
-# --- Temporary & Backup Files ---
+# --- ♻️ TEMPORARY & RECOVERY FILES ---
 *.tmp
 *.bak
 *.old
 *.orig
 .cache/
+.foundry/
 
-# --- Hardhat (Optional Compatibility) ---
-artifacts/
-typechain/
-typechain-types/
-
----
-
-# 🚀 Next Step Recommendation:
-Bu dosyayı `.gitignore` adıyla ana dizine kaydettiğinde, tersanen dış dünyaya karşı tamamen izole ve güvenli hale gelecek. 
-
-Şimdi GitHub'a göndereceğimiz ilk "ağır" kod paketini hazırlayalım mı? 
-**`src/interfaces/`** klasörünün içine, manifestoda belirttiğimiz tüm modüllerin (Governance, Compliance, Monitoring) birbirleriyle konuşmasını sağlayacak **Full Interface Set**'i yazmamı ister misin?
+# ==============================================================================
+# 📜 AOXCDAO QUALITY GATE
+# VERSION: 5.0.0 (Institutional Grade)
+# STATUS: Fully compliant with 0.8.33 Hardhat/Foundry Hybrid Architecture.
+# ==============================================================================

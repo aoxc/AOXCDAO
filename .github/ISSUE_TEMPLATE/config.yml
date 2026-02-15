@@ -1,0 +1,26 @@
+# ==============================================================================
+# 🏛️ AOXCDAO ISSUE CONFIGURATION
+# 🛡️ SYSTEM: Governance & Triage Management
+# 🎓 LEVEL: Pro Ultimate Academic
+# ==============================================================================
+
+blank_issues_enabled: false # Prevents users from bypassing institutional templates
+
+contact_links:
+  - name: "📜 Institutional Documentation"
+    url: "https://docs.aoxc.io" # Replace with your real docs link
+    about: "Read the official AOXCDAO technical specifications before reporting."
+
+  - name: "💬 Technical Governance (Discord)"
+    url: "https://discord.gg/aoxc" # Replace with your real Discord link
+    about: "Join our core developers for real-time technical discussions."
+
+  - name: "⚖️ Security Policy"
+    url: "https://github.com/aoxc/AOXCDAO/security/policy"
+    about: "If you found a critical vulnerability, please report it via our private security channel."
+
+# ==============================================================================
+# 📜 LOGIC:
+# By disabling blank issues, we ensure every submission follows the academic 
+# standards defined in bug_report.md and feature_request.md.
+# ==============================================================================

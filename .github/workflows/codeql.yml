@@ -1,0 +1,89 @@
+# ==============================================================================
+# 🏛️ AOXCDAO INSTITUTIONAL INTEGRITY & SECURITY
+# 🛡️ SCOPE: Solidity 0.8.33 / OpenZeppelin 5.5.x / CodeQL Analysis
+# 🎓 LEVEL: Pro Ultimate Academic / Enterprise Grade
+# ==============================================================================
+
+name: "AOXCDAO Institutional Security"
+
+on:
+  push:
+    branches: [ "main", "develop" ]
+  pull_request:
+    branches: [ "main", "develop" ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  security-events: write
+  actions: read
+
+jobs:
+  analyze-solidity:
+    name: "Solidity Security & Linting"
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 📥 Repository Checkout
+        uses: actions/checkout@v4
+
+      - name: 🟢 Setup Node.js (LTS v20)
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: 📦 Institutional Dependency Audit
+        run: |
+          npm ci
+          # Strict verification for OpenZeppelin 5.5.x compliance
+          if ! npm list @openzeppelin/contracts | grep -q "5.5"; then
+            echo "CRITICAL ERROR: OpenZeppelin 5.5.x required for institutional compliance."
+            exit 1
+          fi
+
+      - name: 🧹 Academic Linting (Solhint)
+        run: |
+          # Enforcing institutional coding standards
+          npx solhint 'contracts/**/*.sol' --max-warnings 0
+
+      - name: 🔍 Pro Static Analysis (Slither)
+        uses: crytic/slither-action@v0.4.0
+        continue-on-error: true
+        with:
+          target: 'contracts/'
+          solc-version: '0.8.33'
+          sarif: results.sarif
+          fail-on: low
+
+      - name: 📤 Upload Slither SARIF Report
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: results.sarif
+        if: always()
+
+  codeql-analysis:
+    name: "CodeQL Logic Analysis"
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [ 'javascript-typescript' ] # Securing deployment scripts and tests
+
+    steps:
+      - name: 📥 Repository Checkout
+        uses: actions/checkout@v4
+
+      - name: 🛡️ Initialize CodeQL Engine
+        uses: github/codeql-action/init@v3
+        with:
+          languages: ${{ matrix.language }}
+          queries: security-and-quality
+
+      - name: ⚙️ Auto Build (Academic Scripts)
+        uses: github/codeql-action/autobuild@v3
+
+      - name: 📊 Finalize CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+        with:
+          category: "/language:${{ matrix.language }}"

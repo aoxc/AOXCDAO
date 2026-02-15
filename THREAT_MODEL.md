@@ -1,78 +1,75 @@
-# ⚔️ THREAT MODEL: AOXC v2 PRIME – AKDENİZ
+# Threat Model: AOXC v2 Prime – Akdeniz
 
 ## 1. Purpose
-This document defines the comprehensive threat landscape for the **AOXC v2 Prime** protocol. It identifies credible adversaries, protected assets, trust boundaries, and the technical mitigations enforced by the architecture.
-
-The goal is to provide transparency on which risks are addressed **on-chain (programmatic)** and which are managed **operationally (governance)**.
+This document describes the main security risks for the **AOXC v2 Prime** protocol. It highlights possible adversaries, critical components, and the mitigations applied. The aim is to provide clarity on which risks are handled on-chain and which are managed through governance.
 
 ---
 
 ## 2. System Scope & Boundaries
 
-### 2.1 In-Scope (The Protected Surface)
-* **Core Ledger:** `AOXC.sol`, `AOXCStorage.sol`, `Mint/RedeemControllers`.
-* **Governance Logic:** `AOXCGovernor.sol`, `AOXCTimelock.sol`.
-* **Asset Integrity:** `Treasury.sol`, `AssetBackingLedger.sol`.
-* **Compliance:** `IIdentityRegistry.sol`, `TransferPolicyEngine.sol`.
-* **Gateways:** `BridgeAdapters`, `RelayerGateways`, `PriceOracle`.
+### 2.1 In-Scope
+- **Core Ledger:** `core/AOXC.sol`, `core/AOXCStorage.sol`, `asset/MintController.sol`, `asset/RedeemController.sol`
+- **Governance Logic:** `governance/AOXCGovernor.sol`, `governance/AOXCTimelock.sol`
+- **Asset Integrity:** `infrastructure/Treasury.sol`, `asset/AssetBackingLedger.sol`
+- **Compliance:** `compliance/IdentityRegistry.sol`, `policy/TransferPolicyEngine.sol`
+- **Gateways:** `infrastructure/BridgeAdapter.sol`, `infrastructure/RelayerGateway.sol`, `infrastructure/PriceOracleAdapter.sol`
 
-### 2.2 Out-of-Scope (External Risks)
-* End-user private key management (Self-custody).
-* Frontend/UI phishing or DNS hijacking.
-* Underlying Layer-1 / L2 (X Layer) consensus failures.
-
----
-
-## 3. Adversary Model & Attack Vectors
-
-### 3.1 External Attacker (The Predator)
-* **Capabilities:** Flash loans, MEV reordering, oracle front-running, arbitrary contract calls.
-* **Primary Targets:** Draining collateral, inflating supply, bypassing KYC.
-
-### 3.2 Privileged Insider (The Malicious Actor)
-* **Capabilities:** Compromised Guardian, Controller, or Governor key.
-* **Primary Targets:** Unauthorized minting, censorship, malicious upgrades.
-
-### 3.3 Colluding Entities (The Federation Breach)
-* **Capabilities:** Multi-role collusion (e.g., Guardian + Controller).
-* **Primary Targets:** Systemic value extraction and permanent trust erosion.
+### 2.2 Out-of-Scope
+- End-user private key management  
+- Frontend/UI phishing or DNS hijacking  
+- Layer-1 / L2 consensus failures  
 
 ---
 
-## 4. Threat Categories & Programmatic Mitigations
+## 3. Adversary Model
 
-| Threat Category | Attack Vector | Technical Mitigation |
-| :--- | :--- | :--- |
-| **Unauthorized Minting** | Hidden inflation / Re-entrancy | `onlyController` modifier + `ReentrancyGuard` + `totalSupply <= collateralValue` invariant. |
-| **Oracle Manipulation** | Price staleness / Flash loan skew | `Timestamp` validation + `Deviation Thresholds` + `Emergency Circuit Breakers`. |
-| **Governance Abuse** | Flash proposal / Hostile takeover | `Governance_Delay` ($T_{delay}$) + `Quorum` requirements + `Guardian` override. |
-| **Upgrade Attacks** | Proxy hijacking / Storage collision | `AOXCUpgradeAuthorizer` + `Frozen Storage Layout` + `Explicit Namespace Protection`. |
-| **Compliance Bypass** | Jurisdictional evasion | `TransferPolicyEngine` hook in the atomic `_update` path. |
-| **Bridge Exploits** | Double-spending / Message forgery | `Core State Isolation` + `Rate Limiting` + `Replay Protection`. |
+### 3.1 External Attacker
+- **Capabilities:** Flash loans, MEV reordering, oracle manipulation  
+- **Targets:** Collateral draining, supply inflation, bypassing compliance  
 
----
+### 3.2 Privileged Insider
+- **Capabilities:** Compromised governance or controller keys  
+- **Targets:** Unauthorized minting, censorship, malicious upgrades  
 
-## 5. Failure Modes & Expected State
-
-* **Scenario: Oracle Staleness Detected** * *Behavior:* `AssetBackingLedger` returns error → Mint/Redeem functions revert immediately.
-* **Scenario: Governance Deadlock** * *Behavior:* Emergency Guardians trigger a temporary protocol freeze until the deadlock is resolved via `RoleAuthority`.
-* **Scenario: Bridge Compromise** * *Behavior:* Bridge adapter is disconnected via `Guardian` call; **AOXC Core** state remains immutable and secure.
+### 3.3 Colluding Entities
+- **Capabilities:** Multi-role collusion  
+- **Targets:** Value extraction, erosion of trust  
 
 ---
 
-## 6. Testing & Validation Matrix
-To ensure this threat model remains valid, the following protocols are enforced:
-1. **Fuzzing:** Targeted attacks on `MintController` invariants.
-2. **Static Analysis:** Zero-tolerance for Slither/Solhint high-severity findings.
-3. **Formal Verification:** Mathematical proof of the **Supply-to-Collateral** ratio.
+## 4. Threat Categories & Mitigations
+
+| Threat Category        | Attack Vector                  | Mitigation |
+| ---------------------- | ------------------------------ | ---------- |
+| Unauthorized Minting   | Hidden inflation, re-entrancy  | `onlyController`, `security/AOXCReentrancyGuard.sol`, supply/collateral invariant |
+| Oracle Manipulation    | Price staleness, flash loan skew | Timestamp checks, deviation thresholds, circuit breakers (`security/AOXCCircuitBreaker.sol`) |
+| Governance Abuse       | Flash proposals, hostile takeover | Delay periods, quorum requirements, guardian override (`security/GuardianRegistry.sol`) |
+| Upgrade Attacks        | Proxy hijacking, storage collision | `core/AOXCUpgradeAuthorizer.sol`, frozen storage layout |
+| Compliance Bypass      | Jurisdictional evasion         | Hooks in `policy/TransferPolicyEngine.sol` |
+| Bridge Exploits        | Double-spending, replay attacks | State isolation, rate limiting, replay protection |
 
 ---
 
-## 7. Residual Risk Statement
-The protocol acknowledges residual risks from:
-* Extreme L1 censorship or network halts.
-* Zero-day vulnerabilities in the Solidity compiler or OpenZeppelin core.
-* Majority governance collusion ($>67\%$).
+## 5. Failure Modes
+
+- **Oracle Staleness:** Mint/Redeem functions revert immediately.  
+- **Governance Deadlock:** Guardians may trigger a temporary freeze.  
+- **Bridge Compromise:** Bridge adapter disconnected; core state remains secure.  
 
 ---
-*"We do not hope for safety; we engineer it."*
+
+## 6. Validation Methods
+- **Fuzzing:** Invariant testing on mint/redeem logic  
+- **Static Analysis:** No high-severity findings tolerated  
+- **Formal Verification:** Proof of collateral ratio correctness  
+
+---
+
+## 7. Residual Risks
+- Layer-1 censorship or halts  
+- Compiler or library zero-day vulnerabilities  
+- Majority governance collusion  
+
+---
+
+*"Security is not assumed; it is continuously engineered."*

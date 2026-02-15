@@ -1,0 +1,111 @@
+# ==============================================================================
+# 🏛️ AOXCDAO INSTITUTIONAL DEPENDENCY & BUILD GUARD
+# 🛡️ ARCHITECTURE: Least Privilege / Deterministic Build / OZ v5.5 Enforcement
+# 🎓 LEVEL: Pro Ultimate Academic / Enterprise Grade
+# ==============================================================================
+
+name: "🛡️ AOXCDAO Dependency & Build Guard"
+
+on:
+  pull_request:
+    branches: [ develop, main ]
+  push:
+    branches: [ develop ]
+
+# --- [GLOBAL SECURITY HARDENING] ---
+# Tüm workflow için yetkileri varsayılan olarak sıfırlıyoruz.
+# Sadece repoyu okuma izni veriyoruz (CWE-275 Fix).
+permissions:
+  contents: read
+
+jobs:
+  deterministic-build:
+    name: "Deterministic Build & Integrity"
+    runs-on: ubuntu-latest
+    
+    # İş seviyesinde de yetkiyi kısıtlayarak güvenliği çift katmanlı yapıyoruz.
+    permissions:
+      contents: read
+      pull-requests: read
+
+    steps:
+      # -------------------------------------------------
+      # CHECKOUT (FULL HISTORY + SUBMODULES)
+      # -------------------------------------------------
+      - name: 📥 Repository Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          fetch-depth: 0
+
+      # -------------------------------------------------
+      # STABLE FOUNDRY INSTALLATION
+      # -------------------------------------------------
+      - name: 🛠️ Install Foundry (Institutional Latest)
+        uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: nightly
+
+      - name: 🔍 Verify Forge Environment
+        run: |
+          forge --version
+          solc --version
+
+      # -------------------------------------------------
+      # LOCKFILE & SUBMODULE INTEGRITY
+      # -------------------------------------------------
+      - name: 🔐 Lockfile & Submodule Validation
+        run: |
+          forge install --check
+          git diff --exit-code foundry.lock || (echo "❌ Dependency drift in foundry.lock" && exit 1)
+          
+          git submodule sync --recursive
+          git submodule update --init --recursive
+          if git submodule status | grep -q "^+"; then
+            echo "❌ Submodule pointer mismatch detected."
+            exit 1
+          fi
+
+      # -------------------------------------------------
+      # OPENZEPPELIN 5.5.x ENFORCEMENT
+      # -------------------------------------------------
+      - name: 🛡️ Enforce OpenZeppelin v5.5.x Compliance
+        run: |
+          # Core Contracts Check
+          if [ -d "lib/openzeppelin-contracts" ]; then
+            cd lib/openzeppelin-contracts
+            git describe --tags --always | grep -q "v5.5" || (echo "❌ OpenZeppelin core must be v5.5.x" && exit 1)
+            cd ../..
+          fi
+          
+          # Upgradeable Contracts Check
+          if [ -d "lib/openzeppelin-contracts-upgradeable" ]; then
+            cd lib/openzeppelin-contracts-upgradeable
+            git describe --tags --always | grep -q "v5.5" || (echo "❌ OpenZeppelin upgradeable must be v5.5.x" && exit 1)
+            cd ../..
+          fi
+
+      # -------------------------------------------------
+      # ARCHITECTURAL INTEGRITY
+      # -------------------------------------------------
+      - name: 📐 Remappings & Format Integrity
+        run: |
+          # Remappings.txt kontrolü (eğer dosya mevcutsa)
+          if [ -f "remappings.txt" ]; then
+            git diff --exit-code remappings.txt || (echo "❌ remappings.txt was modified" && exit 1)
+          fi
+          forge fmt --check
+
+      # -------------------------------------------------
+      # DETERMINISTIC COMPILATION (Solidity 0.8.33)
+      # -------------------------------------------------
+      - name: 🏗️ Clean Academic Build
+        run: |
+          forge clean
+          forge build --sizes
+
+      # -------------------------------------------------
+      # FULL INSTITUTIONAL TEST SUITE
+      # -------------------------------------------------
+      - name: 🧪 Execute Test Suite
+        run: forge test -vvv

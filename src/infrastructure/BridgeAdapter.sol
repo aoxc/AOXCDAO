@@ -21,9 +21,9 @@ import {
 import { ReentrancyGuard } from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 import { SafeERC20, IERC20 } from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 
-import { IBridgeAdapter } from "../interfaces/IBridgeAdapter.sol";
-import { IMonitoringHub } from "../interfaces/IMonitoringHub.sol";
-import { IIdentityRegistry } from "../interfaces/IIdentityRegistry.sol";
+import { IBridgeAdapter } from "@interfaces/IBridgeAdapter.sol";
+import { IMonitoringHub } from "@interfaces/IMonitoringHub.sol";
+import { IIdentityRegistry } from "@interfaces/IIdentityRegistry.sol";
 import { AOXCBaseReporter } from "../monitoring/AOXCBaseReporter.sol";
 
 contract AOXCBridgeAdapter is

@@ -71,4 +71,3 @@ interface ITransferPolicy {
      */
     function updatePolicyParameter(string calldata parameter, uint256 newValue) external;
 }
-

@@ -68,4 +68,3 @@ interface IMintController {
      */
     function isMintActive() external view returns (bool active);
 }
-

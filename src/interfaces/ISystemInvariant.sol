@@ -13,4 +13,3 @@ interface ISystemInvariant {
     /// @notice Upgrades must preserve storage layout integrity
     function invariantStorageIntegrity() external view returns (bool);
 }
-

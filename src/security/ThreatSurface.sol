@@ -12,11 +12,11 @@ import {
     UUPSUpgradeable
 } from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 
-import { IMonitoringHub } from "../interfaces/IMonitoringHub.sol";
-import { IThreatSurface } from "../interfaces/IThreatSurface.sol";
-import { IReputationManager } from "../interfaces/IReputationManager.sol";
+import { IMonitoringHub } from "@interfaces/IMonitoringHub.sol";
+import { IThreatSurface } from "@interfaces/IThreatSurface.sol";
+import { IReputationManager } from "@interfaces/IReputationManager.sol";
 import { AOXCBaseReporter } from "../monitoring/AOXCBaseReporter.sol";
-import { AOXCErrors } from "../libraries/AOXCErrors.sol";
+import { AOXCErrors } from "@libraries/AOXCErrors.sol";
 
 /**
  * @title AOXCThreatSurface

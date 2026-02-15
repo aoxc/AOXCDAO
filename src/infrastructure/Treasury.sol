@@ -15,11 +15,11 @@ import {
 import { ReentrancyGuard } from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 import { SafeERC20, IERC20 } from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 
-import { ITreasury } from "../interfaces/ITreasury.sol";
-import { IMonitoringHub } from "../interfaces/IMonitoringHub.sol";
-import { IBridgeAdapter } from "../interfaces/IBridgeAdapter.sol";
-import { IReputationManager } from "../interfaces/IReputationManager.sol";
-import { AOXCErrors } from "../libraries/AOXCErrors.sol";
+import { ITreasury } from "@interfaces/ITreasury.sol";
+import { IMonitoringHub } from "@interfaces/IMonitoringHub.sol";
+import { IBridgeAdapter } from "@interfaces/IBridgeAdapter.sol";
+import { IReputationManager } from "@interfaces/IReputationManager.sol";
+import { AOXCErrors } from "@libraries/AOXCErrors.sol";
 
 /**
  * @title Treasury

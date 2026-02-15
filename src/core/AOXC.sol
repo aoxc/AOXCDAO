@@ -1,39 +1,21 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.33;
 
-import { Initializable } from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
-import {
-    UUPSUpgradeable
-} from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
-import {
-    AccessControlUpgradeable
-} from "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
-import {
-    ERC20Upgradeable
-} from "@openzeppelin/contracts-upgradeable/token/ERC20/ERC20Upgradeable.sol";
-import {
-    ERC20PermitUpgradeable
-} from "@openzeppelin/contracts-upgradeable/token/ERC20/extensions/ERC20PermitUpgradeable.sol";
-import {
-    ERC20VotesUpgradeable
-} from "@openzeppelin/contracts-upgradeable/token/ERC20/extensions/ERC20VotesUpgradeable.sol";
-import {
-    PausableUpgradeable
-} from "@openzeppelin/contracts-upgradeable/utils/PausableUpgradeable.sol";
-import { NoncesUpgradeable } from "@openzeppelin/contracts-upgradeable/utils/NoncesUpgradeable.sol";
-import { ReentrancyGuard } from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
+import {Initializable} from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
+import {UUPSUpgradeable} from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
+import {AccessControlUpgradeable} from "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
+import {ERC20Upgradeable} from "@openzeppelin/contracts-upgradeable/token/ERC20/ERC20Upgradeable.sol";
+import {ERC20PermitUpgradeable} from "@openzeppelin/contracts-upgradeable/token/ERC20/extensions/ERC20PermitUpgradeable.sol";
+import {ERC20VotesUpgradeable} from "@openzeppelin/contracts-upgradeable/token/ERC20/extensions/ERC20VotesUpgradeable.sol";
+import {PausableUpgradeable} from "@openzeppelin/contracts-upgradeable/utils/PausableUpgradeable.sol";
+import {NoncesUpgradeable} from "@openzeppelin/contracts-upgradeable/utils/NoncesUpgradeable.sol";
+import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
-import { ITransferPolicy } from "../interfaces/ITransferPolicy.sol";
-import { AOXCStorage } from "./AOXCStorage.sol";
-import { IAOXCUpgradeAuthorizer } from "../interfaces/IAOXCUpgradeAuthorizer.sol";
-import { IMonitoringHub } from "../interfaces/IMonitoringHub.sol";
+import {ITransferPolicy} from "@interfaces/ITransferPolicy.sol";
+import {AOXCStorage} from "./AOXCStorage.sol";
+import {IAOXCUpgradeAuthorizer} from "@interfaces/IAOXCUpgradeAuthorizer.sol";
+import {IMonitoringHub} from "@interfaces/IMonitoringHub.sol";
 
-/**
- * @title  AOXC Token
- * @author AOXC Core Engineering
- * @notice Main governance and utility asset for the AOXC Ecosystem.
- * @dev    Utilizes ERC-7201 Namespaced Storage and UUPS Proxy architecture.
- */
 contract AOXC is
     Initializable,
     ERC20Upgradeable,
@@ -44,24 +26,20 @@ contract AOXC is
     PausableUpgradeable,
     ReentrancyGuard
 {
-    using AOXCStorage for AOXCStorage.MainStorage;
-
-    // --- Access Control Roles ---
     bytes32 public constant ADMIN_ROLE = keccak256("AOXC_ADMIN_ROLE");
     bytes32 public constant UPGRADER_ROLE = keccak256("AOXC_UPGRADER_ROLE");
     bytes32 public constant MINT_ROLE = keccak256("AOXC_MINT_ROLE");
     bytes32 public constant BURN_ROLE = keccak256("AOXC_BURN_ROLE");
 
-    // --- State Variables ---
     IMonitoringHub public monitoringHub;
     uint256 public supplyCap;
 
-    // --- Custom Errors ---
     error AOXC__PolicyViolation();
     error AOXC__UpgradeNotAuthorized();
     error AOXC__EmergencyHaltActive();
     error AOXC__ZeroAddress();
     error AOXC__SupplyCapExceeded(uint256 requested, uint256 cap);
+    error AOXC__InvalidSupplyCap();
 
     /// @custom:oz-upgrades-unsafe-allow constructor
     constructor() {
@@ -77,14 +55,15 @@ contract AOXC is
         IMonitoringHub _monitoringHub,
         uint256 _supplyCap
     ) external initializer {
-        if (admin == address(0) || address(_monitoringHub) == address(0)) revert AOXC__ZeroAddress();
+        if (admin == address(0) || address(_monitoringHub) == address(0))
+            revert AOXC__ZeroAddress();
+        if (_supplyCap == 0) revert AOXC__InvalidSupplyCap();
 
         __ERC20_init(name_, symbol_);
         __ERC20Permit_init(name_);
         __ERC20Votes_init();
         __AccessControl_init();
         __Pausable_init();
-        // NOT: UUPS başlatıcı v5'te kaldırıldı.
 
         _grantRole(DEFAULT_ADMIN_ROLE, admin);
         _grantRole(ADMIN_ROLE, admin);
@@ -92,7 +71,7 @@ contract AOXC is
         _grantRole(MINT_ROLE, admin);
         _grantRole(BURN_ROLE, admin);
 
-        AOXCStorage.MainStorage storage ds = AOXCStorage.layout();
+        AOXCStorage.MainStorage storage ds = AOXCStorage.getMainStorage();
         ds.transferPolicy = policyEngine;
         ds.upgradeAuthorizer = authorizer;
         ds.policyEnforcementActive = true;
@@ -101,17 +80,13 @@ contract AOXC is
         monitoringHub = _monitoringHub;
         supplyCap = _supplyCap;
 
-        _logToHub(IMonitoringHub.Severity.INFO, "INITIALIZE", "Contract deployed and roles granted");
+        _logToHub(IMonitoringHub.Severity.INFO, "INITIALIZE", "Protocol active.");
     }
 
-    // --- External Logic ---
-
-    function mint(address to, uint256 amount)
-        external
-        onlyRole(MINT_ROLE)
-        whenNotPaused
-        nonReentrant
-    {
+    function mint(
+        address to,
+        uint256 amount
+    ) external onlyRole(MINT_ROLE) whenNotPaused nonReentrant {
         _internalMint(to, amount);
     }
 
@@ -121,83 +96,77 @@ contract AOXC is
     }
 
     function toggleEmergencyHalt(bool status) external onlyRole(ADMIN_ROLE) {
-        AOXCStorage.layout().isEmergencyHalt = status;
-
+        AOXCStorage.getMainStorage().isEmergencyHalt = status;
         _logToHub(
             status ? IMonitoringHub.Severity.CRITICAL : IMonitoringHub.Severity.WARNING,
             "EMERGENCY",
-            status ? "Halt Enabled" : "Halt Disabled"
+            status ? "Halt Activated" : "Halt Deactivated"
         );
     }
 
-    // --- Core Overrides ---
-
-    function _update(address from, address to, uint256 amount)
-        internal
-        override(ERC20Upgradeable, ERC20VotesUpgradeable)
-    {
-        AOXCStorage.MainStorage storage ds = AOXCStorage.layout();
-
+    function _update(
+        address from,
+        address to,
+        uint256 amount
+    ) internal override(ERC20Upgradeable, ERC20VotesUpgradeable) {
+        AOXCStorage.MainStorage storage ds = AOXCStorage.getMainStorage();
         if (ds.isEmergencyHalt) revert AOXC__EmergencyHaltActive();
 
         if (
-            ds.policyEnforcementActive && ds.transferPolicy != address(0) && from != address(0)
-                && to != address(0)
+            ds.policyEnforcementActive &&
+            ds.transferPolicy != address(0) &&
+            from != address(0) &&
+            to != address(0)
         ) {
-            try ITransferPolicy(ds.transferPolicy).validateTransfer(from, to, amount) { }
-            catch {
+            try ITransferPolicy(ds.transferPolicy).validateTransfer(from, to, amount) {} catch {
                 _logToHub(
-                    IMonitoringHub.Severity.WARNING, "POLICY", "Transfer policy violation attempt"
+                    IMonitoringHub.Severity.WARNING,
+                    "POLICY",
+                    "Unauthorized vector detected."
                 );
                 revert AOXC__PolicyViolation();
             }
         }
-
         super._update(from, to, amount);
     }
 
     function _authorizeUpgrade(address newImpl) internal override onlyRole(UPGRADER_ROLE) {
-        address authorizer = AOXCStorage.layout().upgradeAuthorizer;
+        address authorizer = AOXCStorage.getMainStorage().upgradeAuthorizer;
         if (authorizer != address(0)) {
             IAOXCUpgradeAuthorizer(authorizer).validateUpgrade(msg.sender, newImpl);
-            _logToHub(
-                IMonitoringHub.Severity.CRITICAL, "UPGRADE", "Upgrade authorized and validated"
-            );
+            _logToHub(IMonitoringHub.Severity.CRITICAL, "UPGRADE", "Sequence authorized.");
         } else {
             revert AOXC__UpgradeNotAuthorized();
         }
     }
 
-    // --- Helpers ---
+    function nonces(
+        address owner
+    ) public view override(ERC20PermitUpgradeable, NoncesUpgradeable) returns (uint256) {
+        return super.nonces(owner);
+    }
 
     function clock() public view override returns (uint48) {
         return uint48(block.number);
     }
 
-    function nonces(address owner)
-        public
-        view
-        override(ERC20PermitUpgradeable, NoncesUpgradeable)
-        returns (uint256)
-    {
-        return super.nonces(owner);
+    // forge-config-disable-next-line mixed-case-function
+    function CLOCK_MODE() public pure override returns (string memory) {
+        return "mode=blocknumber&from=default";
     }
 
     function _internalMint(address to, uint256 amount) internal {
         if (to == address(0)) revert AOXC__ZeroAddress();
         if (totalSupply() + amount > supplyCap) revert AOXC__SupplyCapExceeded(amount, supplyCap);
         _mint(to, amount);
-        _logToHub(IMonitoringHub.Severity.INFO, "MINT", "Token supply increased");
+        _logToHub(IMonitoringHub.Severity.INFO, "MINT", "Expansion executed.");
     }
 
     function _internalBurn(address from, uint256 amount) internal {
         _burn(from, amount);
-        _logToHub(IMonitoringHub.Severity.INFO, "BURN", "Token supply decreased");
+        _logToHub(IMonitoringHub.Severity.INFO, "BURN", "Contraction executed.");
     }
 
-    /**
-     * @dev Implementation of high-fidelity 26-channel forensic logging.
-     */
     function _logToHub(
         IMonitoringHub.Severity severity,
         string memory category,
@@ -232,8 +201,7 @@ contract AOXC is
                 metadata: "",
                 proof: ""
             });
-
-            try monitoringHub.logForensic(log) { } catch { }
+            try monitoringHub.logForensic(log) {} catch {}
         }
     }
 

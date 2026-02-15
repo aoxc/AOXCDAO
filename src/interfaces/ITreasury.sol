@@ -88,4 +88,3 @@ interface ITreasury {
      */
     function getSupportedTokens() external view returns (address[] memory tokens);
 }
-

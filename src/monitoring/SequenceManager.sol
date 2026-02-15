@@ -2,7 +2,7 @@
 pragma solidity 0.8.33;
 
 import { AccessControl } from "@openzeppelin/contracts/access/AccessControl.sol";
-import { AOXCConstants } from "../libraries/AOXCConstants.sol";
+import { AOXCConstants } from "@libraries/AOXCConstants.sol";
 
 /**
  * @title SequenceManager

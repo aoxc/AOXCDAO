@@ -13,8 +13,8 @@ import {
 } from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 import { ReentrancyGuard } from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
-import { IAOXCUpgradeAuthorizer } from "../interfaces/IAOXCUpgradeAuthorizer.sol";
-import { IMonitoringHub } from "../interfaces/IMonitoringHub.sol";
+import { IAOXCUpgradeAuthorizer } from "@interfaces/IAOXCUpgradeAuthorizer.sol";
+import { IMonitoringHub } from "@interfaces/IMonitoringHub.sol";
 
 /**
  * @title AOXCUpgradeAuthorizer

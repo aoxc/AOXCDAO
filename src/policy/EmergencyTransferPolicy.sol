@@ -9,10 +9,10 @@ import {
     UUPSUpgradeable
 } from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 
-import { ITransferPolicy } from "../interfaces/ITransferPolicy.sol";
-import { IMonitoringHub } from "../interfaces/IMonitoringHub.sol";
+import { ITransferPolicy } from "@interfaces/ITransferPolicy.sol";
+import { IMonitoringHub } from "@interfaces/IMonitoringHub.sol";
 import { AOXCBaseReporter } from "../monitoring/AOXCBaseReporter.sol";
-import { AOXCErrors } from "../libraries/AOXCErrors.sol";
+import { AOXCErrors } from "@libraries/AOXCErrors.sol";
 
 /**
  * @title AOXCEmergencyTransferPolicy

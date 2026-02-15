@@ -12,10 +12,10 @@ import {
     PausableUpgradeable
 } from "@openzeppelin/contracts-upgradeable/utils/PausableUpgradeable.sol";
 
-import { IComplianceRegistry } from "../interfaces/IComplianceRegistry.sol";
-import { IMonitoringHub } from "../interfaces/IMonitoringHub.sol";
-import { IReputationManager } from "../interfaces/IReputationManager.sol";
-import { AOXCErrors } from "../libraries/AOXCErrors.sol";
+import { IComplianceRegistry } from "@interfaces/IComplianceRegistry.sol";
+import { IMonitoringHub } from "@interfaces/IMonitoringHub.sol";
+import { IReputationManager } from "@interfaces/IReputationManager.sol";
+import { AOXCErrors } from "@libraries/AOXCErrors.sol";
 
 /**
  * @title AOXCComplianceRegistry

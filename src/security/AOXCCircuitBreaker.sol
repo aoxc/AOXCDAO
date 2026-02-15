@@ -2,9 +2,9 @@
 pragma solidity 0.8.33;
 
 import { AOXCBaseReporter } from "../monitoring/AOXCBaseReporter.sol";
-import { IMonitoringHub } from "../interfaces/IMonitoringHub.sol";
-import { AOXCErrors } from "../libraries/AOXCErrors.sol";
-import { AOXCConstants } from "../libraries/AOXCConstants.sol";
+import { IMonitoringHub } from "@interfaces/IMonitoringHub.sol";
+import { AOXCErrors } from "@libraries/AOXCErrors.sol";
+import { AOXCConstants } from "@libraries/AOXCConstants.sol";
 import { AOXCAccessCoordinator } from "../core/AOXCAccessCoordinator.sol";
 import {
     AccessControlUpgradeable
