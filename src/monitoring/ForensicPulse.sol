@@ -2,7 +2,7 @@
 // Academic Grade - AOXC Ultimate Pro Standard
 pragma solidity 0.8.33;
 
-import { IMonitoringHub } from "../interfaces/IMonitoringHub.sol";
+import { IMonitoringHub } from "@interfaces/IMonitoringHub.sol";
 
 /**
  * @title ForensicPulse

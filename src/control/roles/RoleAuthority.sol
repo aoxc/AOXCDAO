@@ -6,7 +6,7 @@ import { AccessControlEnumerableUpgradeable } from "@openzeppelin/contracts-upgr
 import { PausableUpgradeable } from "@openzeppelin/contracts-upgradeable/utils/PausableUpgradeable.sol";
 import { UUPSUpgradeable } from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 import { Strings } from "@openzeppelin/contracts/utils/Strings.sol";
-import { IMonitoringHub } from "../interfaces/IMonitoringHub.sol";
+import { IMonitoringHub } from "@interfaces/IMonitoringHub.sol";
 
 contract RoleAuthority is
     Initializable,

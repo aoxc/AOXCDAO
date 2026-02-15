@@ -4,8 +4,8 @@ pragma solidity 0.8.33;
 import { Initializable } from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import { TimelockControllerUpgradeable } from "@openzeppelin/contracts-upgradeable/governance/TimelockControllerUpgradeable.sol";
 import { UUPSUpgradeable } from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
-import { IMonitoringHub } from "../interfaces/IMonitoringHub.sol";
-import { AOXCErrors } from "../libraries/AOXCErrors.sol";
+import { IMonitoringHub } from "@interfaces/IMonitoringHub.sol";
+import { AOXCErrors } from "@libraries/AOXCErrors.sol";
 
 contract AOXCTimelock is Initializable, TimelockControllerUpgradeable, UUPSUpgradeable {
     IMonitoringHub public monitoringHub;

@@ -2,8 +2,8 @@
 pragma solidity 0.8.33;
 
 import { ContextUpgradeable } from "@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol";
-import { IMonitoringHub } from "../interfaces/IMonitoringHub.sol";
-import { AOXCErrors } from "../libraries/AOXCErrors.sol";
+import { IMonitoringHub } from "@interfaces/IMonitoringHub.sol";
+import { AOXCErrors } from "@libraries/AOXCErrors.sol";
 
 /**
  * @title AOXCBaseReporter

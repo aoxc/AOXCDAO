@@ -2,7 +2,7 @@
 pragma solidity 0.8.33;
 
 import { Test, console } from "forge-std/Test.sol";
-import { ANDROMEDA_CORE } from "../src/governance/ANDROMEDA_CORE.sol";
+import { ANDROMEDA_CORE } from "@core/ANDROMEDA_CORE.sol";
 
 contract BlackHoleStressTest is Test {
     ANDROMEDA_CORE public amiralGemisi;

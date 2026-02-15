@@ -9,8 +9,8 @@ import { ReentrancyGuard } from "@openzeppelin/contracts/utils/ReentrancyGuard.s
 
 import { AOXC } from "../core/AOXC.sol";
 import { AssetBackingLedger } from "./AssetBackingLedger.sol";
-import { IMonitoringHub } from "../interfaces/IMonitoringHub.sol";
-import { IReputationManager } from "../interfaces/IReputationManager.sol";
+import { IMonitoringHub } from "@interfaces/IMonitoringHub.sol";
+import { IReputationManager } from "@interfaces/IReputationManager.sol";
 
 /**
  * @title AOXCRedeemController

@@ -5,9 +5,9 @@ import { Initializable } from "@openzeppelin/contracts-upgradeable/proxy/utils/I
 import { AccessControlUpgradeable } from "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
 import { UUPSUpgradeable } from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 
-import { IMonitoringHub } from "../interfaces/IMonitoringHub.sol";
+import { IMonitoringHub } from "@interfaces/IMonitoringHub.sol";
 import { AOXCBaseReporter } from "../monitoring/AOXCBaseReporter.sol";
-import { AOXCErrors } from "../libraries/AOXCErrors.sol";
+import { AOXCErrors } from "@libraries/AOXCErrors.sol";
 
 /**
  * @title AOXCEmergencyPauseGuard

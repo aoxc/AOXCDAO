@@ -11,10 +11,10 @@ import { PausableUpgradeable } from "@openzeppelin/contracts-upgradeable/utils/P
 import { NoncesUpgradeable } from "@openzeppelin/contracts-upgradeable/utils/NoncesUpgradeable.sol";
 import { ReentrancyGuard } from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
-import { ITransferPolicy } from "../interfaces/ITransferPolicy.sol";
+import { ITransferPolicy } from "@interfaces/ITransferPolicy.sol";
 import { AOXCStorage } from "./AOXCStorage.sol";
-import { IAOXCUpgradeAuthorizer } from "../interfaces/IAOXCUpgradeAuthorizer.sol";
-import { IMonitoringHub } from "../interfaces/IMonitoringHub.sol";
+import { IAOXCUpgradeAuthorizer } from "@interfaces/IAOXCUpgradeAuthorizer.sol";
+import { IMonitoringHub } from "@interfaces/IMonitoringHub.sol";
 
 /**
  * @title AOXC Forensic Governance Asset

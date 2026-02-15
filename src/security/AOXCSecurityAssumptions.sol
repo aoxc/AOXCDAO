@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.33;
 
-import { AOXCErrors } from "../libraries/AOXCErrors.sol";
+import { AOXCErrors } from "@libraries/AOXCErrors.sol";
 import { AOXCBaseReporter } from "../monitoring/AOXCBaseReporter.sol";
-import { IMonitoringHub } from "../interfaces/IMonitoringHub.sol";
+import { IMonitoringHub } from "@interfaces/IMonitoringHub.sol";
 import { OwnableUpgradeable } from "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import { ContextUpgradeable } from "@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol";
 import { Initializable } from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";

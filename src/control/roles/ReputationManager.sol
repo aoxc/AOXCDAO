@@ -7,9 +7,9 @@ import { PausableUpgradeable } from "@openzeppelin/contracts-upgradeable/utils/P
 import { UUPSUpgradeable } from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 import { ReentrancyGuard } from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
-import { IAOXP } from "../interfaces/IAOXP.sol";
-import { IMonitoringHub } from "../interfaces/IMonitoringHub.sol";
-import { AOXCErrors } from "../libraries/AOXCErrors.sol";
+import { IAOXP } from "@interfaces/IAOXP.sol";
+import { IMonitoringHub } from "@interfaces/IMonitoringHub.sol";
+import { AOXCErrors } from "@libraries/AOXCErrors.sol";
 
 /**
  * @title ReputationManager

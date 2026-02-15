@@ -8,7 +8,7 @@
  */
 pragma solidity 0.8.33;
 
-import { IAOXCAndromedaCore } from "../interfaces/IAOXCAndromedaCore.sol";
+import { IAOXCAndromedaCore } from "@interfaces/IAOXCAndromedaCore.sol";
 import { Initializable } from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import { AccessControlUpgradeable } from "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
 import { UUPSUpgradeable } from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";

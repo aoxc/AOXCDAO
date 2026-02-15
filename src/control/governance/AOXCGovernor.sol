@@ -24,8 +24,8 @@ import { UUPSUpgradeable } from "@openzeppelin/contracts-upgradeable/proxy/utils
 import { ReentrancyGuard } from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
 // --- 🔗 AOXC DAO Technical Interfaces ---
-import { IAOXCAndromedaCore } from "../interfaces/IAOXCAndromedaCore.sol";
-import { IReputationManager } from "../interfaces/IReputationManager.sol";
+import { IAOXCAndromedaCore } from "@interfaces/IAOXCAndromedaCore.sol";
+import { IReputationManager } from "@interfaces/IReputationManager.sol";
 
 contract AOXCGovernor is
     Initializable,

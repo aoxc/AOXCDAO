@@ -5,7 +5,7 @@ import { Initializable } from "@openzeppelin/contracts-upgradeable/proxy/utils/I
 import { AccessControlUpgradeable } from "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
 import { ReentrancyGuard } from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
-import { IMonitoringHub } from "../interfaces/IMonitoringHub.sol";
+import { IMonitoringHub } from "@interfaces/IMonitoringHub.sol";
 
 /**
  * @title AOXCComplianceEvents

@@ -6,8 +6,8 @@ import { ERC721Upgradeable } from "@openzeppelin/contracts-upgradeable/token/ERC
 import { AccessControlUpgradeable } from "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
 import { UUPSUpgradeable } from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 
-import { IMonitoringHub } from "../interfaces/IMonitoringHub.sol";
-import { AOXCErrors } from "../libraries/AOXCErrors.sol";
+import { IMonitoringHub } from "@interfaces/IMonitoringHub.sol";
+import { AOXCErrors } from "@libraries/AOXCErrors.sol";
 
 /**
  * @title AOXCHonorSBT

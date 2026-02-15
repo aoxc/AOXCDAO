@@ -10,8 +10,8 @@ import { UUPSUpgradeable } from "@openzeppelin/contracts-upgradeable/proxy/utils
  */
 import { ReentrancyGuard } from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
-import { IMonitoringHub } from "../interfaces/IMonitoringHub.sol";
-import { AOXCErrors } from "../libraries/AOXCErrors.sol";
+import { IMonitoringHub } from "@interfaces/IMonitoringHub.sol";
+import { AOXCErrors } from "@libraries/AOXCErrors.sol";
 
 /**
  * @title AOXCMonitoringHub
