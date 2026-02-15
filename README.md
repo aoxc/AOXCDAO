@@ -7,10 +7,12 @@
   <img src="/image/aoxc_logo_001_2026.png" 
        alt="AOXCDAO Banner Logo" 
        width="240" 
-       style="border-radius: 45px; 
-              box-shadow: 0 20px 50px rgba(0,0,0,0.3), 0 0 15px rgba(0,0,0,0.1); 
-              border: 1px solid rgba(255,255,255,0.1);
-              transition: transform 0.3s ease-in-out;"
+       style="border-radius: 65px; 
+              box-shadow: 0 25px 55px rgba(0,0,0,0.4), 0 0 20px rgba(0,0,0,0.1); 
+              border: 1.5px solid rgba(255,255,255,0.15);
+              display: block;
+              margin: 20px auto;
+              filter: brightness(1.02) contrast(1.05);"
   />
 </p>
 
