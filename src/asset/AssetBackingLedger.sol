@@ -2,9 +2,15 @@
 pragma solidity 0.8.33;
 
 import { Initializable } from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
-import { AccessControlUpgradeable } from "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
-import { PausableUpgradeable } from "@openzeppelin/contracts-upgradeable/utils/PausableUpgradeable.sol";
-import { UUPSUpgradeable } from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
+import {
+    AccessControlUpgradeable
+} from "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
+import {
+    PausableUpgradeable
+} from "@openzeppelin/contracts-upgradeable/utils/PausableUpgradeable.sol";
+import {
+    UUPSUpgradeable
+} from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 import { ReentrancyGuard } from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
 import { IMonitoringHub } from "@interfaces/IMonitoringHub.sol";
@@ -49,16 +55,10 @@ contract AssetBackingLedger is
 
     // --- Events ---
     event AssetDeposited(
-        address indexed caller,
-        bytes32 indexed assetId,
-        uint256 amount,
-        uint256 timestamp
+        address indexed caller, bytes32 indexed assetId, uint256 amount, uint256 timestamp
     );
     event AssetWithdrawn(
-        address indexed caller,
-        bytes32 indexed assetId,
-        uint256 amount,
-        uint256 timestamp
+        address indexed caller, bytes32 indexed assetId, uint256 amount, uint256 timestamp
     );
     event TotalAssetsUpdated(uint256 oldTotal, uint256 newTotal, uint256 timestamp);
     event SystemLimitUpdated(uint256 oldLimit, uint256 newLimit);
@@ -71,11 +71,10 @@ contract AssetBackingLedger is
     /**
      * @notice Proxy initialization.
      */
-    function initialize(
-        address admin,
-        address _monitoringHub,
-        address _reputationManager
-    ) external initializer {
+    function initialize(address admin, address _monitoringHub, address _reputationManager)
+        external
+        initializer
+    {
         if (admin == address(0) || _monitoringHub == address(0)) {
             revert AOXC__ZeroAddress();
         }
@@ -98,10 +97,12 @@ contract AssetBackingLedger is
 
     // --- External Operations ---
 
-    function depositAsset(
-        bytes32 assetId,
-        uint256 amount
-    ) external onlyRole(ASSET_MANAGER_ROLE) whenNotPaused nonReentrant {
+    function depositAsset(bytes32 assetId, uint256 amount)
+        external
+        onlyRole(ASSET_MANAGER_ROLE)
+        whenNotPaused
+        nonReentrant
+    {
         if (assetId == bytes32(0)) revert AOXC__InvalidAssetId();
         if (amount == 0) revert AOXC__ZeroAmount();
 
@@ -122,9 +123,8 @@ contract AssetBackingLedger is
         }
 
         if (address(reputationManager) != address(0)) {
-            try
-                reputationManager.processAction(msg.sender, keccak256("ASSET_LEDGER_UPDATE"))
-            {} catch {}
+            try reputationManager.processAction(msg.sender, keccak256("ASSET_LEDGER_UPDATE")) { }
+                catch { }
         }
 
         emit TotalAssetsUpdated(oldTotal, totalAssets, block.timestamp);
@@ -133,10 +133,12 @@ contract AssetBackingLedger is
         _logToHub(IMonitoringHub.Severity.INFO, "ASSET_DEPOSIT", "Collateral increased");
     }
 
-    function withdrawAsset(
-        bytes32 assetId,
-        uint256 amount
-    ) external onlyRole(ASSET_MANAGER_ROLE) whenNotPaused nonReentrant {
+    function withdrawAsset(bytes32 assetId, uint256 amount)
+        external
+        onlyRole(ASSET_MANAGER_ROLE)
+        whenNotPaused
+        nonReentrant
+    {
         if (assetId == bytes32(0)) revert AOXC__InvalidAssetId();
         if (amount == 0) revert AOXC__ZeroAmount();
 
@@ -204,7 +206,7 @@ contract AssetBackingLedger is
                 proof: ""
             });
 
-            try monitoringHub.logForensic(log) {} catch {}
+            try monitoringHub.logForensic(log) { } catch { }
         }
     }
 

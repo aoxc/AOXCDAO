@@ -111,34 +111,33 @@ contract CentaurusBridge is AccessControl, ReentrancyGuard {
 
     // --- CORE BRIDGE OPERATIONS ---
 
-    function dispatchData(
-        uint256 _targetChain,
-        bytes32 _dataHash
-    ) external onlyQualified(CENTAURUS_KINETIC) nonReentrant {
+    function dispatchData(uint256 _targetChain, bytes32 _dataHash)
+        external
+        onlyQualified(CENTAURUS_KINETIC)
+        nonReentrant
+    {
         if (!activeRoutes[_targetChain].isVerified) revert RouteNotVerified(_targetChain);
 
         _log(IMonitoringHub.Severity.INFO, "LOGISTICS", "Data dispatch initiated.");
         emit DispatchInitiated(msg.sender, _targetChain, _dataHash);
     }
 
-    function establishRoute(
-        uint256 _chainId,
-        uint256 _strength
-    ) external onlyQualified(CENTAURUS_APEX) {
+    function establishRoute(uint256 _chainId, uint256 _strength)
+        external
+        onlyQualified(CENTAURUS_APEX)
+    {
         activeRoutes[_chainId] = LogisticsPath({
-            targetChainId: _chainId,
-            isVerified: true,
-            signalStrength: _strength
+            targetChainId: _chainId, isVerified: true, signalStrength: _strength
         });
 
         _log(IMonitoringHub.Severity.WARNING, "DIPLOMACY", "New cross-chain route established.");
         emit RouteEstablished(_chainId, true);
     }
 
-    function heartbeatSignal(
-        uint256 _chainId,
-        uint256 _newStrength
-    ) external onlyQualified(CENTAURUS_PULSE) {
+    function heartbeatSignal(uint256 _chainId, uint256 _newStrength)
+        external
+        onlyQualified(CENTAURUS_PULSE)
+    {
         activeRoutes[_chainId].signalStrength = _newStrength;
         emit SignalRecalibrated(_chainId, _newStrength);
     }

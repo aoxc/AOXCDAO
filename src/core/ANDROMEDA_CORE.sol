@@ -10,8 +10,12 @@ pragma solidity 0.8.33;
 
 import { IAOXCAndromedaCore } from "@interfaces/IAOXCAndromedaCore.sol";
 import { Initializable } from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
-import { AccessControlUpgradeable } from "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
-import { UUPSUpgradeable } from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
+import {
+    AccessControlUpgradeable
+} from "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
+import {
+    UUPSUpgradeable
+} from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 import { ReentrancyGuard } from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
 contract ANDROMEDA_CORE is
@@ -79,10 +83,10 @@ contract ANDROMEDA_CORE is
     /**
      * @notice Registers a sector-specific logic contract.
      */
-    function registerSector(
-        uint256 _sectorId,
-        address _sectorAddress
-    ) external onlyRole(GOVERNANCE_ROLE) {
+    function registerSector(uint256 _sectorId, address _sectorAddress)
+        external
+        onlyRole(GOVERNANCE_ROLE)
+    {
         if (_sectorId == 0 || _sectorId > 7) revert InvalidSectorRange();
         if (_sectorAddress == address(0)) revert Andromeda_InvalidHangarAddress(address(0));
 
@@ -119,11 +123,10 @@ contract ANDROMEDA_CORE is
         _protocolState = newState;
     }
 
-    function anchorHangar(
-        bytes32 moduleId,
-        address hangarAddress,
-        uint256 version
-    ) external onlyRole(GOVERNANCE_ROLE) {
+    function anchorHangar(bytes32 moduleId, address hangarAddress, uint256 version)
+        external
+        onlyRole(GOVERNANCE_ROLE)
+    {
         if (hangarAddress == address(0)) revert Andromeda_InvalidHangarAddress(address(0));
         if (_hangars[moduleId].hangarAddress != address(0)) {
             revert Andromeda_ModuleAlreadyAnchored(moduleId);
@@ -169,17 +172,23 @@ contract ANDROMEDA_CORE is
      * @dev Restricts proxy upgrades to the UPGRADER_ROLE.
      * @notice Function mutability restricted to 'view' to satisfy Solc 0.8.33 linting.
      */
-    function _authorizeUpgrade(
-        address newImplementation
-    ) internal view override onlyRole(UPGRADER_ROLE) {
+    function _authorizeUpgrade(address newImplementation)
+        internal
+        view
+        override
+        onlyRole(UPGRADER_ROLE)
+    {
         if (newImplementation == address(0)) {
             revert Andromeda_InvalidHangarAddress(address(0));
         }
     }
 
-    function supportsInterface(
-        bytes4 interfaceId
-    ) public view override(AccessControlUpgradeable) returns (bool) {
+    function supportsInterface(bytes4 interfaceId)
+        public
+        view
+        override(AccessControlUpgradeable)
+        returns (bool)
+    {
         return super.supportsInterface(interfaceId);
     }
 }

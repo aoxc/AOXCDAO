@@ -2,9 +2,15 @@
 pragma solidity 0.8.33;
 
 import { Initializable } from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
-import { AccessControlUpgradeable } from "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
-import { PausableUpgradeable } from "@openzeppelin/contracts-upgradeable/utils/PausableUpgradeable.sol";
-import { UUPSUpgradeable } from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
+import {
+    AccessControlUpgradeable
+} from "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
+import {
+    PausableUpgradeable
+} from "@openzeppelin/contracts-upgradeable/utils/PausableUpgradeable.sol";
+import {
+    UUPSUpgradeable
+} from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 import { ReentrancyGuard } from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
 import { AOXC } from "../core/AOXC.sol";
@@ -41,16 +47,10 @@ contract AOXCRedeemController is
 
     // --- Events ---
     event TokensRedeemed(
-        address indexed caller,
-        address indexed from,
-        uint256 amount,
-        bytes32 assetId
+        address indexed caller, address indexed from, uint256 amount, bytes32 assetId
     );
     event BackingReleased(
-        address indexed caller,
-        bytes32 indexed assetId,
-        uint256 amount,
-        uint256 timestamp
+        address indexed caller, bytes32 indexed assetId, uint256 amount, uint256 timestamp
     );
 
     /// @custom:oz-upgrades-unsafe-allow constructor
@@ -90,11 +90,12 @@ contract AOXCRedeemController is
     /**
      * @notice Redeems AOXC tokens and updates collateral records in the ledger.
      */
-    function redeem(
-        address from,
-        uint256 amount,
-        bytes32 assetId
-    ) external whenNotPaused nonReentrant onlyRole(REDEEMER_ROLE) {
+    function redeem(address from, uint256 amount, bytes32 assetId)
+        external
+        whenNotPaused
+        nonReentrant
+        onlyRole(REDEEMER_ROLE)
+    {
         if (from == address(0)) revert AOXC__ZeroAddress();
         if (assetId == bytes32(0)) revert AOXC__InvalidAssetId();
         if (token.balanceOf(from) < amount) revert AOXC__InsufficientTokens();
@@ -107,16 +108,14 @@ contract AOXCRedeemController is
 
         // 3. Reputation System Integration
         if (address(reputationManager) != address(0)) {
-            try reputationManager.processAction(msg.sender, keccak256("TOKEN_REDEEM")) {} catch {}
+            try reputationManager.processAction(msg.sender, keccak256("TOKEN_REDEEM")) { } catch { }
         }
 
         emit BackingReleased(msg.sender, assetId, amount, block.timestamp);
         emit TokensRedeemed(msg.sender, from, amount, assetId);
 
         _logToHub(
-            IMonitoringHub.Severity.INFO,
-            "TOKEN_REDEEM",
-            "Burn and collateral release finalized"
+            IMonitoringHub.Severity.INFO, "TOKEN_REDEEM", "Burn and collateral release finalized"
         );
     }
 
@@ -172,15 +171,13 @@ contract AOXCRedeemController is
                 proof: ""
             });
 
-            try monitoringHub.logForensic(log) {} catch {}
+            try monitoringHub.logForensic(log) { } catch { }
         }
     }
 
     function _authorizeUpgrade(address) internal override onlyRole(ADMIN_ROLE) {
         _logToHub(
-            IMonitoringHub.Severity.CRITICAL,
-            "UPGRADE",
-            "RedeemController upgrade authorized"
+            IMonitoringHub.Severity.CRITICAL, "UPGRADE", "RedeemController upgrade authorized"
         );
     }
 

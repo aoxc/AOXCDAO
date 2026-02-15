@@ -3,7 +3,9 @@ pragma solidity 0.8.33;
 
 import { IMonitoringHub } from "@interfaces/IMonitoringHub.sol";
 import { IEmergencyPauseGuard } from "@interfaces/IEmergencyPauseGuard.sol";
-import { AccessControlUpgradeable } from "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
+import {
+    AccessControlUpgradeable
+} from "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
 import { AOXCErrors } from "@libraries/AOXCErrors.sol";
 import { Initializable } from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 
@@ -77,13 +79,14 @@ contract AOXCSentinelExecutor is Initializable, AccessControlUpgradeable {
      * @notice Validates forensic logs and triggers protocol pause if risk exceeds threshold.
      * @dev Synchronized with IEmergencyPauseGuard to use 0-argument pause().
      */
-    function validateAndExecute(
-        IMonitoringHub.ForensicLog calldata log
-    ) external onlyRole(SENTINEL_ROLE) nonReentrant {
+    function validateAndExecute(IMonitoringHub.ForensicLog calldata log)
+        external
+        onlyRole(SENTINEL_ROLE)
+        nonReentrant
+    {
         // Automation Logic: Triggers if risk score is high and severity is CRITICAL
-        if (
-            log.riskScore >= autoPauseThreshold && log.severity == IMonitoringHub.Severity.CRITICAL
-        ) {
+        if (log.riskScore >= autoPauseThreshold && log.severity == IMonitoringHub.Severity.CRITICAL)
+        {
             emit SentinelActionExecuted(log.riskScore, log.severity);
 
             // Interface matching: Removing string argument to solve Error (6160)

@@ -1,7 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.33;
 
-import { ContextUpgradeable } from "@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol";
+import {
+    ContextUpgradeable
+} from "@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol";
 import { IMonitoringHub } from "@interfaces/IMonitoringHub.sol";
 import { AOXCErrors } from "@libraries/AOXCErrors.sol";
 
@@ -39,40 +41,39 @@ abstract contract AOXCBaseReporter is ContextUpgradeable {
         uint256 currentNonce = ++_localNonce;
 
         // 26-Channel Payload Delivery
-        try
-            monitoringHub.logForensic(
-                IMonitoringHub.ForensicLog({
-                    source: address(this),
-                    actor: _msgSender(),
-                    origin: tx.origin,
-                    related: related,
-                    severity: severity,
-                    category: category,
-                    details: details,
-                    riskScore: riskScore,
-                    nonce: currentNonce,
-                    chainId: block.chainid,
-                    blockNumber: block.number,
-                    timestamp: block.timestamp,
-                    gasUsed: gasleft(),
-                    value: msg.value,
-                    stateRoot: bytes32(0),
-                    txHash: bytes32(0),
-                    selector: msg.sig,
-                    version: 1,
-                    actionReq: (severity >= IMonitoringHub.Severity.CRITICAL),
-                    isUpgraded: true,
-                    environment: 0,
-                    correlationId: _generateCorrelationId(currentNonce),
-                    policyHash: bytes32(0),
-                    sequenceId: 0,
-                    metadata: metadata,
-                    proof: ""
-                })
-            )
-        {
-            // Success: Log recorded
-        } catch {
+        try monitoringHub.logForensic(
+            IMonitoringHub.ForensicLog({
+                source: address(this),
+                actor: _msgSender(),
+                origin: tx.origin,
+                related: related,
+                severity: severity,
+                category: category,
+                details: details,
+                riskScore: riskScore,
+                nonce: currentNonce,
+                chainId: block.chainid,
+                blockNumber: block.number,
+                timestamp: block.timestamp,
+                gasUsed: gasleft(),
+                value: msg.value,
+                stateRoot: bytes32(0),
+                txHash: bytes32(0),
+                selector: msg.sig,
+                version: 1,
+                actionReq: (severity >= IMonitoringHub.Severity.CRITICAL),
+                isUpgraded: true,
+                environment: 0,
+                correlationId: _generateCorrelationId(currentNonce),
+                policyHash: bytes32(0),
+                sequenceId: 0,
+                metadata: metadata,
+                proof: ""
+            })
+        ) {
+        // Success: Log recorded
+        }
+            catch {
             // Critical: Ensure main execution flow is never interrupted by logging failures
         }
     }

@@ -2,8 +2,12 @@
 pragma solidity 0.8.33;
 
 import { Initializable } from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
-import { AccessControlUpgradeable } from "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
-import { UUPSUpgradeable } from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
+import {
+    AccessControlUpgradeable
+} from "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
+import {
+    UUPSUpgradeable
+} from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 
 import { ITransferPolicy } from "@interfaces/ITransferPolicy.sol";
 import { IComplianceRegistry } from "@interfaces/IComplianceRegistry.sol";
@@ -101,23 +105,18 @@ contract AOXCTransferPolicyEngine is
         _setMonitoringHub(_monitoringHub);
 
         _performForensicLog(
-            IMonitoringHub.Severity.INFO,
-            "INITIALIZE",
-            "Policy Engine Online",
-            address(0),
-            0,
-            ""
+            IMonitoringHub.Severity.INFO, "INITIALIZE", "Policy Engine Online", address(0), 0, ""
         );
     }
 
     /**
      * @notice Validates a transfer against compliance, amount limits, and threat signatures.
      */
-    function validateTransfer(
-        address from,
-        address to,
-        uint256 amount
-    ) external override nonReentrant {
+    function validateTransfer(address from, address to, uint256 amount)
+        external
+        override
+        nonReentrant
+    {
         if (!_policyActive) return;
 
         if (amount > maxTxAmount) revert AOXC__MaxTxExceeded();
@@ -167,11 +166,11 @@ contract AOXCTransferPolicyEngine is
     /**
      * @dev Assembly optimized hashing to eliminate lint [asm-keccak256] notes.
      */
-    function _generatePatternId(
-        address from,
-        address to,
-        uint256 amount
-    ) internal pure returns (bytes32 patternId) {
+    function _generatePatternId(address from, address to, uint256 amount)
+        internal
+        pure
+        returns (bytes32 patternId)
+    {
         assembly {
             let ptr := mload(0x40)
             mstore(ptr, from)
@@ -204,10 +203,12 @@ contract AOXCTransferPolicyEngine is
      * @notice Updates policy parameters with assembly-optimized string comparison.
      * @dev Eliminates lint [asm-keccak256] by using inline assembly for the string hash.
      */
-    function updatePolicyParameter(
-        string calldata parameter,
-        uint256 newValue
-    ) external override nonReentrant onlyRole(ADMIN_ROLE) {
+    function updatePolicyParameter(string calldata parameter, uint256 newValue)
+        external
+        override
+        nonReentrant
+        onlyRole(ADMIN_ROLE)
+    {
         bytes32 paramHash;
         bytes memory paramBytes = bytes(parameter);
 
@@ -223,9 +224,11 @@ contract AOXCTransferPolicyEngine is
         emit PolicyParametersUpdated(parameter, newValue, block.timestamp);
     }
 
-    function _authorizeUpgrade(
-        address newImplementation
-    ) internal override onlyRole(UPGRADER_ROLE) {
+    function _authorizeUpgrade(address newImplementation)
+        internal
+        override
+        onlyRole(UPGRADER_ROLE)
+    {
         if (newImplementation == address(0)) {
             revert AOXCErrors.ZeroAddressDetected();
         }

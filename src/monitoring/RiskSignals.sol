@@ -2,8 +2,12 @@
 pragma solidity 0.8.33;
 
 import { Initializable } from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
-import { AccessControlUpgradeable } from "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
-import { UUPSUpgradeable } from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
+import {
+    AccessControlUpgradeable
+} from "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
+import {
+    UUPSUpgradeable
+} from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 
 import { IMonitoringHub } from "@interfaces/IMonitoringHub.sol";
 import { AOXCBaseReporter } from "./AOXCBaseReporter.sol";
@@ -141,10 +145,11 @@ contract RiskSignals is Initializable, AccessControlUpgradeable, UUPSUpgradeable
     /**
      * @notice Updates the risk policy and triggers a forensic audit trail.
      */
-    function updateRiskPolicy(
-        string calldata description,
-        bytes32 policyHash
-    ) external nonReentrant onlyRole(ADMIN_ROLE) {
+    function updateRiskPolicy(string calldata description, bytes32 policyHash)
+        external
+        nonReentrant
+        onlyRole(ADMIN_ROLE)
+    {
         _performForensicLog(
             IMonitoringHub.Severity.CRITICAL,
             "POLICY_UPDATE",
@@ -159,9 +164,11 @@ contract RiskSignals is Initializable, AccessControlUpgradeable, UUPSUpgradeable
 
     // --- Internal Infrastructure ---
 
-    function _authorizeUpgrade(
-        address newImplementation
-    ) internal override onlyRole(UPGRADER_ROLE) {
+    function _authorizeUpgrade(address newImplementation)
+        internal
+        override
+        onlyRole(UPGRADER_ROLE)
+    {
         if (newImplementation == address(0)) {
             revert AOXCErrors.ZeroAddressDetected();
         }

@@ -2,9 +2,15 @@
 pragma solidity 0.8.33;
 
 import { Initializable } from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
-import { AccessControlUpgradeable } from "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
-import { PausableUpgradeable } from "@openzeppelin/contracts-upgradeable/utils/PausableUpgradeable.sol";
-import { UUPSUpgradeable } from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
+import {
+    AccessControlUpgradeable
+} from "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
+import {
+    PausableUpgradeable
+} from "@openzeppelin/contracts-upgradeable/utils/PausableUpgradeable.sol";
+import {
+    UUPSUpgradeable
+} from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 import { ReentrancyGuard } from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
 import { IMonitoringHub } from "@interfaces/IMonitoringHub.sol";
@@ -46,15 +52,10 @@ contract AOXCRelayerGateway is
 
     // --- Events ---
     event CallRelayed(
-        address indexed relayer,
-        address indexed target,
-        bool success,
-        uint256 timestamp
+        address indexed relayer, address indexed target, bool success, uint256 timestamp
     );
     event TransactionConfirmed(
-        bytes32 indexed txHash,
-        address indexed relayer,
-        uint256 confirmations
+        bytes32 indexed txHash, address indexed relayer, uint256 confirmations
     );
     event ThresholdUpdated(uint256 newThreshold);
 
@@ -101,11 +102,12 @@ contract AOXCRelayerGateway is
      * @notice Relays a call after consensus is reached.
      * @dev Uses assembly for gas-efficient hashing to satisfy forge-lint [asm-keccak256].
      */
-    function relayCall(
-        address target,
-        bytes calldata data,
-        uint256 txNonce
-    ) external onlyRole(RELAYER_ROLE) nonReentrant whenNotPaused {
+    function relayCall(address target, bytes calldata data, uint256 txNonce)
+        external
+        onlyRole(RELAYER_ROLE)
+        nonReentrant
+        whenNotPaused
+    {
         bytes32 txHash;
         // Optimized assembly hashing for lint compliance and gas efficiency
         assembly {
@@ -152,9 +154,8 @@ contract AOXCRelayerGateway is
         }
 
         if (address(reputationManager) != address(0)) {
-            try
-                reputationManager.processAction(msg.sender, keccak256("RELAYER_SUCCESS"))
-            {} catch {}
+            try reputationManager.processAction(msg.sender, keccak256("RELAYER_SUCCESS")) { }
+                catch { }
         }
 
         emit CallRelayed(msg.sender, txn.target, true, block.timestamp);
@@ -221,7 +222,7 @@ contract AOXCRelayerGateway is
                 proof: ""
             });
 
-            try monitoringHub.logForensic(log) {} catch {}
+            try monitoringHub.logForensic(log) { } catch { }
         }
     }
 

@@ -13,9 +13,9 @@ library AOXCStorage {
      * keccak256(abi.encode(uint256(keccak256("AOXC-DAO-V2-AKDENIZ-2026")) - 1)) & ~bytes32(uint256(0xff))
      */
     bytes32 private constant STORAGE_SLOT =
-        keccak256(abi.encode(uint256(keccak256("AOXC-DAO-V2-AKDENIZ-2026")) - 1)) &
-            ~bytes32(uint256(0xff));
+        0x367f3747805167389a19c11867e3a34a17951a37651a148972b260907d083100; // Pre-calculated for performance
 
+    /// @custom:storage-location erc7201:AOXC-DAO-V2-AKDENIZ-2026
     struct MainStorage {
         // --- Governance & Policy ---
         address transferPolicy;
@@ -34,16 +34,16 @@ library AOXCStorage {
         mapping(uint256 => uint256) approvalCounts;
         mapping(uint256 => address) pendingImplementation;
         // --- Forensic Tracking ---
-        bytes32 lastActionHash; // Son kritik işlemin izini storage'da tutmak için
+        bytes32 lastActionHash;
         // --- Reserved Space for Future Upgrades ---
-        // 38 olan gap, yeni eklediğimiz actionHash ile 37'ye düşürülmeli (toplam slot koruması)
         uint256[37] _gap;
     }
 
     /**
      * @dev Returns the storage layout for AOXC.
+     * Renamed from 'layout' to 'getMainStorage' to avoid parser conflicts in Forge Doc.
      */
-    function layout() internal pure returns (MainStorage storage ds) {
+    function getMainStorage() internal pure returns (MainStorage storage ds) {
         bytes32 slot = STORAGE_SLOT;
         assembly {
             ds.slot := slot
@@ -53,54 +53,54 @@ library AOXCStorage {
     // --- Internal Helper Functions (Setters) ---
 
     function setEmergencyHalt(bool status) internal {
-        layout().isEmergencyHalt = status;
+        getMainStorage().isEmergencyHalt = status;
     }
 
     function setPolicyEnforcement(bool status) internal {
-        MainStorage storage ds = layout();
+        MainStorage storage ds = getMainStorage();
         ds.policyEnforcementActive = status;
         ds.lastPolicyChange = block.timestamp;
     }
 
     function setUpgradeAuthorizer(address newAuthorizer) internal {
-        MainStorage storage ds = layout();
+        MainStorage storage ds = getMainStorage();
         ds.upgradeAuthorizer = newAuthorizer;
         ds.lastUpgradeTimestamp = block.timestamp;
     }
 
     function setTransferPolicy(address newPolicy) internal {
-        MainStorage storage ds = layout();
+        MainStorage storage ds = getMainStorage();
         ds.transferPolicy = newPolicy;
         ds.lastPolicyChange = block.timestamp;
     }
 
     function setSupplyCap(uint256 newCap) internal {
-        layout().supplyCap = newCap;
+        getMainStorage().supplyCap = newCap;
     }
 
     function excludeFromLimits(address account, bool status) internal {
-        layout().isExcludedFromLimits[account] = status;
+        getMainStorage().isExcludedFromLimits[account] = status;
     }
 
     // --- Internal View Helpers ---
 
     function isExcluded(address account) internal view returns (bool) {
-        return layout().isExcludedFromLimits[account];
+        return getMainStorage().isExcludedFromLimits[account];
     }
 
     function getSupplyCap() internal view returns (uint256) {
-        return layout().supplyCap;
+        return getMainStorage().supplyCap;
     }
 
     function getUpgradeNonce() internal view returns (uint256) {
-        return layout().upgradeNonce;
+        return getMainStorage().upgradeNonce;
     }
 
     function getLastUpgradeTimestamp() internal view returns (uint256) {
-        return layout().lastUpgradeTimestamp;
+        return getMainStorage().lastUpgradeTimestamp;
     }
 
     function getPendingImplementation(uint256 nonce) internal view returns (address) {
-        return layout().pendingImplementation[nonce];
+        return getMainStorage().pendingImplementation[nonce];
     }
 }

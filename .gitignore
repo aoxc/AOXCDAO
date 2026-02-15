@@ -1,68 +1,85 @@
 # ==============================================================================
-# 🏛️ AOXCDAO INSTITUTIONAL GIT EXCLUSION POLICY
-# 🛡️ SCOPE: Solidity 0.8.33 | Foundry Framework | Enterprise Security
-# 🎓 LEVEL: Pro Ultimate Academic
+# 🏛️ AOXCDAO INSTITUTIONAL GIT EXCLUSION POLICY V5.0
+# 🛡️ ARCHITECTURE: Foundry Submodules / Yarn Berry / Hardhat Integration
+# 🎓 LEVEL: Pro Ultimate Academic (Enterprise Grade / 2026 Secured)
 # ==============================================================================
 
 # --- 🏗️ COMPILATION & BUILD ARTIFACTS ---
-# Local build outputs and cached metadata
+# Eliminating all deterministic build leftovers
 out/
 cache/
 artifacts/
 typechain/
 typechain-types/
+cache_hardhat/
+target/
 
-# --- 📦 DEPENDENCY MANAGEMENT ---
-# External libraries are managed via git submodules or specific managers
-lib/
+# --- 📦 DEPENDENCY MANAGEMENT (YARN BERRY / NPM) ---
+# Enforcing 'Zero-Install' stability while ignoring bloat
 node_modules/
-# Keep forge-std for local consistency if necessary
-# !lib/forge-std
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+!.yarn/install-state.gz
+
+# --- 🧶 YARN SPECIFIC NOISE ---
+yarn-error.log
+yarn-debug.log*
+.eslintcache
+.stylelintcache
+*.tsbuildinfo
+
+# --- 🧪 FOUNDRY & ANALYSIS ARTIFACTS ---
+# Pro-Tip: We do NOT ignore 'lib/' entirely because AOXCDAO uses submodules.
+# We only ignore potential junk inside dependencies.
+lib/*/.git
+lib/*/.github
+lib/*/test
+lib/*/spec
+
+# Foundry specific snapshots and logs
+.gas-snapshot
+.forge-snapshot
+gas-report.txt
+coverage/
+lcov.info
 
 # --- 🔐 CRYPTOGRAPHIC & SENSITIVE DATA (CRITICAL) ---
-# Strict exclusion of private keys, environment variables, and mnemonics
+# Zero-tolerance policy for private key leaks
 .env
 .env.*
+.secrets
 secrets.json
 *.pem
 *.key
 mnemonic.txt
 *password.txt
-# Foundry deployment broadcast data (contains private key metadata)
+# Critical: Forge broadcast logs contain deployment private keys/addresses
 broadcast/
 
-# --- 🧪 ANALYSIS & TELEMETRY ---
-# Local testing coverage, gas metrics, and audit tool artifacts
-coverage/
-lcov.info
-gas-report.txt
-.gas-snapshot
+# --- 🔍 STATIC ANALYSIS & SECURITY AUDIT ---
+# Ignoring local scan databases and temporary reports
 slither-reports/
-aderyn-report.json
-*.log
 slither.db.json
+aderyn-report.json
+mythril_reports/
+corpus/
+*.log
 
 # --- 🛠️ IDE & WORKSPACE CONFIGURATION ---
-# Preventing local environment leakage into global history
-.vscode/
+# Preserving team extensions while ignoring user-specific state
+.vscode/*
 !.vscode/extensions.json
-!.vscode/settings.json
 .idea/
 *.swp
 *.swo
 .project
 .settings/
 .classpath
-
-# --- 🐍 TOOLING & SCRIPTING (Python/Node) ---
-# Artifacts from auxiliary scripts or monitoring tools
-__pycache__/
-*.py[cod]
-*$py.class
-venv/
-env/
-.venv/
-.env/
 
 # --- 🖥️ OPERATING SYSTEM ARTIFACTS ---
 .DS_Store
@@ -76,9 +93,10 @@ Thumbs.db
 *.old
 *.orig
 .cache/
+.foundry/
 
 # ==============================================================================
 # 📜 AOXCDAO QUALITY GATE
-# This exclusion policy ensures that sensitive keys and local build noise 
-# never pollute the institutional ledger.
+# VERSION: 5.0.0 (Institutional Grade)
+# STATUS: Fully compliant with 0.8.33 Hardhat/Foundry Hybrid Architecture.
 # ==============================================================================

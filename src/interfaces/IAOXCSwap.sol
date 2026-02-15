@@ -26,17 +26,16 @@ interface IAOXCSwap {
     /**
      * @notice Performs a swap between two supported assets.
      */
-    function executeSwap(
-        SwapRoute calldata route,
-        uint256 amountIn
-    ) external payable returns (uint256 amountOut);
+    function executeSwap(SwapRoute calldata route, uint256 amountIn)
+        external
+        payable
+        returns (uint256 amountOut);
 
     /**
      * @notice Returns price quote for a given amount.
      */
-    function getAmountOut(
-        address tokenIn,
-        address tokenOut,
-        uint256 amountIn
-    ) external view returns (uint256);
+    function getAmountOut(address tokenIn, address tokenOut, uint256 amountIn)
+        external
+        view
+        returns (uint256);
 }

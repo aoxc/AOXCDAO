@@ -38,8 +38,9 @@ contract ForensicPulse {
     function requirePulse(IMonitoringHub.ForensicLog calldata log) external {
         // Attempt to record the log. If the hub fails or runs out of gas, the entire transaction reverts.
         try MONITORING_HUB.logForensic(log) {
-            // Heartbeat/Pulse successful
-        } catch {
+        // Heartbeat/Pulse successful
+        }
+        catch {
             revert AOXC__Pulse_TelemetryOffline();
         }
     }

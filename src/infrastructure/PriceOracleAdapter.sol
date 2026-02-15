@@ -74,11 +74,10 @@ contract PriceOracleAdapter is AccessControl {
      * @param feed The address of the Chainlink-compatible aggregator.
      * @param heartbeat The maximum allowable delay for price updates.
      */
-    function setAssetFeed(
-        address asset,
-        address feed,
-        uint256 heartbeat
-    ) external onlyRole(AOXCConstants.ADMIN_ROLE) {
+    function setAssetFeed(address asset, address feed, uint256 heartbeat)
+        external
+        onlyRole(AOXCConstants.ADMIN_ROLE)
+    {
         if (feed == address(0)) revert AOXC__Oracle_InvalidPrice();
 
         assetFeeds[asset] = FeedConfig({ feedAddress: feed, heartbeat: heartbeat, isActive: true });
@@ -100,8 +99,8 @@ contract PriceOracleAdapter is AccessControl {
 
         IAggregatorV3 aggregator = IAggregatorV3(config.feedAddress);
 
-        (uint80 roundId, int256 answer, , uint256 updatedAt, uint80 answeredInRound) = aggregator
-            .latestRoundData();
+        (uint80 roundId, int256 answer,, uint256 updatedAt, uint80 answeredInRound) =
+            aggregator.latestRoundData();
 
         // 1. Validation: Price must be positive
         if (answer <= 0) revert AOXC__Oracle_InvalidPrice();

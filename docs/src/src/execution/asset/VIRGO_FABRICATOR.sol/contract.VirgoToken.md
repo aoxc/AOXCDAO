@@ -1,0 +1,15 @@
+# VirgoToken
+[Git Source](https://github.com/aoxc/AOXCDAO/blob/4906edc2cee9ebf2ba59629225d505313f10268f/src/execution/asset/VIRGO_FABRICATOR.sol)
+
+**Inherits:**
+ERC20
+
+
+## Functions
+### constructor
+
+
+```solidity
+constructor() ERC20("Virgo Fabricator Token", "VIRGO");
+```
+

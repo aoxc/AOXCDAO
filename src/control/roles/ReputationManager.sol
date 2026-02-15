@@ -2,9 +2,15 @@
 pragma solidity 0.8.33;
 
 import { Initializable } from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
-import { AccessControlUpgradeable } from "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
-import { PausableUpgradeable } from "@openzeppelin/contracts-upgradeable/utils/PausableUpgradeable.sol";
-import { UUPSUpgradeable } from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
+import {
+    AccessControlUpgradeable
+} from "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
+import {
+    PausableUpgradeable
+} from "@openzeppelin/contracts-upgradeable/utils/PausableUpgradeable.sol";
+import {
+    UUPSUpgradeable
+} from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 import { ReentrancyGuard } from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
 import { IAOXP } from "@interfaces/IAOXP.sol";
@@ -54,10 +60,7 @@ contract ReputationManager is
 
     // --- Eventler ---
     event ActionConfigured(
-        bytes32 indexed actionType,
-        uint256 reward,
-        uint256 weight,
-        uint256 cooldown
+        bytes32 indexed actionType, uint256 reward, uint256 weight, uint256 cooldown
     );
     event ReputationProcessed(address indexed user, bytes32 indexed actionType, uint256 newScore);
 
@@ -100,21 +103,21 @@ contract ReputationManager is
         _logToHub(IMonitoringHub.Severity.INFO, "INITIALIZE", "Reputation system deployed");
     }
 
-    function setAction(
-        bytes32 actionType,
-        uint256 reward,
-        uint256 weight,
-        uint256 cooldown
-    ) external onlyRole(ADMIN_ROLE) {
+    function setAction(bytes32 actionType, uint256 reward, uint256 weight, uint256 cooldown)
+        external
+        onlyRole(ADMIN_ROLE)
+    {
         actions[actionType] = ActionConfig({ reward: reward, weight: weight, cooldown: cooldown });
         _logToHub(IMonitoringHub.Severity.WARNING, "CONFIG_CHANGE", "Action parameters updated");
         emit ActionConfigured(actionType, reward, weight, cooldown);
     }
 
-    function processAction(
-        address user,
-        bytes32 actionType
-    ) external onlyRole(OPERATOR_ROLE) whenNotPaused nonReentrant {
+    function processAction(address user, bytes32 actionType)
+        external
+        onlyRole(OPERATOR_ROLE)
+        whenNotPaused
+        nonReentrant
+    {
         ActionConfig memory cfg = actions[actionType];
         UserData storage userRef = _users[user];
 
@@ -128,7 +131,7 @@ contract ReputationManager is
 
         if (cfg.reward > 0) {
             // DÜZELTME: IAOXP (address to, uint256 id, uint256 amount, bytes data) uyumu
-            try aoxp.awardXp(user, 0, cfg.reward, "") {} catch {}
+            try aoxp.awardXp(user, 0, cfg.reward, "") { } catch { }
         }
 
         emit ReputationProcessed(user, actionType, userRef.score);
@@ -145,7 +148,7 @@ contract ReputationManager is
     function _calculateMultiplier(uint256 score) internal view returns (uint256) {
         uint256 m = minMultiplier;
         uint256 len = thresholds.length;
-        for (uint256 i = 0; i < len; ) {
+        for (uint256 i = 0; i < len;) {
             if (score >= thresholds[i]) {
                 m = multipliers[i];
             } else {
@@ -196,7 +199,7 @@ contract ReputationManager is
                 proof: ""
             });
 
-            try monitoringHub.logForensic(log) {} catch {}
+            try monitoringHub.logForensic(log) { } catch { }
         }
     }
 

@@ -2,9 +2,15 @@
 pragma solidity 0.8.33;
 
 import { Initializable } from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
-import { AccessControlEnumerableUpgradeable } from "@openzeppelin/contracts-upgradeable/access/extensions/AccessControlEnumerableUpgradeable.sol";
-import { PausableUpgradeable } from "@openzeppelin/contracts-upgradeable/utils/PausableUpgradeable.sol";
-import { UUPSUpgradeable } from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
+import {
+    AccessControlEnumerableUpgradeable
+} from "@openzeppelin/contracts-upgradeable/access/extensions/AccessControlEnumerableUpgradeable.sol";
+import {
+    PausableUpgradeable
+} from "@openzeppelin/contracts-upgradeable/utils/PausableUpgradeable.sol";
+import {
+    UUPSUpgradeable
+} from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 import { ReentrancyGuard } from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
 import { IAOXCUpgradeAuthorizer } from "@interfaces/IAOXCUpgradeAuthorizer.sol";
@@ -83,9 +89,11 @@ contract AOXCUpgradeAuthorizer is
     /**
      * @notice Casts a vote for a specific new implementation address.
      */
-    function approveUpgrade(
-        address newImplementation
-    ) external onlyRole(UPGRADE_ADMIN_ROLE) whenNotPaused {
+    function approveUpgrade(address newImplementation)
+        external
+        onlyRole(UPGRADE_ADMIN_ROLE)
+        whenNotPaused
+    {
         if (newImplementation == address(0)) {
             revert AOXC__ZeroAddress();
         }
@@ -102,10 +110,12 @@ contract AOXCUpgradeAuthorizer is
     /**
      * @notice Validates an upgrade request during the UUPS transaction lifecycle.
      */
-    function validateUpgrade(
-        address caller,
-        address newImplementation
-    ) external override whenNotPaused nonReentrant {
+    function validateUpgrade(address caller, address newImplementation)
+        external
+        override
+        whenNotPaused
+        nonReentrant
+    {
         if (!hasRole(UPGRADE_ADMIN_ROLE, caller)) revert AOXC__UnauthorizedCaller(caller);
 
         if (block.timestamp < lastUpgradeTimestamp + minUpgradeInterval) {
@@ -183,7 +193,7 @@ contract AOXCUpgradeAuthorizer is
                 proof: ""
             });
 
-            try monitoringHub.logForensic(log) {} catch {}
+            try monitoringHub.logForensic(log) { } catch { }
         }
     }
 
