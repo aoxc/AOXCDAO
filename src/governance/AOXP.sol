@@ -2,15 +2,9 @@
 pragma solidity 0.8.33;
 
 import { Initializable } from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
-import {
-    ERC1155Upgradeable
-} from "@openzeppelin/contracts-upgradeable/token/ERC1155/ERC1155Upgradeable.sol";
-import {
-    AccessControlUpgradeable
-} from "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
-import {
-    UUPSUpgradeable
-} from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
+import { ERC1155Upgradeable } from "@openzeppelin/contracts-upgradeable/token/ERC1155/ERC1155Upgradeable.sol";
+import { AccessControlUpgradeable } from "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
+import { UUPSUpgradeable } from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 
 import { IMonitoringHub } from "../interfaces/IMonitoringHub.sol";
 import { AOXCErrors } from "../libraries/AOXCErrors.sol";
@@ -95,10 +89,11 @@ contract AOXP is Initializable, ERC1155Upgradeable, AccessControlUpgradeable, UU
     /**
      * @notice Individually awards XP for specific ecosystem achievements.
      */
-    function awardXp(address to, uint256 amount, string calldata reason)
-        external
-        onlyRole(MINTER_ROLE)
-    {
+    function awardXp(
+        address to,
+        uint256 amount,
+        string calldata reason
+    ) external onlyRole(MINTER_ROLE) {
         if (to == address(0)) revert AOXCErrors.ZeroAddressDetected();
         if (amount == 0) revert AOXCErrors.InvalidConfiguration();
 
@@ -110,10 +105,11 @@ contract AOXP is Initializable, ERC1155Upgradeable, AccessControlUpgradeable, UU
     /**
      * @notice Revokes XP due to lock expiration or security sanctions.
      */
-    function revokeXp(address from, uint256 amount, string calldata reason)
-        external
-        onlyRole(REVOKER_ROLE)
-    {
+    function revokeXp(
+        address from,
+        uint256 amount,
+        string calldata reason
+    ) external onlyRole(REVOKER_ROLE) {
         if (from == address(0)) revert AOXCErrors.ZeroAddressDetected();
 
         _burn(from, AOXP_ID, amount);
@@ -127,10 +123,12 @@ contract AOXP is Initializable, ERC1155Upgradeable, AccessControlUpgradeable, UU
      * @dev Hook that ensures tokens are non-transferable (Soulbound).
      * Only minting (from == 0) and burning (to == 0) are permitted.
      */
-    function _update(address from, address to, uint256[] memory ids, uint256[] memory values)
-        internal
-        override
-    {
+    function _update(
+        address from,
+        address to,
+        uint256[] memory ids,
+        uint256[] memory values
+    ) internal override {
         if (from != address(0) && to != address(0)) {
             revert AOXCErrors.ActionNotAllowed();
         }
@@ -181,20 +179,17 @@ contract AOXP is Initializable, ERC1155Upgradeable, AccessControlUpgradeable, UU
                 proof: ""
             });
 
-            try monitoringHub.logForensic(log) { } catch { }
+            try monitoringHub.logForensic(log) {} catch {}
         }
     }
 
     // --- Governance ---
 
-    function _authorizeUpgrade(address) internal override onlyRole(UPGRADER_ROLE) { }
+    function _authorizeUpgrade(address) internal override onlyRole(UPGRADER_ROLE) {}
 
-    function supportsInterface(bytes4 interfaceId)
-        public
-        view
-        override(ERC1155Upgradeable, AccessControlUpgradeable)
-        returns (bool)
-    {
+    function supportsInterface(
+        bytes4 interfaceId
+    ) public view override(ERC1155Upgradeable, AccessControlUpgradeable) returns (bool) {
         return super.supportsInterface(interfaceId);
     }
 

@@ -2,12 +2,8 @@
 pragma solidity 0.8.33;
 
 import { Initializable } from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
-import {
-    AccessControlUpgradeable
-} from "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
-import {
-    UUPSUpgradeable
-} from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
+import { AccessControlUpgradeable } from "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
+import { UUPSUpgradeable } from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 
 import { IMonitoringHub } from "../interfaces/IMonitoringHub.sol";
 import { AOXCBaseReporter } from "../monitoring/AOXCBaseReporter.sol";
@@ -84,10 +80,11 @@ contract AOXCEmergencyPauseGuard is
      * @param _monitoringHub Forensic logging hub address.
      * @param _minPauseDuration Minimum seconds the system must stay paused.
      */
-    function initialize(address admin, address _monitoringHub, uint256 _minPauseDuration)
-        external
-        initializer
-    {
+    function initialize(
+        address admin,
+        address _monitoringHub,
+        uint256 _minPauseDuration
+    ) external initializer {
         if (admin == address(0) || _monitoringHub == address(0)) {
             revert AOXCErrors.ZeroAddressDetected();
         }
@@ -104,7 +101,12 @@ contract AOXCEmergencyPauseGuard is
         _grantRole(UPGRADER_ROLE, admin);
 
         _performForensicLog(
-            IMonitoringHub.Severity.INFO, "INITIALIZE", "Circuit Breaker Active", address(0), 0, ""
+            IMonitoringHub.Severity.INFO,
+            "INITIALIZE",
+            "Circuit Breaker Active",
+            address(0),
+            0,
+            ""
         );
     }
 
@@ -187,7 +189,12 @@ contract AOXCEmergencyPauseGuard is
         lastPauseTime = block.timestamp;
 
         _performForensicLog(
-            IMonitoringHub.Severity.CRITICAL, "SYSTEM_PAUSED", reason, msg.sender, 100, ""
+            IMonitoringHub.Severity.CRITICAL,
+            "SYSTEM_PAUSED",
+            reason,
+            msg.sender,
+            100,
+            ""
         );
 
         emit Paused(msg.sender, block.timestamp, reason);
@@ -196,11 +203,9 @@ contract AOXCEmergencyPauseGuard is
     /**
      * @dev Restricts implementation upgrades to the UPGRADER_ROLE.
      */
-    function _authorizeUpgrade(address newImplementation)
-        internal
-        override
-        onlyRole(UPGRADER_ROLE)
-    {
+    function _authorizeUpgrade(
+        address newImplementation
+    ) internal override onlyRole(UPGRADER_ROLE) {
         if (newImplementation == address(0)) {
             revert AOXCErrors.ZeroAddressDetected();
         }

@@ -111,13 +111,16 @@ contract PegasusOracle is AccessControl, ReentrancyGuard {
 
     // --- CORE ORACLE OPERATIONS ---
 
-    function synthesizeData(bytes32 _dataKey, uint256 _rawValue, bytes32 _proof)
-        external
-        onlyQualified(PEGASUS_NEURAL)
-        nonReentrant
-    {
+    function synthesizeData(
+        bytes32 _dataKey,
+        uint256 _rawValue,
+        bytes32 _proof
+    ) external onlyQualified(PEGASUS_NEURAL) nonReentrant {
         oracleRegistry[_dataKey] = IntelligenceReport({
-            timestamp: block.timestamp, value: _rawValue, sourceHash: _proof, isValidated: true
+            timestamp: block.timestamp,
+            value: _rawValue,
+            sourceHash: _proof,
+            isValidated: true
         });
 
         _log(IMonitoringHub.Severity.INFO, "SYNTHESIS", "New intelligence report finalized.");
@@ -132,10 +135,10 @@ contract PegasusOracle is AccessControl, ReentrancyGuard {
         _log(IMonitoringHub.Severity.DEBUG, "INGESTION", "Raw signal stream recorded.");
     }
 
-    function invalidateData(bytes32 _dataKey, string calldata _reason)
-        external
-        onlyQualified(PEGASUS_AEGIS)
-    {
+    function invalidateData(
+        bytes32 _dataKey,
+        string calldata _reason
+    ) external onlyQualified(PEGASUS_AEGIS) {
         oracleRegistry[_dataKey].isValidated = false;
         _log(IMonitoringHub.Severity.WARNING, "INTEGRITY", "Data set invalidated.");
         emit DataBlacklisted(_dataKey, _reason);

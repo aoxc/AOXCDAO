@@ -2,12 +2,8 @@
 pragma solidity 0.8.33;
 
 import { Initializable } from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
-import {
-    AccessControlUpgradeable
-} from "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
-import {
-    UUPSUpgradeable
-} from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
+import { AccessControlUpgradeable } from "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
+import { UUPSUpgradeable } from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 
 import { ITransferPolicy } from "../interfaces/ITransferPolicy.sol";
 import { IMonitoringHub } from "../interfaces/IMonitoringHub.sol";
@@ -73,10 +69,11 @@ contract AOXCEmergencyTransferPolicy is
      * @param _monitoringHub Forensic logging hub address.
      * @param _initialLimit Initial global transfer amount threshold.
      */
-    function initialize(address admin, address _monitoringHub, uint256 _initialLimit)
-        external
-        initializer
-    {
+    function initialize(
+        address admin,
+        address _monitoringHub,
+        uint256 _initialLimit
+    ) external initializer {
         if (admin == address(0) || _monitoringHub == address(0)) {
             revert AOXCErrors.ZeroAddressDetected();
         }
@@ -116,7 +113,12 @@ contract AOXCEmergencyTransferPolicy is
 
         if (frozen) {
             _performForensicLog(
-                IMonitoringHub.Severity.WARNING, "AUTH_REJECT", "Freeze active", from, 40, ""
+                IMonitoringHub.Severity.WARNING,
+                "AUTH_REJECT",
+                "Freeze active",
+                from,
+                40,
+                ""
             );
             revert AOXCErrors.ProtocolPaused();
         }
@@ -161,11 +163,10 @@ contract AOXCEmergencyTransferPolicy is
         return 2;
     }
 
-    function updatePolicyParameter(string calldata, uint256 newValue)
-        external
-        override
-        onlyRole(ADMIN_ROLE)
-    {
+    function updatePolicyParameter(
+        string calldata,
+        uint256 newValue
+    ) external override onlyRole(ADMIN_ROLE) {
         globalTransferLimit = newValue;
     }
 
@@ -176,11 +177,9 @@ contract AOXCEmergencyTransferPolicy is
     /**
      * @dev Implementation for UUPS upgrade authorization.
      */
-    function _authorizeUpgrade(address newImplementation)
-        internal
-        override
-        onlyRole(UPGRADER_ROLE)
-    {
+    function _authorizeUpgrade(
+        address newImplementation
+    ) internal override onlyRole(UPGRADER_ROLE) {
         if (newImplementation == address(0)) {
             revert AOXCErrors.ZeroAddressDetected();
         }

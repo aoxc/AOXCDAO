@@ -2,12 +2,8 @@
 pragma solidity 0.8.33;
 
 import { Initializable } from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
-import {
-    AccessControlUpgradeable
-} from "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
-import {
-    UUPSUpgradeable
-} from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
+import { AccessControlUpgradeable } from "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
+import { UUPSUpgradeable } from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 
 /**
  * @dev V5 Compliance: Standard ReentrancyGuard is used as it is stateless in V5.
@@ -74,12 +70,9 @@ contract AOXCMonitoringHub is
      * @notice Seals a 26-channel forensic log onto the blockchain.
      * @param log The full forensic data package.
      */
-    function logForensic(ForensicLog calldata log)
-        external
-        override
-        onlyRole(REPORTER_ROLE)
-        nonReentrant
-    {
+    function logForensic(
+        ForensicLog calldata log
+    ) external override onlyRole(REPORTER_ROLE) nonReentrant {
         if (!_active) revert AOXCErrors.ProtocolPaused();
 
         // Anti-spam protection for non-emergency logs

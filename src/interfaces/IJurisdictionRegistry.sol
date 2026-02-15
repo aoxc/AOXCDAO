@@ -86,4 +86,3 @@ interface IJurisdictionRegistry {
      */
     function jurisdictionExists(uint256 jurisdictionId) external view returns (bool exists);
 }
-

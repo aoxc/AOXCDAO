@@ -68,4 +68,3 @@ interface IRedeemController {
      */
     function isRedeemActive() external view returns (bool active);
 }
-

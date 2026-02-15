@@ -9,7 +9,9 @@ pragma solidity 0.8.33;
 interface IAOXCUpgradeAuthorizer {
     // --- SECTION: EVENTS ---
     event UpgradeValidated(
-        address indexed initiator, address indexed implementation, uint256 timestamp
+        address indexed initiator,
+        address indexed implementation,
+        uint256 timestamp
     );
 
     // --- SECTION: AUTHORIZATION OPERATIONS ---
@@ -19,4 +21,3 @@ interface IAOXCUpgradeAuthorizer {
     function isUpgradeAuthorized(address implementation) external view returns (bool authorized);
     function getAuthorizerVersion() external pure returns (uint256 version);
 }
-

@@ -1,0 +1,29 @@
+testMode: assertion
+testLimit: 500000
+codeSize: 0
+shrinkLimit: 5000
+coverage: true
+
+contract: AOXC
+
+# Enable all public/external functions
+allContracts: false
+
+sender: ["0x10000", "0x20000", "0x30000", "0x40000", "0x50000"]
+
+# Fuzzing parameters
+maxCallDepth: 20
+balanceContract: 1000000000000000000000000
+balanceAddr: 1000000000000000000000000
+
+# Excluded functions (none for now)
+filterFunctions: []
+
+# Property prefix
+prefix: echidna_
+
+# Enable corpus saving
+corpusDir: echidna-corpus
+
+# Stop on first failure
+stopOnFail: true

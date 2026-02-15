@@ -2,9 +2,7 @@
 pragma solidity 0.8.33;
 
 import { Initializable } from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
-import {
-    AccessControlUpgradeable
-} from "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
+import { AccessControlUpgradeable } from "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
 import { ReentrancyGuard } from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
 import { IMonitoringHub } from "../interfaces/IMonitoringHub.sol";
@@ -54,11 +52,10 @@ contract AOXCComplianceEvents is Initializable, AccessControlUpgradeable, Reentr
     /**
      * @notice Logs and emits a blacklist event.
      */
-    function emitBlacklist(address account, string calldata reason)
-        external
-        nonReentrant
-        onlyRole(COMPLIANCE_ROLE)
-    {
+    function emitBlacklist(
+        address account,
+        string calldata reason
+    ) external nonReentrant onlyRole(COMPLIANCE_ROLE) {
         // 26-Channel Forensic Log
         _logToHub(IMonitoringHub.Severity.CRITICAL, "BLACKLISTED", reason, account);
         emit Blacklisted(account, reason, block.timestamp, msg.sender);
@@ -112,7 +109,7 @@ contract AOXCComplianceEvents is Initializable, AccessControlUpgradeable, Reentr
                 proof: ""
             });
 
-            try monitoringHub.logForensic(log) { } catch { }
+            try monitoringHub.logForensic(log) {} catch {}
         }
     }
 

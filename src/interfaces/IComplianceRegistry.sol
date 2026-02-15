@@ -20,4 +20,3 @@ interface IComplianceRegistry {
     function getBlacklistReason(address account) external view returns (string memory reason);
     function getBlacklistCount() external view returns (uint256 count);
 }
-

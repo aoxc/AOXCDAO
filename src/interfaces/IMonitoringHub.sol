@@ -32,31 +32,26 @@ interface IMonitoringHub {
         address actor; // 2. Immediate caller (msg.sender)
         address origin; // 3. Original transaction initiator (tx.origin)
         address related; // 4. Secondary address involved (Counterparty/Target)
-
         // --- Categorization Group (5-8) ---
         Severity severity; // 5. Incident criticality
         string category; // 6. Strategic module identifier (e.g., "MINT", "GOV", "GAME")
         string details; // 7. Human-readable description of the event
         uint8 riskScore; // 8. Algorithmic risk rating (0-100)
-
         // --- Temporal & Sequential Group (9-12) ---
         uint256 nonce; // 9. Contract-specific sequential counter
         uint256 chainId; // 10. Network ID (X Layer)
         uint256 blockNumber; // 11. Block height at mintage
         uint256 timestamp; // 12. Unix timestamp of the event
-
         // --- Technical Forensic Group (13-16) ---
         uint256 gasUsed; // 13. Snapshot of gas consumption
         uint256 value; // 14. Native asset value transferred (OKB)
         bytes32 stateRoot; // 15. Cryptographic snapshot of the contract state
         bytes32 txHash; // 16. Transaction identifier
-
         // --- Logic & Proxy Group (17-20) ---
         bytes4 selector; // 17. Function selector executed
         uint8 version; // 18. Forensic schema version (V1)
         bool actionReq; // 19. Flag for automated response systems
         bool isUpgraded; // 20. Indicates if logic is via Proxy/Implementation
-
         // --- Extended Telemetry Group (21-26) ---
         uint8 environment; // 21. 0:Prod, 1:Test, 2:Dev
         bytes32 correlationId; // 22. ID to link multiple related transactions

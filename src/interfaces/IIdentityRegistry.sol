@@ -20,4 +20,3 @@ interface IIdentityRegistry {
     function isRegistered(address account) external view returns (bool registered);
     function getRegisteredCount() external view returns (uint256 totalCount);
 }
-

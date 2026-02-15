@@ -17,4 +17,3 @@ interface IGovernance {
     function vote(uint256 proposalId, bool support) external;
     function executeProposal(uint256 proposalId) external;
 }
-

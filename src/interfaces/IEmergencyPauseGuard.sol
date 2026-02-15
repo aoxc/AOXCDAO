@@ -18,4 +18,3 @@ interface IEmergencyPauseGuard {
     // --- SECTION: VIEW OPERATIONS ---
     function isPaused() external view returns (bool status);
 }
-

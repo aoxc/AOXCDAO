@@ -15,11 +15,11 @@ library AOXCLogicLib {
      * @notice Calculates reputation weight based on amount and lock duration.
      * @dev Linear scaling: Power = Amount * (1 + (Duration / 1 Year) * Multiplier)
      */
-    function calculateReputationWeight(uint256 amount, uint256 duration, uint256 annualMultiplier)
-        internal
-        pure
-        returns (uint256)
-    {
+    function calculateReputationWeight(
+        uint256 amount,
+        uint256 duration,
+        uint256 annualMultiplier
+    ) internal pure returns (uint256) {
         if (duration == 0) return amount;
 
         // Example: 1 year lock with 2x multiplier (20000 BP)

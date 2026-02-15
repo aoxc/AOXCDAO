@@ -3,9 +3,7 @@
 // Academic Grade - AOXC Ultimate Pro Standard
 pragma solidity 0.8.33;
 
-import {
-    AccessControlEnumerable
-} from "@openzeppelin/contracts/access/extensions/AccessControlEnumerable.sol";
+import { AccessControlEnumerable } from "@openzeppelin/contracts/access/extensions/AccessControlEnumerable.sol";
 import { Pausable } from "@openzeppelin/contracts/utils/Pausable.sol";
 import { AOXCConstants } from "../libraries/AOXCConstants.sol";
 
@@ -38,7 +36,9 @@ contract AOXCAccessCoordinator is AccessControlEnumerable, Pausable {
     // --- Events ---
 
     event SystemStatusChanged(
-        SystemStatus indexed previous, SystemStatus indexed current, address indexed actor
+        SystemStatus indexed previous,
+        SystemStatus indexed current,
+        address indexed actor
     );
     event EmergencyActionTriggered(string reason, address indexed sentinel);
 
@@ -63,8 +63,8 @@ contract AOXCAccessCoordinator is AccessControlEnumerable, Pausable {
     function triggerEmergencyPause(string calldata reason) external {
         // Corrected revert logic using Custom Error for gas efficiency and lint compliance
         if (
-            !hasRole(AOXCConstants.SENTINEL_ROLE, msg.sender)
-                && !hasRole(AOXCConstants.ADMIN_ROLE, msg.sender)
+            !hasRole(AOXCConstants.SENTINEL_ROLE, msg.sender) &&
+            !hasRole(AOXCConstants.ADMIN_ROLE, msg.sender)
         ) {
             revert AOXCUnauthorizedAccount(msg.sender, AOXCConstants.SENTINEL_ROLE);
         }

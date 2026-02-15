@@ -102,10 +102,13 @@ contract AOXCSwap is ReentrancyGuard, Pausable, AccessControl {
         }
 
         // 3. Treasury Logic
-        (bool success,) = payable(address(TREASURY)).call{ value: amountIn }("");
+        (bool success, ) = payable(address(TREASURY)).call{ value: amountIn }("");
         if (!success) {
             _reportToHub(
-                IMonitoringHub.Severity.CRITICAL, "FINANCE_CHANNEL", "Treasury Inbound Failed", 99
+                IMonitoringHub.Severity.CRITICAL,
+                "FINANCE_CHANNEL",
+                "Treasury Inbound Failed",
+                99
             );
             revert Swap__TreasuryFailure();
         }
@@ -134,11 +137,11 @@ contract AOXCSwap is ReentrancyGuard, Pausable, AccessControl {
         }
     }
 
-    function _calculateRiskScore(uint256 _in, uint256 _out, uint256 _min)
-        internal
-        view
-        returns (uint8)
-    {
+    function _calculateRiskScore(
+        uint256 _in,
+        uint256 _out,
+        uint256 _min
+    ) internal view returns (uint8) {
         uint8 score = 10;
         if (_in >= highValueThreshold) score += 40;
         if (_out == _min) score += 20;
@@ -180,7 +183,7 @@ contract AOXCSwap is ReentrancyGuard, Pausable, AccessControl {
                 metadata: "",
                 proof: ""
             });
-            try MONITORING_HUB.logForensic(log) { } catch { }
+            try MONITORING_HUB.logForensic(log) {} catch {}
         }
     }
 
@@ -210,7 +213,7 @@ contract AOXCSwap is ReentrancyGuard, Pausable, AccessControl {
         while (_i != 0) {
             // casting to 'uint8' is safe because 48 + (0-9) is always < 255
             // forge-lint: disable-next-line(unsafe-typecast)
-            bstr[--k] = bytes1(uint8(48 + _i % 10));
+            bstr[--k] = bytes1(uint8(48 + (_i % 10)));
             _i /= 10;
         }
         return string(bstr);

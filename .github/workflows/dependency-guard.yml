@@ -1,0 +1,94 @@
+name: AOXCDAO Institutional Dependency & Build Guard
+
+on:
+  pull_request:
+    branches: [ develop, main ]
+  push:
+    branches: [ develop ]
+
+jobs:
+  deterministic-build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # -------------------------------------------------
+      # CHECKOUT (FULL HISTORY + SUBMODULES)
+      # -------------------------------------------------
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          fetch-depth: 0
+
+      # -------------------------------------------------
+      # PINNED FOUNDRY VERSION
+      # -------------------------------------------------
+      - name: Install Foundry (Pinned Version)
+        uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: nightly-2024-01-01
+
+      - name: Verify Foundry Version
+        run: forge --version
+
+      # -------------------------------------------------
+      # LOCKFILE INTEGRITY
+      # -------------------------------------------------
+      - name: Lockfile validation
+        run: |
+          forge install --check
+          git diff --exit-code foundry.lock || \
+          (echo "❌ Dependency drift detected in foundry.lock" && exit 1)
+
+      # -------------------------------------------------
+      # SUBMODULE FREEZE CHECK
+      # -------------------------------------------------
+      - name: Validate submodule integrity
+        run: |
+          git submodule sync --recursive
+          git submodule update --init --recursive
+          if git submodule status | grep -q "^+"; then
+            echo "❌ Submodule pointer mismatch detected."
+            exit 1
+          fi
+
+      # -------------------------------------------------
+      # OPENZEPPELIN VERSION ENFORCEMENT
+      # -------------------------------------------------
+      - name: Enforce OpenZeppelin v5.5.0
+        run: |
+          cd lib/openzeppelin-contracts
+          git tag --points-at HEAD | grep -q "v5.5.0" || \
+          (echo "❌ OpenZeppelin core must be v5.5.0" && exit 1)
+          cd ../openzeppelin-contracts-upgradeable
+          git tag --points-at HEAD | grep -q "v5.5.0" || \
+          (echo "❌ OpenZeppelin upgradeable must be v5.5.0" && exit 1)
+
+      # -------------------------------------------------
+      # REMAPPINGS INTEGRITY
+      # -------------------------------------------------
+      - name: Ensure remappings unchanged
+        run: |
+          git diff --exit-code remappings.txt || \
+          (echo "❌ remappings.txt was modified" && exit 1)
+
+      # -------------------------------------------------
+      # FORMAT CHECK
+      # -------------------------------------------------
+      - name: Solidity format check
+        run: forge fmt --check
+
+      # -------------------------------------------------
+      # CLEAN BUILD (DETERMINISTIC)
+      # -------------------------------------------------
+      - name: Clean build
+        run: |
+          forge clean
+          forge build --sizes
+
+      # -------------------------------------------------
+      # FULL TEST SUITE
+      # -------------------------------------------------
+      - name: Test suite
+        run: forge test -vvv
+

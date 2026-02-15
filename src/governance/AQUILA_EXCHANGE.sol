@@ -116,11 +116,10 @@ contract AquilaExchange is AccessControl, ReentrancyGuard {
      * @dev Liquidity management now emits event with data.
      * In a real DEX, this would interact with a pool contract.
      */
-    function manageLiquidity(bytes32 _pair, uint256 _amount)
-        external
-        onlyQualified(AQUILA_FLUX)
-        nonReentrant
-    {
+    function manageLiquidity(
+        bytes32 _pair,
+        uint256 _amount
+    ) external onlyQualified(AQUILA_FLUX) nonReentrant {
         // Audit Fix: Veriyi state'e yansıtıyoruz veya event ile doğruluyoruz
         registry[_pair].volumeLimit += _amount;
 
@@ -128,18 +127,18 @@ contract AquilaExchange is AccessControl, ReentrancyGuard {
         emit LiquidityInjected(_pair, _amount);
     }
 
-    function recalibratePricing(bytes32 _pair, uint256 _newFee)
-        external
-        onlyQualified(AQUILA_NEURAL)
-    {
+    function recalibratePricing(
+        bytes32 _pair,
+        uint256 _newFee
+    ) external onlyQualified(AQUILA_NEURAL) {
         registry[_pair].tradeFee = _newFee;
         _log(IMonitoringHub.Severity.WARNING, "ECONOMY", "Pricing model updated.");
     }
 
-    function haltMarket(bytes32 _pair, string calldata _reason)
-        external
-        onlyQualified(AQUILA_AEGIS)
-    {
+    function haltMarket(
+        bytes32 _pair,
+        string calldata _reason
+    ) external onlyQualified(AQUILA_AEGIS) {
         if (!registry[_pair].isTradingEnabled) {
             revert MarketAlreadyHalted(_pair);
         }

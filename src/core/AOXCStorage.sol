@@ -12,9 +12,9 @@ library AOXCStorage {
      * @dev ERC-7201 Storage Slot calculation.
      * keccak256(abi.encode(uint256(keccak256("AOXC-DAO-V2-AKDENIZ-2026")) - 1)) & ~bytes32(uint256(0xff))
      */
-    bytes32 private constant STORAGE_SLOT = keccak256(
-        abi.encode(uint256(keccak256("AOXC-DAO-V2-AKDENIZ-2026")) - 1)
-    ) & ~bytes32(uint256(0xff));
+    bytes32 private constant STORAGE_SLOT =
+        keccak256(abi.encode(uint256(keccak256("AOXC-DAO-V2-AKDENIZ-2026")) - 1)) &
+            ~bytes32(uint256(0xff));
 
     struct MainStorage {
         // --- Governance & Policy ---
@@ -22,24 +22,19 @@ library AOXCStorage {
         address upgradeAuthorizer;
         bool policyEnforcementActive;
         bool isEmergencyHalt;
-
         // --- Metadata & Timestamps ---
         uint256 lastUpgradeTimestamp;
         uint256 lastPolicyChange;
-
         // --- Supply Management ---
         uint256 supplyCap;
         mapping(address => bool) isExcludedFromLimits;
-
         // --- Upgrade Authorization State (Multi-sig/Consensus) ---
         uint256 upgradeNonce;
         mapping(uint256 => mapping(address => bool)) upgradeApprovals;
         mapping(uint256 => uint256) approvalCounts;
         mapping(uint256 => address) pendingImplementation;
-
         // --- Forensic Tracking ---
         bytes32 lastActionHash; // Son kritik işlemin izini storage'da tutmak için
-
         // --- Reserved Space for Future Upgrades ---
         // 38 olan gap, yeni eklediğimiz actionHash ile 37'ye düşürülmeli (toplam slot koruması)
         uint256[37] _gap;

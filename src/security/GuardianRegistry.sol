@@ -2,15 +2,9 @@
 pragma solidity 0.8.33;
 
 import { Initializable } from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
-import {
-    AccessControlUpgradeable
-} from "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
-import {
-    PausableUpgradeable
-} from "@openzeppelin/contracts-upgradeable/utils/PausableUpgradeable.sol";
-import {
-    UUPSUpgradeable
-} from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
+import { AccessControlUpgradeable } from "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
+import { PausableUpgradeable } from "@openzeppelin/contracts-upgradeable/utils/PausableUpgradeable.sol";
+import { UUPSUpgradeable } from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 
 import { IMonitoringHub } from "../interfaces/IMonitoringHub.sol";
 import { AOXCBaseReporter } from "../monitoring/AOXCBaseReporter.sol";
@@ -109,12 +103,9 @@ contract AOXCGuardianRegistry is
      * @notice Appoints a new guardian to the registry.
      * @param guardian Address to be granted sentinel powers.
      */
-    function addGuardian(address guardian)
-        external
-        onlyRole(ADMIN_ROLE)
-        whenNotPaused
-        nonReentrant
-    {
+    function addGuardian(
+        address guardian
+    ) external onlyRole(ADMIN_ROLE) whenNotPaused nonReentrant {
         if (guardian == address(0)) revert AOXCErrors.ZeroAddressDetected();
         if (_isGuardian[guardian]) revert AOXCErrors.SecurityAssumptionViolated();
 
@@ -182,11 +173,9 @@ contract AOXCGuardianRegistry is
 
     // --- Internal Infrastructure ---
 
-    function _authorizeUpgrade(address newImplementation)
-        internal
-        override
-        onlyRole(UPGRADER_ROLE)
-    {
+    function _authorizeUpgrade(
+        address newImplementation
+    ) internal override onlyRole(UPGRADER_ROLE) {
         if (newImplementation == address(0)) {
             revert AOXCErrors.ZeroAddressDetected();
         }

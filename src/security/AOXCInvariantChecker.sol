@@ -91,9 +91,8 @@ contract AOXCInvariantChecker {
      */
     function _handleViolation(string memory reason) internal {
         try COORDINATOR.triggerEmergencyPause(reason) {
-        // Emergency pause successful
-        }
-            catch {
+            // Emergency pause successful
+        } catch {
             // Fail-safe: Handle coordinator call failure if necessary
         }
     }

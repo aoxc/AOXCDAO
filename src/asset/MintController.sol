@@ -2,15 +2,9 @@
 pragma solidity 0.8.33;
 
 import { Initializable } from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
-import {
-    AccessControlUpgradeable
-} from "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
-import {
-    PausableUpgradeable
-} from "@openzeppelin/contracts-upgradeable/utils/PausableUpgradeable.sol";
-import {
-    UUPSUpgradeable
-} from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
+import { AccessControlUpgradeable } from "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
+import { PausableUpgradeable } from "@openzeppelin/contracts-upgradeable/utils/PausableUpgradeable.sol";
+import { UUPSUpgradeable } from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 import { ReentrancyGuard } from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 import { IERC20 } from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
@@ -55,10 +49,16 @@ contract AOXCMintController is
 
     // --- Events ---
     event TokensMinted(
-        address indexed caller, address indexed to, uint256 amount, bytes32 indexed assetId
+        address indexed caller,
+        address indexed to,
+        uint256 amount,
+        bytes32 indexed assetId
     );
     event TokensRedeemed(
-        address indexed caller, address indexed from, uint256 amount, bytes32 indexed assetId
+        address indexed caller,
+        address indexed from,
+        uint256 amount,
+        bytes32 indexed assetId
     );
 
     /// @custom:oz-upgrades-unsafe-allow constructor
@@ -97,12 +97,11 @@ contract AOXCMintController is
     /**
      * @notice Mints new AOXC by utilizing asset backing from the Ledger.
      */
-    function mint(address to, uint256 amount, bytes32 assetId)
-        external
-        whenNotPaused
-        nonReentrant
-        onlyRole(MINTER_ROLE)
-    {
+    function mint(
+        address to,
+        uint256 amount,
+        bytes32 assetId
+    ) external whenNotPaused nonReentrant onlyRole(MINTER_ROLE) {
         if (to == address(0)) revert AOXC__ZeroAddress();
         if (frozenAssets[assetId]) revert AOXC__AssetFrozen(assetId);
 
@@ -119,7 +118,7 @@ contract AOXCMintController is
 
         // 3. Reputation Processing
         if (address(reputationManager) != address(0)) {
-            try reputationManager.processAction(to, keccak256("MINT_ASSET")) { } catch { }
+            try reputationManager.processAction(to, keccak256("MINT_ASSET")) {} catch {}
         }
 
         emit TokensMinted(msg.sender, to, amount, assetId);
@@ -207,7 +206,7 @@ contract AOXCMintController is
                 proof: ""
             });
 
-            try monitoringHub.logForensic(log) { } catch { }
+            try monitoringHub.logForensic(log) {} catch {}
         }
     }
 

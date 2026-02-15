@@ -2,12 +2,8 @@
 pragma solidity 0.8.33;
 
 import { Initializable } from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
-import {
-    TimelockControllerUpgradeable
-} from "@openzeppelin/contracts-upgradeable/governance/TimelockControllerUpgradeable.sol";
-import {
-    UUPSUpgradeable
-} from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
+import { TimelockControllerUpgradeable } from "@openzeppelin/contracts-upgradeable/governance/TimelockControllerUpgradeable.sol";
+import { UUPSUpgradeable } from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 import { IMonitoringHub } from "../interfaces/IMonitoringHub.sol";
 import { AOXCErrors } from "../libraries/AOXCErrors.sol";
 
@@ -73,15 +69,13 @@ contract AOXCTimelock is Initializable, TimelockControllerUpgradeable, UUPSUpgra
                 metadata: abi.encode(action),
                 proof: ""
             });
-            try monitoringHub.logForensic(log) { } catch { }
+            try monitoringHub.logForensic(log) {} catch {}
         }
     }
 
-    function _authorizeUpgrade(address newImplementation)
-        internal
-        override
-        onlyRole(UPGRADER_ROLE)
-    {
+    function _authorizeUpgrade(
+        address newImplementation
+    ) internal override onlyRole(UPGRADER_ROLE) {
         if (newImplementation == address(0)) {
             revert AOXCErrors.ZeroAddressDetected();
         }

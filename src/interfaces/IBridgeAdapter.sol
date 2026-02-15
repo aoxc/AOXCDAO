@@ -31,10 +31,12 @@ interface IBridgeAdapter {
      * @return txHash The unique transaction identifier for tracking.
      * @dev V5 FIX: Added 'payable' to support native gas token bridging and protocol fees.
      */
-    function bridgeAsset(uint256 targetChainId, address token, uint256 amount, address recipient)
-        external
-        payable
-        returns (bytes32 txHash); // <-- PAYABLE EKLENDİ
+    function bridgeAsset(
+        uint256 targetChainId,
+        address token,
+        uint256 amount,
+        address recipient
+    ) external payable returns (bytes32 txHash); // <-- PAYABLE EKLENDİ
 
     /**
      * @notice Verifies if a specific bridge transaction has reached finality.

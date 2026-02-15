@@ -2,15 +2,9 @@
 pragma solidity 0.8.33;
 
 import { Initializable } from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
-import {
-    AccessControlUpgradeable
-} from "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
-import {
-    PausableUpgradeable
-} from "@openzeppelin/contracts-upgradeable/utils/PausableUpgradeable.sol";
-import {
-    UUPSUpgradeable
-} from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
+import { AccessControlUpgradeable } from "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
+import { PausableUpgradeable } from "@openzeppelin/contracts-upgradeable/utils/PausableUpgradeable.sol";
+import { UUPSUpgradeable } from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 
 import { IMonitoringHub } from "../interfaces/IMonitoringHub.sol";
 import { IThreatSurface } from "../interfaces/IThreatSurface.sol";
@@ -63,7 +57,9 @@ contract AOXCThreatSurface is
 
     // --- Events ---
     event ThreatLogged(
-        uint256 indexed index, IThreatSurface.RiskLevel risk, bytes32 indexed patternId
+        uint256 indexed index,
+        IThreatSurface.RiskLevel risk,
+        bytes32 indexed patternId
     );
     event PatternStatusUpdated(bytes32 indexed patternId, bool flagged);
 
@@ -98,12 +94,14 @@ contract AOXCThreatSurface is
      * @param _monitoringHub Centralized forensic logging hub.
      * @param _reputationManager Reputation management system address.
      */
-    function initialize(address admin, address _monitoringHub, address _reputationManager)
-        external
-        initializer
-    {
-        if (admin == address(0) || _monitoringHub == address(0) || _reputationManager == address(0))
-        {
+    function initialize(
+        address admin,
+        address _monitoringHub,
+        address _reputationManager
+    ) external initializer {
+        if (
+            admin == address(0) || _monitoringHub == address(0) || _reputationManager == address(0)
+        ) {
             revert AOXCErrors.ZeroAddressDetected();
         }
 
@@ -173,7 +171,7 @@ contract AOXCThreatSurface is
         }
 
         // Reputation update (Non-blocking)
-        try reputationManager.processAction(msg.sender, keccak256("SECURITY_CHECK")) { } catch { }
+        try reputationManager.processAction(msg.sender, keccak256("SECURITY_CHECK")) {} catch {}
 
         IMonitoringHub.Severity severity = (risk == IThreatSurface.RiskLevel.CRITICAL)
             ? IMonitoringHub.Severity.CRITICAL
@@ -260,11 +258,9 @@ contract AOXCThreatSurface is
 
     // --- Internal Infrastructure ---
 
-    function _authorizeUpgrade(address newImplementation)
-        internal
-        override
-        onlyRole(UPGRADER_ROLE)
-    {
+    function _authorizeUpgrade(
+        address newImplementation
+    ) internal override onlyRole(UPGRADER_ROLE) {
         if (newImplementation == address(0)) {
             revert AOXCErrors.ZeroAddressDetected();
         }

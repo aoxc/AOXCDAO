@@ -19,4 +19,3 @@ interface IGuardianRegistry {
      */
     function isGuardian(address account) external view returns (bool status);
 }
-

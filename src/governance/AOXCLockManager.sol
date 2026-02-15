@@ -62,8 +62,9 @@ contract AOXCLockManager is ReentrancyGuard, AccessControl, Pausable {
      * @notice Initializes the Lock Manager with ecosystem links.
      */
     constructor(address _aoxc, address _rep, address _hub, address _admin) {
-        if (_aoxc == address(0) || _rep == address(0) || _hub == address(0) || _admin == address(0))
-        {
+        if (
+            _aoxc == address(0) || _rep == address(0) || _hub == address(0) || _admin == address(0)
+        ) {
             revert AOXCErrors.ZeroAddressDetected();
         }
 
@@ -112,9 +113,8 @@ contract AOXCLockManager is ReentrancyGuard, AccessControl, Pausable {
 
         // 4. Update Reputation (External Hook)
         try REPUTATION_MANAGER.processAction(msg.sender, keccak256("TOKEN_LOCK")) {
-        // Success
-        }
-        catch {
+            // Success
+        } catch {
             emit ReputationSyncFailed(msg.sender, "LOCK_SYNC");
             _reportToHub(
                 IMonitoringHub.Severity.WARNING,
@@ -155,9 +155,8 @@ contract AOXCLockManager is ReentrancyGuard, AccessControl, Pausable {
 
         // Notify Reputation Manager
         try REPUTATION_MANAGER.processAction(msg.sender, keccak256("TOKEN_UNLOCK")) {
-        // Success
-        }
-        catch {
+            // Success
+        } catch {
             emit ReputationSyncFailed(msg.sender, "UNLOCK_SYNC");
             _reportToHub(
                 IMonitoringHub.Severity.WARNING,
@@ -224,7 +223,7 @@ contract AOXCLockManager is ReentrancyGuard, AccessControl, Pausable {
             proof: ""
         });
 
-        try MONITORING_HUB.logForensic(log) { } catch { }
+        try MONITORING_HUB.logForensic(log) {} catch {}
     }
 
     // --- View Functions ---

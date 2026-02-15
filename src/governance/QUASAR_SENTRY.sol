@@ -117,10 +117,10 @@ contract QuasarSentry is AccessControl, ReentrancyGuard {
     /**
      * @dev External call with try-catch. Correctly uses MONITORING_HUB.
      */
-    function quarantineSector(address _targetSector, string calldata _reason)
-        external
-        onlyRanked(QUASAR_KINETIC)
-    {
+    function quarantineSector(
+        address _targetSector,
+        string calldata _reason
+    ) external onlyRanked(QUASAR_KINETIC) {
         sectorBlacklist[_targetSector] = true;
 
         // Audit-Ref: External call reentrancy risk check (nonReentrant added for safety)
@@ -134,7 +134,11 @@ contract QuasarSentry is AccessControl, ReentrancyGuard {
 
     function finalizeThreatReport(uint256 _level) external onlyRanked(QUASAR_NEURAL) {
         // LINT: Using the parameter _level in the event removes the "Unused Parameter" warning.
-        _log(IMonitoringHub.Severity.INFO, "INTELLIGENCE", "System-wide threat analysis finalized.");
+        _log(
+            IMonitoringHub.Severity.INFO,
+            "INTELLIGENCE",
+            "System-wide threat analysis finalized."
+        );
         emit ThreatLevelEscalated(_level);
     }
 

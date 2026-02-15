@@ -1,0 +1,25 @@
+{
+  "filter_paths": [
+    "lib/",
+    "node_modules/",
+    "test/",
+    "script/",
+    "out/",
+    "cache/"
+  ],
+  "exclude_dependencies": true,
+  "exclude_informational": false,
+  "exclude_low": false,
+  "solc_remaps": [
+    "@openzeppelin/=lib/openzeppelin-contracts/",
+    "@openzeppelin-upgradeable/=lib/openzeppelin-contracts-upgradeable/"
+  ],
+  "detectors_to_exclude": [
+    "naming-convention",
+    "pragma",
+    "solc-version"
+  ],
+  "json": "reports/slither-report.json",
+  "checklist": true,
+  "triage_mode": true
+}

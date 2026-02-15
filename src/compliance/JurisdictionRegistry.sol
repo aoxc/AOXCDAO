@@ -2,15 +2,9 @@
 pragma solidity 0.8.33;
 
 import { Initializable } from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
-import {
-    AccessControlUpgradeable
-} from "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
-import {
-    PausableUpgradeable
-} from "@openzeppelin/contracts-upgradeable/utils/PausableUpgradeable.sol";
-import {
-    UUPSUpgradeable
-} from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
+import { AccessControlUpgradeable } from "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
+import { PausableUpgradeable } from "@openzeppelin/contracts-upgradeable/utils/PausableUpgradeable.sol";
+import { UUPSUpgradeable } from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 
 import { IJurisdictionRegistry } from "../interfaces/IJurisdictionRegistry.sol";
 import { IMonitoringHub } from "../interfaces/IMonitoringHub.sol";
@@ -48,11 +42,16 @@ contract AOXCJurisdictionRegistry is
 
     // --- Events ---
     event JurisdictionAdded(
-        uint256 indexed id, string name, bool allowed, address indexed operator
+        uint256 indexed id,
+        string name,
+        bool allowed,
+        address indexed operator
     );
     event JurisdictionRemoved(uint256 indexed id, address indexed operator);
     event UserJurisdictionSet(
-        address indexed user, uint256 indexed jurisdictionId, address indexed operator
+        address indexed user,
+        uint256 indexed jurisdictionId,
+        address indexed operator
     );
     event UserJurisdictionRevoked(address indexed user, address indexed operator);
 
@@ -64,10 +63,11 @@ contract AOXCJurisdictionRegistry is
     /**
      * @notice Initializes the Jurisdiction Registry.
      */
-    function initialize(address admin, address _monitoringHub, address _reputationManager)
-        external
-        initializer
-    {
+    function initialize(
+        address admin,
+        address _monitoringHub,
+        address _reputationManager
+    ) external initializer {
         if (admin == address(0) || _monitoringHub == address(0)) {
             revert AOXCErrors.ZeroAddressDetected();
         }
@@ -88,12 +88,10 @@ contract AOXCJurisdictionRegistry is
 
     // --- IJurisdictionRegistry Implementation ---
 
-    function registerJurisdiction(uint256 id, string calldata name)
-        external
-        override
-        onlyRole(OPERATOR_ROLE)
-        whenNotPaused
-    {
+    function registerJurisdiction(
+        uint256 id,
+        string calldata name
+    ) external override onlyRole(OPERATOR_ROLE) whenNotPaused {
         if (id == 0) revert AOXCErrors.InvalidConfiguration();
         if (bytes(_jurisdictionNames[id]).length != 0) revert AOXCErrors.InvalidConfiguration();
         if (bytes(name).length == 0) revert AOXCErrors.MetadataInconsistent();
@@ -130,12 +128,10 @@ contract AOXCJurisdictionRegistry is
         _logToHub(IMonitoringHub.Severity.WARNING, "JUR_REMOVE", "Jurisdiction purged");
     }
 
-    function assignJurisdiction(address user, uint256 id)
-        external
-        override
-        onlyRole(OPERATOR_ROLE)
-        whenNotPaused
-    {
+    function assignJurisdiction(
+        address user,
+        uint256 id
+    ) external override onlyRole(OPERATOR_ROLE) whenNotPaused {
         _assignJurisdiction(user, id);
         _rewardOperator(msg.sender, "JUR_ASSIGNMENT");
     }
@@ -168,24 +164,20 @@ contract AOXCJurisdictionRegistry is
         return _jurisdictionIds.length;
     }
 
-    function getJurisdictionName(uint256 jurisdictionId)
-        external
-        view
-        override
-        returns (string memory)
-    {
+    function getJurisdictionName(
+        uint256 jurisdictionId
+    ) external view override returns (string memory) {
         return _jurisdictionNames[jurisdictionId];
     }
 
     // --- Batch Operations ---
 
-    function batchAssignJurisdiction(address[] calldata users, uint256 id)
-        external
-        onlyRole(OPERATOR_ROLE)
-        whenNotPaused
-    {
+    function batchAssignJurisdiction(
+        address[] calldata users,
+        uint256 id
+    ) external onlyRole(OPERATOR_ROLE) whenNotPaused {
         uint256 len = users.length;
-        for (uint256 i = 0; i < len;) {
+        for (uint256 i = 0; i < len; ) {
             _assignJurisdiction(users[i], id);
             unchecked {
                 ++i;
@@ -206,7 +198,7 @@ contract AOXCJurisdictionRegistry is
 
     function _rewardOperator(address operator, bytes32 actionKey) internal {
         if (address(reputationManager) != address(0)) {
-            try reputationManager.processAction(operator, actionKey) { } catch { }
+            try reputationManager.processAction(operator, actionKey) {} catch {}
         }
     }
 
@@ -248,13 +240,15 @@ contract AOXCJurisdictionRegistry is
                 proof: ""
             });
 
-            try monitoringHub.logForensic(log) { } catch { }
+            try monitoringHub.logForensic(log) {} catch {}
         }
     }
 
     function _authorizeUpgrade(address) internal override onlyRole(UPGRADER_ROLE) {
         _logToHub(
-            IMonitoringHub.Severity.CRITICAL, "UPGRADE", "Jurisdiction Registry upgrade authorized"
+            IMonitoringHub.Severity.CRITICAL,
+            "UPGRADE",
+            "Jurisdiction Registry upgrade authorized"
         );
     }
 
