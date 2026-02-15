@@ -1,2 +1,0 @@
-AOXCInitTest:testInitializeDisabled() (gas: 21009)
-AOXCInitTest:testInitializeZeroAddressReverts() (gas: 18819)
