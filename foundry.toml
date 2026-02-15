@@ -85,7 +85,6 @@ ignore = ["src/core/AOXC.sol"]
 xlayer_mainnet = "https://rpc.xlayer.okx.com"
 xlayer_testnet = "https://testrpc.xlayer.okx.com"
 
-
 # ==============================================================================
 # 🔍 CONTRACT VERIFICATION ENDPOINTS
 # ==============================================================================

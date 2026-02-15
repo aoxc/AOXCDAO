@@ -120,49 +120,29 @@ contract VirgoFabricator is AccessControl, ReentrancyGuard {
      */
     function _initializeDepartments() internal {
         departmentRegistry[VIRGO_APEX] = Department({
-            rankRequirement: 6,
-            epochQuota: 1_000_000e18,
-            epochSpent: 0,
-            isOperational: true
+            rankRequirement: 6, epochQuota: 1_000_000e18, epochSpent: 0, isOperational: true
         });
         departmentRegistry[VIRGO_KINETIC] = Department({
-            rankRequirement: 4,
-            epochQuota: 500_000e18,
-            epochSpent: 0,
-            isOperational: true
+            rankRequirement: 4, epochQuota: 500_000e18, epochSpent: 0, isOperational: true
         });
         departmentRegistry[VIRGO_FLUX] = Department({
-            rankRequirement: 3,
-            epochQuota: 200_000e18,
-            epochSpent: 0,
-            isOperational: true
+            rankRequirement: 3, epochQuota: 200_000e18, epochSpent: 0, isOperational: true
         });
-        departmentRegistry[VIRGO_NEURAL] = Department({
-            rankRequirement: 5,
-            epochQuota: 0,
-            epochSpent: 0,
-            isOperational: true
-        });
-        departmentRegistry[VIRGO_AEGIS] = Department({
-            rankRequirement: 4,
-            epochQuota: 0,
-            epochSpent: 0,
-            isOperational: true
-        });
-        departmentRegistry[VIRGO_PULSE] = Department({
-            rankRequirement: 2,
-            epochQuota: 0,
-            epochSpent: 0,
-            isOperational: true
-        });
+        departmentRegistry[VIRGO_NEURAL] =
+            Department({ rankRequirement: 5, epochQuota: 0, epochSpent: 0, isOperational: true });
+        departmentRegistry[VIRGO_AEGIS] =
+            Department({ rankRequirement: 4, epochQuota: 0, epochSpent: 0, isOperational: true });
+        departmentRegistry[VIRGO_PULSE] =
+            Department({ rankRequirement: 2, epochQuota: 0, epochSpent: 0, isOperational: true });
     }
 
     // --- CORE OPERATIONS ---
 
-    function executeFabrication(
-        address _recipient,
-        uint256 _amount
-    ) external onlyQualified(VIRGO_KINETIC) nonReentrant {
+    function executeFabrication(address _recipient, uint256 _amount)
+        external
+        onlyQualified(VIRGO_KINETIC)
+        nonReentrant
+    {
         _syncEpoch();
         Department storage dept = departmentRegistry[VIRGO_KINETIC];
 

@@ -2,8 +2,12 @@
 pragma solidity 0.8.33;
 
 import { Initializable } from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
-import { AccessControlUpgradeable } from "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
-import { UUPSUpgradeable } from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
+import {
+    AccessControlUpgradeable
+} from "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
+import {
+    UUPSUpgradeable
+} from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 
 import { IMonitoringHub } from "@interfaces/IMonitoringHub.sol";
 import { AOXCBaseReporter } from "./AOXCBaseReporter.sol";
@@ -103,12 +107,11 @@ contract AOXCTransferAlerts is
     /**
      * @notice Reports suspicious transfers to the Monitoring Hub.
      */
-    function alertTransfer(
-        address from,
-        address to,
-        uint256 amount,
-        string calldata reason
-    ) external nonReentrant onlyRole(MONITOR_ROLE) {
+    function alertTransfer(address from, address to, uint256 amount, string calldata reason)
+        external
+        nonReentrant
+        onlyRole(MONITOR_ROLE)
+    {
         unchecked {
             ++totalAlertsLogged;
         }
@@ -131,9 +134,11 @@ contract AOXCTransferAlerts is
      * @dev Authorizes the upgrade and logs the event for forensic auditing.
      * @param newImplementation The address of the new contract logic.
      */
-    function _authorizeUpgrade(
-        address newImplementation
-    ) internal override onlyRole(UPGRADER_ROLE) {
+    function _authorizeUpgrade(address newImplementation)
+        internal
+        override
+        onlyRole(UPGRADER_ROLE)
+    {
         if (newImplementation == address(0)) {
             revert AOXCErrors.ZeroAddressDetected();
         }

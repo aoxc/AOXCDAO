@@ -2,9 +2,15 @@
 pragma solidity 0.8.33;
 
 import { Initializable } from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
-import { AccessControlUpgradeable } from "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
-import { UUPSUpgradeable } from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
-import { PausableUpgradeable } from "@openzeppelin/contracts-upgradeable/utils/PausableUpgradeable.sol";
+import {
+    AccessControlUpgradeable
+} from "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
+import {
+    UUPSUpgradeable
+} from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
+import {
+    PausableUpgradeable
+} from "@openzeppelin/contracts-upgradeable/utils/PausableUpgradeable.sol";
 
 import { IComplianceRegistry } from "@interfaces/IComplianceRegistry.sol";
 import { IMonitoringHub } from "@interfaces/IMonitoringHub.sol";
@@ -51,11 +57,10 @@ contract AOXCComplianceRegistry is
     /**
      * @notice Initializes the Compliance Registry contract.
      */
-    function initialize(
-        address admin,
-        address _monitoringHub,
-        address _reputationManager
-    ) external initializer {
+    function initialize(address admin, address _monitoringHub, address _reputationManager)
+        external
+        initializer
+    {
         if (admin == address(0) || _monitoringHub == address(0)) {
             revert AOXCErrors.ZeroAddressDetected();
         }
@@ -76,17 +81,22 @@ contract AOXCComplianceRegistry is
 
     // --- IComplianceRegistry Implementation ---
 
-    function addToBlacklist(
-        address account,
-        string calldata reason
-    ) external override onlyRole(COMPLIANCE_OFFICER_ROLE) whenNotPaused {
+    function addToBlacklist(address account, string calldata reason)
+        external
+        override
+        onlyRole(COMPLIANCE_OFFICER_ROLE)
+        whenNotPaused
+    {
         _addToBlacklist(account, reason);
         _rewardOfficer(msg.sender, "COMPLIANCE_ACTION");
     }
 
-    function removeFromBlacklist(
-        address account
-    ) external override onlyRole(COMPLIANCE_OFFICER_ROLE) whenNotPaused {
+    function removeFromBlacklist(address account)
+        external
+        override
+        onlyRole(COMPLIANCE_OFFICER_ROLE)
+        whenNotPaused
+    {
         if (!_blacklisted[account]) revert AOXCErrors.InvalidConfiguration();
 
         _removeFromBlacklist(account);
@@ -108,14 +118,15 @@ contract AOXCComplianceRegistry is
 
     // --- Batch Operations ---
 
-    function batchAddToBlacklist(
-        address[] calldata accounts,
-        string[] calldata reasons
-    ) external onlyRole(COMPLIANCE_OFFICER_ROLE) whenNotPaused {
+    function batchAddToBlacklist(address[] calldata accounts, string[] calldata reasons)
+        external
+        onlyRole(COMPLIANCE_OFFICER_ROLE)
+        whenNotPaused
+    {
         uint256 len = accounts.length;
         if (len != reasons.length) revert AOXCErrors.InvalidConfiguration();
 
-        for (uint256 i = 0; i < len; ) {
+        for (uint256 i = 0; i < len;) {
             _addToBlacklist(accounts[i], reasons[i]);
             unchecked {
                 ++i;
@@ -161,7 +172,7 @@ contract AOXCComplianceRegistry is
 
     function _rewardOfficer(address officer, bytes32 actionKey) internal {
         if (address(reputationManager) != address(0)) {
-            try reputationManager.processAction(officer, actionKey) {} catch {}
+            try reputationManager.processAction(officer, actionKey) { } catch { }
         }
     }
 
@@ -203,7 +214,7 @@ contract AOXCComplianceRegistry is
                 proof: ""
             });
 
-            try monitoringHub.logForensic(log) {} catch {}
+            try monitoringHub.logForensic(log) { } catch { }
         }
     }
 
@@ -213,9 +224,7 @@ contract AOXCComplianceRegistry is
 
     function _authorizeUpgrade(address) internal override onlyRole(UPGRADER_ROLE) {
         _logToHub(
-            IMonitoringHub.Severity.CRITICAL,
-            "UPGRADE",
-            "Compliance Registry upgrade authorized"
+            IMonitoringHub.Severity.CRITICAL, "UPGRADE", "Compliance Registry upgrade authorized"
         );
     }
 

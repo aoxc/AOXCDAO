@@ -2,9 +2,15 @@
 pragma solidity 0.8.33;
 
 import { Initializable } from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
-import { AccessControlUpgradeable } from "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
-import { PausableUpgradeable } from "@openzeppelin/contracts-upgradeable/utils/PausableUpgradeable.sol";
-import { UUPSUpgradeable } from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
+import {
+    AccessControlUpgradeable
+} from "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
+import {
+    PausableUpgradeable
+} from "@openzeppelin/contracts-upgradeable/utils/PausableUpgradeable.sol";
+import {
+    UUPSUpgradeable
+} from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 
 import { IIdentityRegistry } from "@interfaces/IIdentityRegistry.sol";
 import { IMonitoringHub } from "@interfaces/IMonitoringHub.sol";
@@ -42,10 +48,7 @@ contract AOXCIdentityRegistry is
     event IdentityRegistered(address indexed account, string id, address indexed verifier);
     event IdentityRemoved(address indexed account, address indexed verifier);
     event IdentityUpdated(
-        address indexed account,
-        string oldId,
-        string newId,
-        address indexed verifier
+        address indexed account, string oldId, string newId, address indexed verifier
     );
 
     /// @custom:oz-upgrades-unsafe-allow constructor
@@ -56,11 +59,10 @@ contract AOXCIdentityRegistry is
     /**
      * @notice Initializes the Identity Registry.
      */
-    function initialize(
-        address admin,
-        address _monitoringHub,
-        address _reputationManager
-    ) external initializer {
+    function initialize(address admin, address _monitoringHub, address _reputationManager)
+        external
+        initializer
+    {
         if (admin == address(0) || _monitoringHub == address(0)) {
             revert AOXCErrors.ZeroAddressDetected();
         }
@@ -81,10 +83,12 @@ contract AOXCIdentityRegistry is
 
     // --- IIdentityRegistry Implementation ---
 
-    function register(
-        address account,
-        string calldata id
-    ) external override onlyRole(VERIFIER_ROLE) whenNotPaused {
+    function register(address account, string calldata id)
+        external
+        override
+        onlyRole(VERIFIER_ROLE)
+        whenNotPaused
+    {
         _register(account, id);
         _rewardVerifier(msg.sender, "IDENTITY_VERIFICATION");
     }
@@ -129,14 +133,15 @@ contract AOXCIdentityRegistry is
 
     // --- Batch Operations ---
 
-    function batchRegister(
-        address[] calldata accounts,
-        string[] calldata ids
-    ) external onlyRole(VERIFIER_ROLE) whenNotPaused {
+    function batchRegister(address[] calldata accounts, string[] calldata ids)
+        external
+        onlyRole(VERIFIER_ROLE)
+        whenNotPaused
+    {
         uint256 len = accounts.length;
         if (len != ids.length) revert AOXCErrors.InvalidConfiguration();
 
-        for (uint256 i = 0; i < len; ) {
+        for (uint256 i = 0; i < len;) {
             _register(accounts[i], ids[i]);
             unchecked {
                 ++i;
@@ -162,7 +167,7 @@ contract AOXCIdentityRegistry is
 
     function _rewardVerifier(address verifier, bytes32 actionKey) internal {
         if (address(reputationManager) != address(0)) {
-            try reputationManager.processAction(verifier, actionKey) {} catch {}
+            try reputationManager.processAction(verifier, actionKey) { } catch { }
         }
     }
 
@@ -204,15 +209,13 @@ contract AOXCIdentityRegistry is
                 proof: ""
             });
 
-            try monitoringHub.logForensic(log) {} catch {}
+            try monitoringHub.logForensic(log) { } catch { }
         }
     }
 
     function _authorizeUpgrade(address) internal override onlyRole(UPGRADER_ROLE) {
         _logToHub(
-            IMonitoringHub.Severity.CRITICAL,
-            "UPGRADE",
-            "Identity Registry upgrade authorized"
+            IMonitoringHub.Severity.CRITICAL, "UPGRADE", "Identity Registry upgrade authorized"
         );
     }
 

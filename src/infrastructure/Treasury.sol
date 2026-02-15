@@ -2,9 +2,15 @@
 pragma solidity 0.8.33;
 
 import { Initializable } from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
-import { AccessControlUpgradeable } from "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
-import { PausableUpgradeable } from "@openzeppelin/contracts-upgradeable/utils/PausableUpgradeable.sol";
-import { UUPSUpgradeable } from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
+import {
+    AccessControlUpgradeable
+} from "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
+import {
+    PausableUpgradeable
+} from "@openzeppelin/contracts-upgradeable/utils/PausableUpgradeable.sol";
+import {
+    UUPSUpgradeable
+} from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 // Rules: Use standard ReentrancyGuard from @openzeppelin/contracts as per instruction.
 import { ReentrancyGuard } from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 import { SafeERC20, IERC20 } from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
@@ -105,7 +111,7 @@ contract Treasury is
     function getTotalReserves() external view override returns (uint256 totalReserves) {
         totalReserves = address(this).balance;
         uint256 length = _supportedTokensList.length;
-        for (uint256 i = 0; i < length; ) {
+        for (uint256 i = 0; i < length;) {
             totalReserves += IERC20(_supportedTokensList[i]).balanceOf(address(this));
             unchecked {
                 ++i;
@@ -116,10 +122,13 @@ contract Treasury is
     /**
      * @notice Primary deposit mechanism for Native and ERC20 assets.
      */
-    function deposit(
-        address token,
-        uint256 amount
-    ) external payable override whenNotPaused nonReentrant {
+    function deposit(address token, uint256 amount)
+        external
+        payable
+        override
+        whenNotPaused
+        nonReentrant
+    {
         if (token == address(0)) {
             if (msg.value != amount) revert AOXCErrors.InvalidConfiguration();
             emit Deposited(msg.sender, address(0), msg.value);
@@ -131,9 +140,8 @@ contract Treasury is
         }
 
         if (address(reputationManager) != address(0)) {
-            try
-                reputationManager.processAction(msg.sender, keccak256("TREASURY_DEPOSIT"))
-            {} catch {}
+            try reputationManager.processAction(msg.sender, keccak256("TREASURY_DEPOSIT")) { }
+                catch { }
         }
     }
 
@@ -154,31 +162,29 @@ contract Treasury is
     /**
      * @notice Guardian-led emergency asset recovery.
      */
-    function emergencyWithdraw(
-        address token,
-        address to,
-        uint256 amount
-    ) external override onlyRole(GUARDIAN_ROLE) nonReentrant {
+    function emergencyWithdraw(address token, address to, uint256 amount)
+        external
+        override
+        onlyRole(GUARDIAN_ROLE)
+        nonReentrant
+    {
         _executeTransfer(token, to, amount);
 
         emit EmergencyAssetReleased(token, amount, to);
         _logToHub(
-            IMonitoringHub.Severity.CRITICAL,
-            "EMERGENCY_RELEASE",
-            "Guardian override triggered",
-            90
+            IMonitoringHub.Severity.CRITICAL, "EMERGENCY_RELEASE", "Guardian override triggered", 90
         );
     }
 
     /**
      * @notice Cross-chain liquidity deployment via Bridge Adapter.
      */
-    function bridgeOut(
-        uint256 targetChainId,
-        address token,
-        uint256 amount,
-        address recipient
-    ) external payable onlyRole(ADMIN_ROLE) nonReentrant {
+    function bridgeOut(uint256 targetChainId, address token, uint256 amount, address recipient)
+        external
+        payable
+        onlyRole(ADMIN_ROLE)
+        nonReentrant
+    {
         if (getBalance(token) < amount) {
             revert AOXCErrors.InsufficientReserves(getBalance(token), amount);
         }
@@ -221,7 +227,7 @@ contract Treasury is
         }
 
         if (token == address(0)) {
-            (bool success, ) = payable(to).call{ value: amount }("");
+            (bool success,) = payable(to).call{ value: amount }("");
             if (!success) revert AOXCErrors.TransferFailed();
         } else {
             IERC20(token).safeTransfer(to, amount);
@@ -264,7 +270,7 @@ contract Treasury is
                 proof: ""
             });
 
-            try monitoringHub.logForensic(log) {} catch {}
+            try monitoringHub.logForensic(log) { } catch { }
         }
     }
 

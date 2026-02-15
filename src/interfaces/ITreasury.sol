@@ -17,10 +17,7 @@ interface ITreasury {
 
     /// @notice Emitted when an emergency withdrawal occurs (admin-only).
     event EmergencyWithdraw(
-        address indexed to,
-        address indexed token,
-        uint256 amount,
-        uint256 timestamp
+        address indexed to, address indexed token, uint256 amount, uint256 timestamp
     );
 
     /// @notice Emitted when a new token is added to the supported list.

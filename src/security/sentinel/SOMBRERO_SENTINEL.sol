@@ -111,31 +111,16 @@ contract SombreroSentinel is AccessControl, ReentrancyGuard {
     }
 
     function _initializeProtocols() internal {
-        protocols[SOMBRERO_APEX] = SecurityProtocol({
-            minRank: 6,
-            alertActive: false,
-            incidentCount: 0
-        });
-        protocols[SOMBRERO_KINETIC] = SecurityProtocol({
-            minRank: 4,
-            alertActive: false,
-            incidentCount: 0
-        });
-        protocols[SOMBRERO_NEURAL] = SecurityProtocol({
-            minRank: 5,
-            alertActive: false,
-            incidentCount: 0
-        });
-        protocols[SOMBRERO_AEGIS] = SecurityProtocol({
-            minRank: 4,
-            alertActive: false,
-            incidentCount: 0
-        });
-        protocols[SOMBRERO_PULSE] = SecurityProtocol({
-            minRank: 2,
-            alertActive: false,
-            incidentCount: 0
-        });
+        protocols[SOMBRERO_APEX] =
+            SecurityProtocol({ minRank: 6, alertActive: false, incidentCount: 0 });
+        protocols[SOMBRERO_KINETIC] =
+            SecurityProtocol({ minRank: 4, alertActive: false, incidentCount: 0 });
+        protocols[SOMBRERO_NEURAL] =
+            SecurityProtocol({ minRank: 5, alertActive: false, incidentCount: 0 });
+        protocols[SOMBRERO_AEGIS] =
+            SecurityProtocol({ minRank: 4, alertActive: false, incidentCount: 0 });
+        protocols[SOMBRERO_PULSE] =
+            SecurityProtocol({ minRank: 2, alertActive: false, incidentCount: 0 });
     }
 
     // --- CORE SECURITY OPERATIONS ---
@@ -146,20 +131,20 @@ contract SombreroSentinel is AccessControl, ReentrancyGuard {
         emit FleetStateChanged(_active, msg.sender);
     }
 
-    function reportAnomaly(
-        string calldata _threatType,
-        address _suspect
-    ) external onlyQualified(SOMBRERO_PULSE) {
+    function reportAnomaly(string calldata _threatType, address _suspect)
+        external
+        onlyQualified(SOMBRERO_PULSE)
+    {
         protocols[SOMBRERO_PULSE].incidentCount++;
         // calldata'dan gelen _threatType doğrudan iletilebilir
         _log(IMonitoringHub.Severity.WARNING, "SURVEILLANCE", _threatType);
         emit ThreatDetected(_threatType, _suspect, 1);
     }
 
-    function executeIntervention(
-        address _targetSector,
-        string calldata _reason
-    ) external onlyQualified(SOMBRERO_KINETIC) {
+    function executeIntervention(address _targetSector, string calldata _reason)
+        external
+        onlyQualified(SOMBRERO_KINETIC)
+    {
         _log(IMonitoringHub.Severity.CRITICAL, "TACTICAL", "Intervention broadcasted.");
         emit InterventionExecuted(_targetSector, _reason);
     }

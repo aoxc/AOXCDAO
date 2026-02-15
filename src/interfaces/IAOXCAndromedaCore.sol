@@ -74,8 +74,7 @@ interface IAOXCAndromedaCore {
 
     /// @notice Emitted when the protocol transitions between operational states.
     event ProtocolStateTransition(
-        ProtocolState indexed previousState,
-        ProtocolState indexed newState
+        ProtocolState indexed previousState, ProtocolState indexed newState
     );
 
     /// @notice Emitted when a hangar's compliance status is updated by the ComplianceRegistry.

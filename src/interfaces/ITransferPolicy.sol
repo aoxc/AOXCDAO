@@ -11,19 +11,12 @@ interface ITransferPolicy {
 
     /// @notice Emitted when a transfer passes validation.
     event TransferValidated(
-        address indexed from,
-        address indexed to,
-        uint256 amount,
-        uint256 timestamp
+        address indexed from, address indexed to, uint256 amount, uint256 timestamp
     );
 
     /// @notice Emitted when a transfer fails validation.
     event TransferRejected(
-        address indexed from,
-        address indexed to,
-        uint256 amount,
-        uint256 timestamp,
-        string reason
+        address indexed from, address indexed to, uint256 amount, uint256 timestamp, string reason
     );
 
     /// @notice Emitted when policy status changes (activated/deactivated).

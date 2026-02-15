@@ -13,14 +13,28 @@
 pragma solidity 0.8.33;
 
 import { Initializable } from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
-import { AccessControlUpgradeable } from "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
-import { GovernorUpgradeable } from "@openzeppelin/contracts-upgradeable/governance/GovernorUpgradeable.sol";
-import { GovernorCountingSimpleUpgradeable } from "@openzeppelin/contracts-upgradeable/governance/extensions/GovernorCountingSimpleUpgradeable.sol";
-import { GovernorVotesUpgradeable } from "@openzeppelin/contracts-upgradeable/governance/extensions/GovernorVotesUpgradeable.sol";
-import { GovernorTimelockControlUpgradeable } from "@openzeppelin/contracts-upgradeable/governance/extensions/GovernorTimelockControlUpgradeable.sol";
-import { TimelockControllerUpgradeable } from "@openzeppelin/contracts-upgradeable/governance/TimelockControllerUpgradeable.sol";
+import {
+    AccessControlUpgradeable
+} from "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
+import {
+    GovernorUpgradeable
+} from "@openzeppelin/contracts-upgradeable/governance/GovernorUpgradeable.sol";
+import {
+    GovernorCountingSimpleUpgradeable
+} from "@openzeppelin/contracts-upgradeable/governance/extensions/GovernorCountingSimpleUpgradeable.sol";
+import {
+    GovernorVotesUpgradeable
+} from "@openzeppelin/contracts-upgradeable/governance/extensions/GovernorVotesUpgradeable.sol";
+import {
+    GovernorTimelockControlUpgradeable
+} from "@openzeppelin/contracts-upgradeable/governance/extensions/GovernorTimelockControlUpgradeable.sol";
+import {
+    TimelockControllerUpgradeable
+} from "@openzeppelin/contracts-upgradeable/governance/TimelockControllerUpgradeable.sol";
 import { IVotes } from "@openzeppelin/contracts/governance/utils/IVotes.sol";
-import { UUPSUpgradeable } from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
+import {
+    UUPSUpgradeable
+} from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 import { ReentrancyGuard } from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
 // --- 🔗 AOXC DAO Technical Interfaces ---
@@ -70,11 +84,8 @@ contract AOXCGovernor is
         address _andromeda
     ) public initializer {
         if (
-            address(_token) == address(0) ||
-            address(_timelock) == address(0) ||
-            _admin == address(0) ||
-            _repManager == address(0) ||
-            _andromeda == address(0)
+            address(_token) == address(0) || address(_timelock) == address(0)
+                || _admin == address(0) || _repManager == address(0) || _andromeda == address(0)
         ) {
             revert AOXC_ZeroAddressForbidden();
         }
@@ -93,11 +104,12 @@ contract AOXCGovernor is
 
     // --- ⚖️ Advanced Weighted Voting Logic ---
 
-    function _getVotes(
-        address account,
-        uint256 timepoint,
-        bytes memory params
-    ) internal view override(GovernorUpgradeable, GovernorVotesUpgradeable) returns (uint256) {
+    function _getVotes(address account, uint256 timepoint, bytes memory params)
+        internal
+        view
+        override(GovernorUpgradeable, GovernorVotesUpgradeable)
+        returns (uint256)
+    {
         uint256 baseVotes = super._getVotes(account, timepoint, params);
         if (baseVotes == 0) return 0;
 
@@ -140,10 +152,10 @@ contract AOXCGovernor is
 
     // --- 🛠️ Operational Security ---
 
-    function updateInfrastructure(
-        address _repManager,
-        address _andromeda
-    ) external onlyRole(DEFAULT_ADMIN_ROLE) {
+    function updateInfrastructure(address _repManager, address _andromeda)
+        external
+        onlyRole(DEFAULT_ADMIN_ROLE)
+    {
         if (_repManager == address(0) || _andromeda == address(0)) {
             revert AOXC_ZeroAddressForbidden();
         }
@@ -156,9 +168,7 @@ contract AOXCGovernor is
 
     // --- 🏗️ Inheritance Resolution & Security Overrides ---
 
-    function state(
-        uint256 pId
-    )
+    function state(uint256 pId)
         public
         view
         override(GovernorUpgradeable, GovernorTimelockControlUpgradeable)
@@ -167,9 +177,12 @@ contract AOXCGovernor is
         return super.state(pId);
     }
 
-    function proposalNeedsQueuing(
-        uint256 pId
-    ) public view override(GovernorUpgradeable, GovernorTimelockControlUpgradeable) returns (bool) {
+    function proposalNeedsQueuing(uint256 pId)
+        public
+        view
+        override(GovernorUpgradeable, GovernorTimelockControlUpgradeable)
+        returns (bool)
+    {
         return super.proposalNeedsQueuing(pId);
     }
 
@@ -202,18 +215,20 @@ contract AOXCGovernor is
         return super._queueOperations(pId, t, v, c, d);
     }
 
-    function _cancel(
-        address[] memory t,
-        uint256[] memory v,
-        bytes[] memory c,
-        bytes32 d
-    ) internal override(GovernorUpgradeable, GovernorTimelockControlUpgradeable) returns (uint256) {
+    function _cancel(address[] memory t, uint256[] memory v, bytes[] memory c, bytes32 d)
+        internal
+        override(GovernorUpgradeable, GovernorTimelockControlUpgradeable)
+        returns (uint256)
+    {
         return super._cancel(t, v, c, d);
     }
 
-    function supportsInterface(
-        bytes4 iId
-    ) public view override(GovernorUpgradeable, AccessControlUpgradeable) returns (bool) {
+    function supportsInterface(bytes4 iId)
+        public
+        view
+        override(GovernorUpgradeable, AccessControlUpgradeable)
+        returns (bool)
+    {
         return super.supportsInterface(iId);
     }
 
@@ -221,9 +236,12 @@ contract AOXCGovernor is
      * @dev Critical Security Gate for Logic Upgrades.
      * @notice Mutability restricted to 'view' to suppress Solc 0.8.33 warnings.
      */
-    function _authorizeUpgrade(
-        address newImplementation
-    ) internal view override onlyRole(UPGRADER_ROLE) {
+    function _authorizeUpgrade(address newImplementation)
+        internal
+        view
+        override
+        onlyRole(UPGRADER_ROLE)
+    {
         if (newImplementation == address(0)) {
             revert AOXC_ZeroAddressForbidden();
         }

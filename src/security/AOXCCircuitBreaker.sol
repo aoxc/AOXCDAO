@@ -6,7 +6,9 @@ import { IMonitoringHub } from "@interfaces/IMonitoringHub.sol";
 import { AOXCErrors } from "@libraries/AOXCErrors.sol";
 import { AOXCConstants } from "@libraries/AOXCConstants.sol";
 import { AOXCAccessCoordinator } from "../core/AOXCAccessCoordinator.sol";
-import { AccessControlUpgradeable } from "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
+import {
+    AccessControlUpgradeable
+} from "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
 import { Initializable } from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 
 /**

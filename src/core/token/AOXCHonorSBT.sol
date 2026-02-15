@@ -2,9 +2,15 @@
 pragma solidity 0.8.33;
 
 import { Initializable } from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
-import { ERC721Upgradeable } from "@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol";
-import { AccessControlUpgradeable } from "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
-import { UUPSUpgradeable } from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
+import {
+    ERC721Upgradeable
+} from "@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol";
+import {
+    AccessControlUpgradeable
+} from "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
+import {
+    UUPSUpgradeable
+} from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 
 import { IMonitoringHub } from "@interfaces/IMonitoringHub.sol";
 import { AOXCErrors } from "@libraries/AOXCErrors.sol";
@@ -102,11 +108,11 @@ contract AOXCHonorSBT is
      * @dev Modern OpenZeppelin v5.x _update hook.
      * Reverts if from != 0 and to != 0 (Transfer between wallets).
      */
-    function _update(
-        address to,
-        uint256 tokenId,
-        address auth
-    ) internal override returns (address) {
+    function _update(address to, uint256 tokenId, address auth)
+        internal
+        override
+        returns (address)
+    {
         address from = _ownerOf(tokenId);
         if (from != address(0) && to != address(0)) {
             revert AOXCErrors.ItemLocked(); // Soulbound restriction
@@ -158,7 +164,7 @@ contract AOXCHonorSBT is
                 proof: ""
             });
 
-            try monitoringHub.logForensic(log) {} catch {}
+            try monitoringHub.logForensic(log) { } catch { }
         }
     }
 
@@ -166,9 +172,12 @@ contract AOXCHonorSBT is
         _logToHub(IMonitoringHub.Severity.CRITICAL, "UPGRADE", "SBT Logic migration");
     }
 
-    function supportsInterface(
-        bytes4 interfaceId
-    ) public view override(ERC721Upgradeable, AccessControlUpgradeable) returns (bool) {
+    function supportsInterface(bytes4 interfaceId)
+        public
+        view
+        override(ERC721Upgradeable, AccessControlUpgradeable)
+        returns (bool)
+    {
         return super.supportsInterface(interfaceId);
     }
 

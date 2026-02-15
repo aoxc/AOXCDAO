@@ -13,9 +13,9 @@ interface IAOXCLockManager {
     function lock(uint256 amount, uint256 duration) external;
     function unlock(uint256 batchId) external;
     function getUserBatchCount(address user) external view returns (uint256);
-    function getBatchInfo(
-        address user,
-        uint256 batchId
-    ) external view returns (uint256 amount, uint256 unlockTime, bool claimed);
+    function getBatchInfo(address user, uint256 batchId)
+        external
+        view
+        returns (uint256 amount, uint256 unlockTime, bool claimed);
     function getUserLocks(address user) external view returns (LockBatch[] memory);
 }
