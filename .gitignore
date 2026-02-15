@@ -1,38 +1,42 @@
 # ==============================================================================
-# 🏛️ AOXCDAO INSTITUTIONAL GIT EXCLUSION POLICY
-# 🛡️ SCOPE: Solidity 0.8.33 | Foundry Framework | Enterprise Security
-# 🎓 LEVEL: Pro Ultimate Academic
+# 🏛️ AOXCDAO INSTITUTIONAL GIT EXCLUSION POLICY V4.0
+# 🛡️ ARCHITECTURE: Multi-Tool (Foundry/Yarn/Hardhat) Lean Sync
+# 🎓 LEVEL: Pro Ultimate Academic (Enterprise Grade)
 # ==============================================================================
 
 # --- 🏗️ COMPILATION & BUILD ARTIFACTS ---
-# Local build outputs and cached metadata
 out/
 cache/
 artifacts/
 typechain/
 typechain-types/
+# Hardhat artifacts
+cache_hardhat/
 
-# --- 📦 DEPENDENCY MANAGEMENT ---
-# External libraries are managed via git submodules or specific managers
-lib/
+# --- 📦 DEPENDENCY & PACKAGE MANAGEMENT (YARN/NPM) ---
+# Node modülleri ve Yarn'ın oluşturduğu devasa cache yapıları
 node_modules/
-# Keep forge-std for local consistency if necessary
-# !lib/forge-std
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
 
-# --- 🔐 CRYPTOGRAPHIC & SENSITIVE DATA (CRITICAL) ---
-# Strict exclusion of private keys, environment variables, and mnemonics
-.env
-.env.*
-secrets.json
-*.pem
-*.key
-mnemonic.txt
-*password.txt
-# Foundry deployment broadcast data (contains private key metadata)
-broadcast/
+# --- 🧶 YARN SPECIFIC NOISE ---
+yarn-error.log
+yarn-debug.log*
+.eslintcache
+.stylelintcache
+*.tsbuildinfo
 
-# --- 🧪 ANALYSIS & TELEMETRY ---
-# Local testing coverage, gas metrics, and audit tool artifacts
+# --- 🧪 FOUNDRY & ANALYSIS ARTIFACTS ---
+lib/
+# Opsiyonel: Eğer kütüphaneleri git submodule olarak yönetiyorsan lib/ kalsın.
+# Ama modern 'forge install' kullanıyorsan içerikleri submodule olarak eklenir.
+
+# Analiz raporları
 coverage/
 lcov.info
 gas-report.txt
@@ -41,28 +45,34 @@ slither-reports/
 aderyn-report.json
 *.log
 slither.db.json
+# Mythril ve Echidna çıktıları
+mythril_reports/
+corpus/
+
+# --- 🔐 CRYPTOGRAPHIC & SENSITIVE DATA (CRITICAL) ---
+.env
+.env.*
+.secrets
+secrets.json
+*.pem
+*.key
+mnemonic.txt
+*password.txt
+# Foundry deployment logs (Asla pushlanmamalı!)
+broadcast/
+cache/
 
 # --- 🛠️ IDE & WORKSPACE CONFIGURATION ---
-# Preventing local environment leakage into global history
 .vscode/
 !.vscode/extensions.json
-!.vscode/settings.json
 .idea/
 *.swp
 *.swo
 .project
 .settings/
 .classpath
-
-# --- 🐍 TOOLING & SCRIPTING (Python/Node) ---
-# Artifacts from auxiliary scripts or monitoring tools
-__pycache__/
-*.py[cod]
-*$py.class
-venv/
-env/
-.venv/
-.env/
+# Elixir/Rust gibi yan araçların oluşturduğu dosyalar
+target/
 
 # --- 🖥️ OPERATING SYSTEM ARTIFACTS ---
 .DS_Store
@@ -79,6 +89,6 @@ Thumbs.db
 
 # ==============================================================================
 # 📜 AOXCDAO QUALITY GATE
-# This exclusion policy ensures that sensitive keys and local build noise 
-# never pollute the institutional ledger.
+# This policy enforces a 'Source-Only' repository state, ensuring high-fidelity
+# auditability and zero environmental pollution.
 # ==============================================================================
