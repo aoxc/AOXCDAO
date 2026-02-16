@@ -1,0 +1,24 @@
+# AOXCDAO Institutional Dependency Management Protocol
+# Strategy: Alert-Only Mode (Manual Audit Required)
+version: 2
+
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "sunday"
+      time: "00:00"
+      timezone: "UTC"
+    
+    # [SECURITY POLICY]
+    # Automatic pull requests are disabled to enforce manual integrity checks.
+    # Updates must be processed through the consensus mechanism.
+    open-pull-requests-limit: 0
+
+    labels:
+      - "security-audit-required"
+      - "automated-discovery"
+
+    # Ensuring specific focus on the root directory
+    target-branch: "develop"
