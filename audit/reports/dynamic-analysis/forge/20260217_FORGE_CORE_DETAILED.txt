@@ -1,0 +1,31 @@
+[2m2026-02-16T21:17:10.924396Z[0m [31mERROR[0m [2mfoundry_compilers_artifacts_solc::sources[0m[2m:[0m [3merror[0m[2m=[0m"/home/orcun/AOXCDAO/lib/openzeppelin-contracts-upgradeable/contracts/utils/ReentrancyGuardUpgradeable.sol": No such file or directory (os error 2)
+Unable to resolve imports:
+      "@openzeppelin/contracts-upgradeable/utils/ReentrancyGuardUpgradeable.sol" in "/home/orcun/AOXCDAO/src/asset/AssetBackingLedger.sol"
+      "./interfaces/IMonitoringHub.sol" in "/home/orcun/AOXCDAO/src/asset/AssetBackingLedger.sol"
+      "./interfaces/IReputationManager.sol" in "/home/orcun/AOXCDAO/src/asset/AssetBackingLedger.sol"
+with remappings:
+      @openzeppelin/contracts/=/home/orcun/AOXCDAO/lib/openzeppelin-contracts/contracts/
+      @openzeppelin/contracts-upgradeable/=/home/orcun/AOXCDAO/lib/openzeppelin-contracts-upgradeable/contracts/
+      forge-std/=/home/orcun/AOXCDAO/lib/forge-std/src/
+      @interfaces/=/home/orcun/AOXCDAO/src/interfaces/
+      @libraries/=/home/orcun/AOXCDAO/src/libraries/
+      @core/=/home/orcun/AOXCDAO/src/core/
+      @security/=/home/orcun/AOXCDAO/src/security/
+      @andromeda/=/home/orcun/AOXCDAO/ANDROMEDA/
+      @virgo/=/home/orcun/AOXCDAO/VIRGO/
+      @aquila/=/home/orcun/AOXCDAO/AQUILA/
+      @centaurus/=/home/orcun/AOXCDAO/CENTAURUS/
+      @pegasus/=/home/orcun/AOXCDAO/PEGASUS/
+      @quasar/=/home/orcun/AOXCDAO/QUASAR/
+      @sombrero/=/home/orcun/AOXCDAO/SOMBRERO/
+      01_GOVERNANCE/=/home/orcun/AOXCDAO/ANDROMEDA/01_GOVERNANCE/
+      02_COMMAND/=/home/orcun/AOXCDAO/ANDROMEDA/02_COMMAND/
+      03_DEPARTMENTS/=/home/orcun/AOXCDAO/ANDROMEDA/03_DEPARTMENTS/
+      04_STAFF/=/home/orcun/AOXCDAO/ANDROMEDA/04_STAFF/
+      05_PASSENGERS/=/home/orcun/AOXCDAO/ANDROMEDA/05_PASSENGERS/
+      erc4626-tests/=/home/orcun/AOXCDAO/lib/openzeppelin-contracts/lib/erc4626-tests/
+      halmos-cheatcodes/=/home/orcun/AOXCDAO/lib/openzeppelin-contracts/lib/halmos-cheatcodes/src/
+      openzeppelin-contracts-upgradeable/=/home/orcun/AOXCDAO/lib/openzeppelin-contracts-upgradeable/
+      openzeppelin-contracts/=/home/orcun/AOXCDAO/lib/openzeppelin-contracts/
+Compiling 199 files with Solc 0.8.33
+Solc 0.8.33 finished in 207.78ms

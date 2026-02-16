@@ -1,11 +1,10 @@
 # ==============================================================================
-# 🏛️ AOXCDAO INSTITUTIONAL GIT EXCLUSION POLICY V5.0
+# 🏛️ AOXCDAO INSTITUTIONAL GIT EXCLUSION POLICY V2.0.0
 # 🛡️ ARCHITECTURE: Foundry Submodules / Yarn Berry / Hardhat Integration
 # 🎓 LEVEL: Pro Ultimate Academic (Enterprise Grade / 2026 Secured)
 # ==============================================================================
 
 # --- 🏗️ COMPILATION & BUILD ARTIFACTS ---
-# Eliminating all deterministic build leftovers
 out/
 cache/
 artifacts/
@@ -15,7 +14,6 @@ cache_hardhat/
 target/
 
 # --- 📦 DEPENDENCY MANAGEMENT (YARN BERRY / NPM) ---
-# Enforcing 'Zero-Install' stability while ignoring bloat
 node_modules/
 .node_modules/
 .pnp.*
@@ -34,15 +32,20 @@ yarn-debug.log*
 .stylelintcache
 *.tsbuildinfo
 
-# --- 🧪 FOUNDRY & ANALYSIS ARTIFACTS ---
-# Pro-Tip: We do NOT ignore 'lib/' entirely because AOXCDAO uses submodules.
-# We only ignore potential junk inside dependencies.
+# --- 📚 LIBRARIES & SUBMODULE MANAGEMENT (CRITICAL) ---
+# [NEW] Strateji: Kütüphanelerin kodunu ana depoya (origin) göndermiyoruz.
+# Sadece lib klasörü yerelde (ns1) kalır, build için aktiftir.
+lib/openzeppelin-contracts/
+lib/openzeppelin-contracts-upgradeable/
+lib/forge-std/
+
+# Foundry specific junk removal within submodules
 lib/*/.git
 lib/*/.github
 lib/*/test
 lib/*/spec
 
-# Foundry specific snapshots and logs
+# --- 🧪 FOUNDRY & ANALYSIS ARTIFACTS ---
 .gas-snapshot
 .forge-snapshot
 gas-report.txt
@@ -50,7 +53,6 @@ coverage/
 lcov.info
 
 # --- 🔐 CRYPTOGRAPHIC & SENSITIVE DATA (CRITICAL) ---
-# Zero-tolerance policy for private key leaks
 .env
 .env.*
 .secrets
@@ -59,11 +61,9 @@ secrets.json
 *.key
 mnemonic.txt
 *password.txt
-# Critical: Forge broadcast logs contain deployment private keys/addresses
 broadcast/
 
 # --- 🔍 STATIC ANALYSIS & SECURITY AUDIT ---
-# Ignoring local scan databases and temporary reports
 slither-reports/
 slither.db.json
 aderyn-report.json
@@ -72,7 +72,6 @@ corpus/
 *.log
 
 # --- 🛠️ IDE & WORKSPACE CONFIGURATION ---
-# Preserving team extensions while ignoring user-specific state
 .vscode/*
 !.vscode/extensions.json
 .idea/
@@ -98,6 +97,6 @@ Thumbs.db
 
 # ==============================================================================
 # 📜 AOXCDAO QUALITY GATE
-# VERSION: 5.0.0 (Institutional Grade)
-# STATUS: Fully compliant with 0.8.33 Hardhat/Foundry Hybrid Architecture.
+# VERSION: 5.1.0 (Institutional Grade - 2026)
+# STATUS: Fully compliant with 0.8.33 Hybrid Architecture.
 # ==============================================================================
