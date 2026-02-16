@@ -1,0 +1,65 @@
+{
+  "compilerOptions": {
+    /* --- TARGET & MODULE SYSTEM --- */
+    "target": "ESNext",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "lib": ["ESNext", "DOM", "DOM.Iterable"],
+    
+    /* --- SOVEREIGN TYPE-CHECKING DISCIPLINE --- */
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "strictBindCallApply": true,
+    "strictPropertyInitialization": true,
+    "noImplicitThis": true,
+    "useUnknownInCatchVariables": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedIndexedAccess": true,
+    "noImplicitOverride": true,
+
+    /* --- ESM SPECIFICATION ENFORCEMENT --- */
+    // Allows explicit .ts extensions in imports for native ESM compatibility
+    "allowImportingTsExtensions": true,
+    // Mandatory when extensions are allowed (prevents incomplete build output)
+    "noEmit": true, 
+    "isolatedModules": true,
+    "resolveJsonModule": true,
+
+    /* --- FLEET COMPATIBILITY & INTEROPERABILITY --- */
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    
+    /* --- QUALITY & DOCUMENTATION --- */
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "removeComments": false,
+    
+    /* --- PATH MAPPING STRATEGY --- */
+    "baseUrl": ".",
+    "paths": {
+      "@aoxc/*": ["./*"],
+      "@core/*": ["./types/core/*"],
+      "@security/*": ["./types/security/*"],
+      "@economics/*": ["./types/economics/*"],
+      "@infrastructure/*": ["./types/infrastructure/*"],
+      "@system/*": ["./types/system/*"]
+    }
+  },
+  "include": [
+    "types/**/*.ts",
+    "scripts/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "out",
+    "**/*.test.ts"
+  ]
+}

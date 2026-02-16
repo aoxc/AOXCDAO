@@ -1,67 +1,73 @@
 [profile.default]
 
 # ==============================================================================
-# 🏢 PROJECT INFRASTRUCTURE
+# 🏢 SYSTEM TOPOLOGY & MODULE DOCKING
 # ==============================================================================
+# "src" remains the core forge. Ships are docked as explicit top-level modules 
+# to ensure absolute memory safety during compilation.
 
-src            = "src"
-out            = "out"
-libs           = ["lib"]
-test           = "test"
-script         = "scripts"
-cache_path     = "cache"
+src           = "src"
+out           = "out"
+test          = "test"
+script        = "scripts"
+cache_path    = "cache"
 
+# Explicit Module Injection (Prevents Recursive Stack Overflow)
+libs          = [
+    "lib", 
+    "ANDROMEDA", "VIRGO", "AQUILA", 
+    "CENTAURUS", "PEGASUS", "QUASAR", "SOMBRERO"
+]
 
 # ==============================================================================
-# 💎 COMPILER STRATEGY — Solidity 0.8.33 (Governance-Optimized)
+# 💎 COMPILER STRATEGY — Solidity 0.8.33 (Apex-Grade)
 # ==============================================================================
 
 solc_version   = "0.8.33"
-via_ir         = true
+via_ir         = true                  # Advanced Intermediate Representation optimization
 optimizer      = true
-optimizer_runs = 800            # Optimized for governance-heavy runtime usage
-bytecode_hash  = "none"         # Deterministic bytecode
-cbor_metadata  = false          # Deterministic deployment artifacts
-evm_version    = "cancun"       # Latest stable execution target (TSTORE/TLOAD enabled)
-
-
-# ==============================================================================
-# 📦 COMPILER WARNING MANAGEMENT
-# ==============================================================================
-
-# Suppression of Note [1891] is required for clean output.
-# Note: ERC-6372 (CLOCK_MODE) naming convention is handled via [fmt] ignore
-# to ensure compatibility without triggering configuration errors.
-
-ignored_error_codes = [1891]    # Solc: Unreachable code/specific notes
-
+optimizer_runs = 1000                  # Increased for peak operational efficiency
+bytecode_hash  = "none"                # Ensures deterministic ship identification
+cbor_metadata  = false                # Strips metadata for lean deployment
+evm_version    = "cancun"              # Targets TSTORE/TLOAD for gas-efficient state management
 
 # ==============================================================================
-# 🔗 ARCHITECTURAL REMAPPINGS
+# 🔗 ARCHITECTURAL MAPPING (Fleet Virtualization)
 # ==============================================================================
 
 remappings = [
     "@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/",
     "@openzeppelin/contracts-upgradeable/=lib/openzeppelin-contracts-upgradeable/contracts/",
+    "forge-std/=lib/forge-std/src/",
     "@interfaces/=src/interfaces/",
     "@libraries/=src/libraries/",
     "@core/=src/core/",
     "@security/=src/security/",
-    "forge-std/=lib/forge-std/src/"
+    
+    # --- 🌌 FLEET MODULE RE-ENTRY POINTS ---
+    "@andromeda/=ANDROMEDA/",
+    "@virgo/=VIRGO/",
+    "@aquila/=AQUILA/",
+    "@centaurus/=CENTAURUS/",
+    "@pegasus/=PEGASUS/",
+    "@quasar/=QUASAR/",
+    "@sombrero/=SOMBRERO/"
 ]
 
-
 # ==============================================================================
-# 🧪 ADVANCED FUZZING CONFIGURATION (Governance & Upgrade Safety)
+# 🧪 INVARIANT & FUZZING ENGINE
 # ==============================================================================
 
 [fuzz]
-runs = 10_000                   # Strengthened invariant surface exploration
-max_test_rejects = 131_072      # Increased threshold for complex state machines
+runs = 10_000                          # Stress-testing ship integrity
+max_test_rejects = 131_072
 
+[invariant]
+runs = 5_000                           # Ensuring fleet-wide state consistency
+depth = 500                            # Deep state-space exploration
 
 # ==============================================================================
-# 🏛️ INSTITUTIONAL FORMATTING STANDARD
+# 🏛️ INSTITUTIONAL FORMATTING & LINT GUARD
 # ==============================================================================
 
 [fmt]
@@ -72,22 +78,19 @@ check_functions_order = true
 multiline_func_header = "attributes_first"
 quote_style           = "double"
 
-# ERC-6372 naming standard (CLOCK_MODE) exception:
-# This prevents the "mixed-case-function" linter warning for the core contract.
-ignore = ["src/core/AOXC.sol"]
-
+# Protects your Serial-ID naming standard from being altered
+ignore = [
+    "src/core/AOXC.sol",
+    "**/0000*.sol"                     
+]
 
 # ==============================================================================
-# 🌐 NETWORK CONFIGURATION
+# 🌐 PROTOCOL ENDPOINTS (XLayer Native)
 # ==============================================================================
 
 [rpc_endpoints]
 xlayer_mainnet = "https://rpc.xlayer.okx.com"
 xlayer_testnet = "https://testrpc.xlayer.okx.com"
-
-# ==============================================================================
-# 🔍 CONTRACT VERIFICATION ENDPOINTS
-# ==============================================================================
 
 [etherscan]
 xlayer_mainnet = { key = "${XLAYER_API_KEY}", url = "https://www.oklink.com/api/v5/explorer/xlayer/api" }

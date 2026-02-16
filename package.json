@@ -1,35 +1,55 @@
 {
-  "name": "@aoxc/core",
-  "version": "1.0.0",
-  "description": "AOXC DAO Core Smart Contracts",
-  "author": "AOXC Academic Team",
+  "name": "aoxc-dao-v2",
+  "version": "2.0.0",
+  "description": "AOXC Sovereign Fleet | Decentralized Autonomous Institution & Multi-Vessel Ecosystem",
+  "author": "AOXC Academic Intelligence Unit",
   "license": "MIT",
   "private": true,
-  "packageManager": "yarn@4.12.0",
+  "type": "module",
+  "packageManager": "yarn@4.6.0",
   "engines": {
-    "node": ">=20.0.0"
-  },
-  "dependencies": {
-    "@openzeppelin/contracts": "5.5.0",
-    "@openzeppelin/contracts-upgradeable": "5.5.0"
-  },
-  "devDependencies": {
-    "prettier": "^3.2.5",
-    "prettier-plugin-solidity": "^1.4.1",
-    "solhint": "^4.5.0"
+    "node": ">=20.0.0",
+    "yarn": ">=4.0.0"
   },
   "scripts": {
+    "--- 🌌 CORE OPERATIONS ---": "",
+    "nexus:init": "node --loader ts-node/esm types/bootstrap.ts",
     "build": "forge build --silent",
-    "rebuild": "forge clean && forge build --silent",
+    "rebuild": "forge clean && forge build --optimizer-runs 1000",
     "test": "forge test -vv",
-    "coverage": "forge coverage",
-    "gas": "forge test --gas-report",
-    "snapshot": "forge snapshot",
-    "lint": "yarn run solhint 'src/**/*.sol' --fix",
-    "format": "yarn exec prettier --write 'src/**/*.sol' --plugin=prettier-plugin-solidity",
-    "clean": "forge clean",
-    "version:major": "yarn version major",
-    "version:minor": "yarn version minor",
-    "version:patch": "yarn version patch"
+    "test:trace": "forge test -vvvv",
+    "--- 🔍 ANALYTICS & INTEGRITY ---": "",
+    "check:all": "yarn lint && yarn typecheck && yarn test:coverage && yarn audit:knip",
+    "lint": "yarn lint:ts && yarn lint:sol",
+    "lint:ts": "eslint 'types/**/*.ts' --fix",
+    "lint:sol": "solhint 'src/**/*.sol' 'ANDROMEDA/**/*.sol' 'VIRGO/**/*.sol' --fix",
+    "typecheck": "tsc --project tsconfig.json --noEmit",
+    "test:coverage": "type-coverage --at-least 90 --detail --strict --ignore-catch",
+    "format": "prettier --write . --plugin=prettier-plugin-solidity",
+    "audit:knip": "knip",
+    "--- 📡 FLEET DEPLOYMENT ---": "",
+    "deploy:testnet": "forge script scripts/DeployFleet.s.sol --rpc-url xlayer_testnet --broadcast --verify",
+    "deploy:mainnet": "forge script scripts/DeployFleet.s.sol --rpc-url xlayer_mainnet --broadcast --verify",
+    "--- 📜 VERSION CONTROL ---": "",
+    "release:major": "yarn version major",
+    "release:minor": "yarn version minor",
+    "release:patch": "yarn version patch"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "5.2.0",
+    "@openzeppelin/contracts-upgradeable": "5.2.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.20.0",
+    "@types/node": "^20.11.0",
+    "eslint": "^9.20.0",
+    "knip": "^5.83.1",
+    "prettier": "^3.5.1",
+    "prettier-plugin-solidity": "^1.4.3",
+    "solhint": "^6.0.3",
+    "ts-node": "^10.9.2",
+    "type-coverage": "^2.29.7",
+    "typescript": "^5.7.3",
+    "typescript-eslint": "^8.24.0"
   }
 }

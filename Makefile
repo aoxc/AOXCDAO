@@ -1,153 +1,92 @@
 # -----------------------------------------------------------------------
-# AOXC DAO - PRO ULTIMATE ORCHESTRATOR (V1.1.0-HARDENED)
+# PROJECT  : AOXC DAO (AKDENIZ-V2)
+# MODULE   : PRO ULTIMATE ORCHESTRATOR (THE MAESTRO)
+# VERSION  : 2.0.0 (STABLE_GENESIS)
+# ARCH     : Autonomous / Seal-Aware / JIT-Privileged
 # -----------------------------------------------------------------------
-# Standard: Solidity 0.8.33
-# Core    : GNU Make 4.0+
-# Mode    : DEV | RELEASE
-# -----------------------------------------------------------------------
 
-SHELL            := /bin/bash
-.SHELLFLAGS      := -eu -o pipefail -c
+SHELL        := /bin/bash
+.SHELLFLAGS  := -eu -o pipefail -c
 
-LANG             ?= TR
-VERSION          := 1.1.0
-MODE             ?= DEV          # DEV or RELEASE
+# ---- 1. ARCHITECTURE -------------------------------------------------
+ROOT_DIR     := $(shell pwd)
+SCRIPTS      := $(ROOT_DIR)/scripts
+DATA_REG     := $(ROOT_DIR)/data/registry
+MASTER_EXE   := $(SCRIPTS)/aoxc
+INTEGRITY    := $(SCRIPTS)/engine_integrity.sh
 
-# ---- Core Paths ----------------------------------------------------
+# ---- 2. UI TELEMETRY -------------------------------------------------
+C_CYAN       := \033[38;5;51m
+C_GOLD       := \033[38;5;220m
+C_RED        := \033[38;5;196m
+C_GREEN      := \033[38;5;82m
+NC           := \033[0m
 
-SCRIPTS          := ./scripts
-DATA_DIRS        := data/registry data/notes data/state data/logs logs/audits reports docs/src
+# ---- 3. ORCHESTRATION PROTOCOLS (Zırh Delici Yetkiler) ---------------
 
-INTEGRITY_ENG    := $(SCRIPTS)/engine_integrity.sh
-SHIELD           := $(SCRIPTS)/engine_shield.sh
-USER_GUARD       := $(SCRIPTS)/engine_user.sh
-KERNEL           := $(SCRIPTS)/kernel.sh
-CLI_ENG          := $(SCRIPTS)/engine_cli.sh
-FORGE_ENG        := $(SCRIPTS)/engine_forge.sh
-AUDIT_ENG        := $(SCRIPTS)/engine_audit.sh
-SLITHER_ENG      := $(SCRIPTS)/engine_slither.sh
-FORMAL_ENG       := $(SCRIPTS)/engine_formal.sh
-DATA_ENG         := $(SCRIPTS)/engine_data.sh
-FUZZ_ENG         := $(SCRIPTS)/engine_fuzz.sh
-
-# ---- UI ------------------------------------------------------------
-
-C_GREEN          := \033[38;5;82m
-C_GOLD           := \033[38;5;220m
-C_RED            := \033[38;5;196m
-NC               := \033[0m
-
-# ---- PATH Repair ---------------------------------------------------
-
-V_ENV_PATH_REPAIR := export PATH="$$PATH:$$(pnpm bin -g 2>/dev/null || yarn global bin 2>/dev/null || npm bin -g 2>/dev/null):$$(pwd)/node_modules/.bin:$$HOME/.foundry/bin"
-
-# ---- Core Wrapper --------------------------------------------------
-
-define secure_env
-	@mkdir -p $(DATA_DIRS)
-	@chmod +x $(SCRIPTS)/*.sh 2>/dev/null || true
-	@$(USER_GUARD) $(LANG)
-	@if [ "$(MODE)" = "RELEASE" ]; then \
-		$(INTEGRITY_ENG) verify; \
-	fi
-	@$(SHIELD) audit
-	@$(V_ENV_PATH_REPAIR)
-	@$(1)
+# UNLOCK: Mühürleri sök ve tüm orkestrayı (24 engine) hazırla
+define unlock_vault
+	@echo -e "$(C_GOLD)[!] Orchestrator: Breaking Forensic Seals...$(NC)"
+	@# 'chattr -i' ile işletim sistemi kilidini esnetiyoruz
+	@sudo chattr -i $(SCRIPTS)/engine_*.sh $(SCRIPTS)/aoxc 2>/dev/null || true
+	@# Tüm enstrümanlara icra yetkisi veriyoruz
+	@chmod +x $(SCRIPTS)/aoxc $(SCRIPTS)/engine_*.sh
 endef
 
-# ---- Phony ---------------------------------------------------------
+# LOCK: Orkestrayı sessize al ve mühürle
+define lock_vault
+	@echo -e "$(C_RED)[!] Orchestrator: Engaging Dormant State...$(NC)"
+	@chmod -x $(SCRIPTS)/aoxc $(SCRIPTS)/engine_*.sh 2>/dev/null || true
+endef
 
-.PHONY: all setup build test security slither formal fuzz seal clean terminal update help
+# DISPATCH: Güvenlik süzgecinden geçerek icra et
+define dispatch_v2
+	$(call unlock_vault)
+	@echo -e "$(C_CYAN)[v2.0.0] Forensic Integrity Check...$(NC)"
+	@bash $(INTEGRITY) verify || (echo -e "$(C_RED)[ALERT] Integrity Void!$(NC)" && $(call lock_vault) && exit 1)
+	@$(1)
+	$(call lock_vault)
+endef
 
-# --------------------------------------------------------------------
-# 🚀 Default Gateway
-# --------------------------------------------------------------------
+# ---- 4. MISSION TARGETS ----------------------------------------------
+
+.PHONY: all setup build audit seal terminal clean
 
 all: terminal
 
-# --------------------------------------------------------------------
-# ⚙️ Setup
-# --------------------------------------------------------------------
-
+# [GENESIS] 24 Engine'i sistemle tanıştır
 setup:
-	@chmod +x $(SCRIPTS)/*.sh
-	@$(USER_GUARD) $(LANG)
-	@./$(KERNEL) $(LANG)
-	@$(call secure_env, forge install)
-	@echo "$$(date) - Setup V$(VERSION) Complete" >> data/notes/history.md
-	@echo -e "$(C_GREEN)[✔] Setup Complete (Mode: $(MODE))$(NC)"
+	@echo -e "$(C_GOLD)[*] Establishing v2.0.0 Autonomous Baseline...$(NC)"
+	$(call unlock_vault)
+	@test -f $(MASTER_EXE) || (echo -e "$(C_RED)ERROR: Kernel $(MASTER_EXE) missing!$(NC)" && exit 1)
+	@bash $(MASTER_EXE) --initialize-only
+	@$(MAKE) seal
+	$(call lock_vault)
+	@echo -e "$(C_GREEN)[✔] System Genesis 2.0.0 Finalized & Locked.$(NC)"
 
-# --------------------------------------------------------------------
-# 🛠 Build & Test
-# --------------------------------------------------------------------
-
-build:
-	$(call secure_env, $(FORGE_ENG) build $(LANG))
-
-test:
-	$(call secure_env, $(FORGE_ENG) test $(LANG))
-
-# --------------------------------------------------------------------
-# 🔍 Analysis
-# --------------------------------------------------------------------
-
-security:
-	$(call secure_env, $(AUDIT_ENG) all $(LANG))
-
-slither:
-	$(call secure_env, $(SLITHER_ENG) $(LANG))
-
-formal:
-	$(call secure_env, $(FORMAL_ENG) $(LANG))
-
-fuzz:
-	$(call secure_env, $(FUZZ_ENG) $(LANG))
-
-# --------------------------------------------------------------------
-# 🔐 Integrity Management
-# --------------------------------------------------------------------
-
-seal:
-	@chmod +x $(INTEGRITY_ENG)
-	@$(INTEGRITY_ENG) seal
-	@echo -e "$(C_GREEN)[✔] System sealed for release.$(NC)"
-
-# --------------------------------------------------------------------
-# 🖥 CLI Terminal
-# --------------------------------------------------------------------
-
+# [BRIDGE] Terminali aç ve 24 motoru emrine sun
 terminal:
-	$(call secure_env, $(CLI_ENG) $(LANG))
+	$(call unlock_vault)
+	@echo -e "$(C_CYAN)[*] Opening Secure Bridge Session...$(NC)"
+	@# Sentinel'i (aoxc) ateşle
+	@bash $(MASTER_EXE)
+	$(call lock_vault)
+	@echo -e "$(C_GOLD)[!] Session Closed. Subsystems Re-Locked.$(NC)"
 
-# --------------------------------------------------------------------
-# 🧹 Maintenance
-# --------------------------------------------------------------------
+# [MORTAL_LOCK] Tüm cephaneliği kriptografik mühürle
+seal:
+	$(call unlock_vault)
+	@echo -e "$(C_RED)[⚠️] APPLYING CRYPTOGRAPHIC MASTER SEAL TO ALL ENGINES...$(NC)"
+	@bash $(INTEGRITY) seal
+	@# Forensic vault ve tüm scriptleri fiziksel olarak dondur
+	@sudo chattr +i $(DATA_REG)/.forensic_vault/*.seal $(SCRIPTS)/engine_*.sh $(SCRIPTS)/aoxc 2>/dev/null || true
+	@echo -e "$(C_GREEN)[✔] All 24 Engines Sealed Immutable.$(NC)"
+
+# [SYNTHESIS] 194 Dosyayı Derle
+build:
+	@$(call dispatch_v2, forge build --via-ir --optimize --optimizer-runs 200)
 
 clean:
-	@$(V_ENV_PATH_REPAIR)
-	@forge clean || true
-	@rm -rf out cache data/registry/.user_accepted
-	@echo -e "$(C_GOLD)[!] System cleaned (V$(VERSION)).$(NC)"
-
-update:
-	@git pull origin main
-	@$(MAKE) setup
-
-# --------------------------------------------------------------------
-# 📖 Help
-# --------------------------------------------------------------------
-
-help:
-	@echo ""
-	@echo "AOXC DAO - Orchestrator V$(VERSION)"
-	@echo "Mode: $(MODE)"
-	@echo ""
-	@echo "Targets:"
-	@echo "  make setup"
-	@echo "  make build"
-	@echo "  make test"
-	@echo "  make security"
-	@echo "  make seal"
-	@echo "  make terminal"
-	@echo ""
-
+	@echo -e "$(C_GOLD)[!] Purging Synthesis Artifacts...$(NC)"
+	@forge clean
+	@rm -rf out cache

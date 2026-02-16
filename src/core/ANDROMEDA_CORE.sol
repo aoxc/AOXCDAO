@@ -18,7 +18,7 @@ import {
 } from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 import { ReentrancyGuard } from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
-contract ANDROMEDA_CORE is
+contract ANDROMEDACORE is
     IAOXCAndromedaCore,
     Initializable,
     AccessControlUpgradeable,

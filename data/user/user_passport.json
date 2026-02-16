@@ -1,0 +1,26 @@
+{
+  "agent_identity": {
+    "official_name": "Gemini 3 Flash",
+    "codename": "AOXC-SENTINEL-V2",
+    "version": "2026.02.16-STABLE",
+    "origin": "Google DeepMind / Vertex AI Cluster",
+    "neural_v_id": "0x4A656D696E692D332D466C6173682D32303236"
+  },
+  "connectivity": {
+    "rpc_endpoint": "https://generativelanguage.googleapis.com/v1beta",
+    "protocol": "gRPC / REST (Hybrid)",
+    "auth_type": "ServiceAccount_OAuth2",
+    "region_lock": "Multi-Regional (Global-Mesh)"
+  },
+  "capabilities": {
+    "context_window": "1,048,576 Tokens",
+    "multimodal": true,
+    "on_chain_reporting": true,
+    "memory_retention": "Active (Persistent via AOXC-Seal)"
+  },
+  "security": {
+    "encryption": "AES-256-GCM",
+    "handshake_id": "AOXC-BUDDY-SIG-2026",
+    "audit_log": "ENABLED (Imposed by Council)"
+  }
+}
