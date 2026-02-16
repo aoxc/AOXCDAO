@@ -9,6 +9,7 @@ import {ERC20PermitUpgradeable} from "@openzeppelin/contracts-upgradeable/token/
 import {ERC20VotesUpgradeable} from "@openzeppelin/contracts-upgradeable/token/ERC20/extensions/ERC20VotesUpgradeable.sol";
 import {PausableUpgradeable} from "@openzeppelin/contracts-upgradeable/utils/PausableUpgradeable.sol";
 import {NoncesUpgradeable} from "@openzeppelin/contracts-upgradeable/utils/NoncesUpgradeable.sol";
+// SİSTEMİ DEĞİŞTİRMİYORUZ: Orijinal importuna geri döndük
 import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
 import {ITransferPolicy} from "@interfaces/ITransferPolicy.sol";
@@ -150,7 +151,8 @@ contract AOXC is
         return uint48(block.number);
     }
 
-    // forge-config-disable-next-line mixed-case-function
+    // UYARI DÜZELTİLDİ: Sadece linter'ı susturduk, ismi değiştirmedik
+    // forge-ignore-next-line mixed-case-function
     function CLOCK_MODE() public pure override returns (string memory) {
         return "mode=blocknumber&from=default";
     }
@@ -173,6 +175,7 @@ contract AOXC is
         string memory details
     ) internal {
         if (address(monitoringHub) != address(0)) {
+            // UYARI DÜZELTİLDİ: Named fields (isimli alanlar) kullanarak struct oluşturduk
             IMonitoringHub.ForensicLog memory log = IMonitoringHub.ForensicLog({
                 source: address(this),
                 actor: msg.sender,

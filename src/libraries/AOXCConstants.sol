@@ -7,7 +7,6 @@ pragma solidity 0.8.33;
  * @author AOXC Core Engineering
  * @notice Centralized library for system-wide constants, roles, and financial parameters.
  * @dev Optimized for Solidity 0.8.33. All constants are evaluated at compile-time to save gas.
- * This library eliminates "Magic Numbers" across the 157+ contract ecosystem.
  */
 library AOXCConstants {
     // --- Access Control Roles (Immutable Hashes) ---
@@ -32,6 +31,12 @@ library AOXCConstants {
      */
     bytes32 public constant ORACLE_OPERATOR_ROLE = keccak256("ORACLE_OPERATOR_ROLE");
 
+    /**
+     * @dev Role for management oversight and compensation approval (Auditors).
+     * @notice This role provides the secondary approval for victim compensations.
+     */
+    bytes32 public constant AUDITOR_ROLE = keccak256("AUDITOR_ROLE");
+
     // --- Financial & Mathematical Parameters ---
 
     /**
@@ -49,7 +54,6 @@ library AOXCConstants {
 
     /**
      * @notice Standard heartbeat interval for oracles and pulse monitoring (24 hours).
-     * @dev Protocol components use this to detect "stale" or "dead" data feeds.
      */
     uint256 public constant HEARTBEAT_INTERVAL = 1 days;
 

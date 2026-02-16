@@ -5,11 +5,26 @@
   "useTabs": false,
   "singleQuote": false,
   "bracketSpacing": true,
+  "explicitTypes": "always",
+  "semi": true,
+  "trailingComma": "all",
   "overrides": [
     {
       "files": "*.sol",
       "options": {
-        "parser": "solidity-parse"
+        "parser": "solidity-parse",
+        "printWidth": 120,
+        "tabWidth": 4,
+        "compiler": "0.8.20"
+      }
+    },
+    {
+      "files": "*.ts",
+      "options": {
+        "printWidth": 100,
+        "parser": "typescript",
+        "singleQuote": false,
+        "trailingComma": "all"
       }
     }
   ]

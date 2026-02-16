@@ -2,66 +2,104 @@
 pragma solidity 0.8.33;
 
 import { Initializable } from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
-import {
-    AccessControlUpgradeable
-} from "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
-import {
-    PausableUpgradeable
-} from "@openzeppelin/contracts-upgradeable/utils/PausableUpgradeable.sol";
-import {
-    UUPSUpgradeable
-} from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
-import { ReentrancyGuard } from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
+import { AccessControlUpgradeable } from "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
+import { PausableUpgradeable } from "@openzeppelin/contracts-upgradeable/utils/PausableUpgradeable.sol";
+import { UUPSUpgradeable } from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
+import { ReentrancyGuardUpgradeable } from "@openzeppelin/contracts-upgradeable/utils/ReentrancyGuardUpgradeable.sol";
 
-import { IMonitoringHub } from "@interfaces/IMonitoringHub.sol";
-import { IReputationManager } from "@interfaces/IReputationManager.sol";
+import { IMonitoringHub } from "./interfaces/IMonitoringHub.sol";
+import { IReputationManager } from "./interfaces/IReputationManager.sol";
 
 /**
  * @title AssetBackingLedger
- * @author AOXC Core Engineering
- * @notice Central accounting module for collateral assets in the AOXC ecosystem.
- * @dev Fully compliant with 26-channel MonitoringHub and UUPS Proxy pattern (OZ v5).
+ * @author AOXCDAO
+ * @notice RWA (Real World Asset) varlıklarının muhasebesini ve sistem limitlerini yöneten ana kontrat.
+ * @dev UUPS (EIP-1822) standardında yükseltilebilir, rol tabanlı erişim kontrolü ve duraklatma özelliklerine sahiptir.
  */
 contract AssetBackingLedger is
     Initializable,
     AccessControlUpgradeable,
     PausableUpgradeable,
     UUPSUpgradeable,
-    ReentrancyGuard
+    ReentrancyGuardUpgradeable
 {
     // --- Roles ---
+
+    /// @notice Sistem yönetici rolü (Admin yetkileri için)
     bytes32 public constant ADMIN_ROLE = keccak256("AOXC_ADMIN_ROLE");
+    /// @notice Varlık giriş/çıkış işlemlerini yöneten rol
     bytes32 public constant ASSET_MANAGER_ROLE = keccak256("AOXC_ASSET_MANAGER_ROLE");
-    bytes32 public constant OPERATOR_ROLE = keccak256("AOXC_OPERATOR_ROLE");
+    /// @notice Dış AI ajanları için tanımlanan özel rol
+    bytes32 public constant EXTERNAL_AI_AGENT_ROLE = keccak256("EXTERNAL_AI_AGENT_ROLE");
 
     // --- State Variables ---
+
+    /// @notice İşlemlerin raporlandığı izleme merkezi kontratı
     IMonitoringHub public monitoringHub;
+    /// @notice Kullanıcı veya ajan itibarlarını yöneten kontrat
     IReputationManager public reputationManager;
 
+    /// @notice Sistemdeki tüm varlıkların toplam miktarı
     uint256 public totalAssets;
+    /// @notice Sistemin kabul edebileceği maksimum toplam varlık miktarı
     uint256 public systemLimit;
 
+    /// @dev Kayıtlı varlık ID'lerinin listesi
     bytes32[] private _assetIds;
+    /// @dev Varlık ID'sine göre güncel bakiye tutan mapping
     mapping(bytes32 => uint256) private _assetBalances;
+    /// @dev Varlığın sistemde tanımlı olup olmadığını kontrol eden mapping
     mapping(bytes32 => bool) private _isAssetKnown;
 
     // --- Custom Errors ---
+
     error AOXC__ZeroAddress();
     error AOXC__ZeroAmount();
     error AOXC__InsufficientBalance();
     error AOXC__InvalidAssetId();
     error AOXC__SystemCapReached(uint256 currentTotal, uint256 limit);
-    error AOXC__OnlyTimelock();
 
     // --- Events ---
-    event AssetDeposited(
-        address indexed caller, bytes32 indexed assetId, uint256 amount, uint256 timestamp
-    );
-    event AssetWithdrawn(
-        address indexed caller, bytes32 indexed assetId, uint256 amount, uint256 timestamp
-    );
-    event TotalAssetsUpdated(uint256 oldTotal, uint256 newTotal, uint256 timestamp);
-    event SystemLimitUpdated(uint256 oldLimit, uint256 newLimit);
+
+    /**
+     * @notice Varlık sisteme yatırıldığında tetiklenir.
+     * @param caller İşlemi başlatan adres.
+     * @param assetId Yatırılan varlığın benzersiz ID'si.
+     * @param amount Yatırılan miktar.
+     * @param timestamp İşlemin gerçekleştiği zaman damgası.
+     */
+    event AssetDeposited(address indexed caller, bytes32 indexed assetId, uint256 indexed amount, uint256 timestamp);
+
+    /**
+     * @notice Varlık sistemden çekildiğinde tetiklenir.
+     * @param caller İşlemi başlatan adres.
+     * @param assetId Çekilen varlığın benzersiz ID'si.
+     * @param amount Çekilen miktar.
+     * @param timestamp İşlemin gerçekleştiği zaman damgası.
+     */
+    event AssetWithdrawn(address indexed caller, bytes32 indexed assetId, uint256 indexed amount, uint256 timestamp);
+
+    /**
+     * @notice Toplam varlık miktarı güncellendiğinde tetiklenir.
+     * @param oldTotal Güncelleme öncesi toplam miktar.
+     * @param newTotal Güncelleme sonrası yeni toplam miktar.
+     * @param timestamp İşlem zamanı.
+     */
+    event TotalAssetsUpdated(uint256 indexed oldTotal, uint256 indexed newTotal, uint256 timestamp);
+
+    /**
+     * @notice Sistem üst limiti değiştirildiğinde tetiklenir.
+     * @param oldLimit Eski limit değeri.
+     * @param newLimit Yeni limit değeri.
+     */
+    event SystemLimitUpdated(uint256 indexed oldLimit, uint256 indexed newLimit);
+
+    /**
+     * @notice Yeni bir AI ajanı sisteme kaydedildiğinde tetiklenir.
+     * @param agent Ajanın cüzdan adresi.
+     * @param contractHash Ajanın sözleşme doğrulama hash'i.
+     */
+    event AIAgentRegistered(address indexed agent, bytes32 indexed contractHash);
 
     /// @custom:oz-upgrades-unsafe-allow constructor
     constructor() {
@@ -69,34 +107,42 @@ contract AssetBackingLedger is
     }
 
     /**
-     * @notice Proxy initialization.
+     * @notice Kontratın ilk kurulumunu yapar.
+     * @param admin Başlangıç yöneticisi adresi.
+     * @param _monitoringHub İzleme merkezi adresi.
+     * @param _reputationManager İtibar yönetimi adresi.
      */
-    function initialize(address admin, address _monitoringHub, address _reputationManager)
-        external
-        initializer
-    {
-        if (admin == address(0) || _monitoringHub == address(0)) {
+    function initialize(
+        address admin, 
+        address _monitoringHub, 
+        address _reputationManager
+    ) external initializer {
+        if (admin == address(0) || _monitoringHub == address(0) || _reputationManager == address(0)) {
             revert AOXC__ZeroAddress();
         }
 
         __AccessControl_init();
         __Pausable_init();
-        // NOT: OpenZeppelin v5'te __UUPSUpgradeable_init() kaldırılmıştır.
+        __ReentrancyGuard_init();
+        __UUPSUpgradeable_init();
 
         _grantRole(DEFAULT_ADMIN_ROLE, admin);
         _grantRole(ADMIN_ROLE, admin);
         _grantRole(ASSET_MANAGER_ROLE, admin);
-        _grantRole(OPERATOR_ROLE, admin);
 
         monitoringHub = IMonitoringHub(_monitoringHub);
         reputationManager = IReputationManager(_reputationManager);
-        systemLimit = type(uint128).max;
-
-        _logToHub(IMonitoringHub.Severity.INFO, "INITIALIZE", "Asset Ledger Online");
+        
+        systemLimit = type(uint256).max;
     }
 
-    // --- External Operations ---
+    // --- Core Functions ---
 
+    /**
+     * @notice Belirli bir varlığı ledger'a kaydeder ve bakiyeyi artırır.
+     * @param assetId İşlem yapılacak varlığın ID'si.
+     * @param amount Eklenecek miktar.
+     */
     function depositAsset(bytes32 assetId, uint256 amount)
         external
         onlyRole(ASSET_MANAGER_ROLE)
@@ -106,9 +152,9 @@ contract AssetBackingLedger is
         if (assetId == bytes32(0)) revert AOXC__InvalidAssetId();
         if (amount == 0) revert AOXC__ZeroAmount();
 
-        if (totalAssets + amount > systemLimit) {
-            _logToHub(IMonitoringHub.Severity.WARNING, "LIMIT_EXCEEDED", "Deposit blocked by cap");
-            revert AOXC__SystemCapReached(totalAssets, systemLimit);
+        uint256 currentTotal = totalAssets;
+        if (currentTotal + amount > systemLimit) {
+            revert AOXC__SystemCapReached(currentTotal, systemLimit);
         }
 
         if (!_isAssetKnown[assetId]) {
@@ -116,104 +162,119 @@ contract AssetBackingLedger is
             _isAssetKnown[assetId] = true;
         }
 
-        uint256 oldTotal = totalAssets;
+        uint256 oldTotal = currentTotal;
         unchecked {
             _assetBalances[assetId] += amount;
-            totalAssets += amount;
-        }
-
-        if (address(reputationManager) != address(0)) {
-            try reputationManager.processAction(msg.sender, keccak256("ASSET_LEDGER_UPDATE")) { }
-                catch { }
+            totalAssets = oldTotal + amount;
         }
 
         emit TotalAssetsUpdated(oldTotal, totalAssets, block.timestamp);
         emit AssetDeposited(msg.sender, assetId, amount, block.timestamp);
 
-        _logToHub(IMonitoringHub.Severity.INFO, "ASSET_DEPOSIT", "Collateral increased");
+        _logToHub("DEPOSIT", "Asset added to ledger.");
     }
 
+    /**
+     * @notice Belirli bir varlığı ledger'dan düşer ve bakiyeyi azaltır.
+     * @param assetId İşlem yapılacak varlığın ID'si.
+     * @param amount Çıkarılacak miktar.
+     */
     function withdrawAsset(bytes32 assetId, uint256 amount)
         external
         onlyRole(ASSET_MANAGER_ROLE)
         whenNotPaused
         nonReentrant
     {
-        if (assetId == bytes32(0)) revert AOXC__InvalidAssetId();
-        if (amount == 0) revert AOXC__ZeroAmount();
-
-        uint256 currentBalance = _assetBalances[assetId];
-        if (currentBalance < amount) revert AOXC__InsufficientBalance();
+        uint256 currentBal = _assetBalances[assetId];
+        if (currentBal < amount) revert AOXC__InsufficientBalance();
 
         uint256 oldTotal = totalAssets;
         unchecked {
-            _assetBalances[assetId] = currentBalance - amount;
+            _assetBalances[assetId] = currentBal - amount;
             totalAssets = oldTotal - amount;
         }
 
         emit TotalAssetsUpdated(oldTotal, totalAssets, block.timestamp);
         emit AssetWithdrawn(msg.sender, assetId, amount, block.timestamp);
 
-        _logToHub(IMonitoringHub.Severity.INFO, "ASSET_WITHDRAW", "Collateral decreased");
+        _logToHub("WITHDRAW", "Asset removed from ledger.");
     }
 
-    // --- Governance ---
+    // --- Admin Functions ---
 
-    function setSystemLimit(uint256 newLimit) external onlyRole(DEFAULT_ADMIN_ROLE) {
-        uint256 old = systemLimit;
+    /**
+     * @notice Sistemin toplam varlık kapasite limitini günceller.
+     * @param newLimit Yeni limit değeri.
+     */
+    function setSystemLimit(uint256 newLimit) external onlyRole(ADMIN_ROLE) {
+        emit SystemLimitUpdated(systemLimit, newLimit);
         systemLimit = newLimit;
-        emit SystemLimitUpdated(old, newLimit);
-        _logToHub(IMonitoringHub.Severity.WARNING, "GOVERNANCE", "Asset limit adjusted");
+    }
+
+    /**
+     * @notice Sisteme yeni bir AI ajanı yetkilendirir.
+     * @param agent Yetki verilecek ajanın adresi.
+     */
+    function registerAIAgent(address agent) external onlyRole(ADMIN_ROLE) {
+        if (agent == address(0)) revert AOXC__ZeroAddress();
+        _grantRole(EXTERNAL_AI_AGENT_ROLE, agent);
+        emit AIAgentRegistered(agent, keccak256("AOXC_AGENT_V1"));
+    }
+
+    /** @notice Kontrat üzerindeki işlemleri acil durum için duraklatır. */
+    function pause() external onlyRole(ADMIN_ROLE) {
+        _pause();
+    }
+
+    /** @notice Duraklatılmış işlemleri tekrar başlatır. */
+    function unpause() external onlyRole(ADMIN_ROLE) {
+        _unpause();
+    }
+
+    // --- View Functions ---
+
+    /**
+     * @notice Bir varlığın güncel bakiyesini döner.
+     * @param assetId Sorgulanacak varlık ID'si.
+     * @return Varlığın bakiyesi.
+     */
+    function getAssetBalance(bytes32 assetId) external view returns (uint256) {
+        return _assetBalances[assetId];
+    }
+
+    /**
+     * @notice Varlığın sistem tarafından tanınıp tanınmadığını döner.
+     * @param assetId Sorgulanacak varlık ID'si.
+     * @return Tanınıyorsa true.
+     */
+    function isAssetSupported(bytes32 assetId) external view returns (bool) {
+        return _isAssetKnown[assetId];
+    }
+
+    /**
+     * @notice Sistemde kayıtlı olan tüm varlık ID'lerini listeler.
+     * @return Varlık ID dizisi.
+     */
+    function getAllAssetIds() external view returns (bytes32[] memory) {
+        return _assetIds;
     }
 
     // --- Internal Helpers ---
 
     /**
-     * @notice High-fidelity 26-channel forensic logging.
+     * @dev MonitoringHub'a log gönderen iç yardımcı fonksiyon.
      */
-    function _logToHub(
-        IMonitoringHub.Severity severity,
-        string memory action,
-        string memory details
-    ) internal {
+    function _logToHub(string memory action, string memory details) internal {
         if (address(monitoringHub) != address(0)) {
-            IMonitoringHub.ForensicLog memory log = IMonitoringHub.ForensicLog({
-                source: address(this),
-                actor: msg.sender,
-                origin: tx.origin,
-                related: address(0),
-                severity: severity,
-                category: "ASSET_LEDGER",
-                details: details,
-                riskScore: 0,
-                nonce: 0,
-                chainId: block.chainid,
-                blockNumber: block.number,
-                timestamp: block.timestamp,
-                gasUsed: gasleft(),
-                value: msg.value,
-                stateRoot: bytes32(0),
-                txHash: bytes32(0), // Will be visible on-chain via tx
-                selector: msg.sig,
-                version: 1,
-                actionReq: severity == IMonitoringHub.Severity.EMERGENCY,
-                isUpgraded: false,
-                environment: 0, // 0: Production
-                correlationId: bytes32(0),
-                policyHash: bytes32(0),
-                sequenceId: 0,
-                metadata: abi.encodePacked(action),
-                proof: ""
-            });
-
-            try monitoringHub.logForensic(log) { } catch { }
+            try monitoringHub.quickLog(msg.sender, msg.sender, action, details) {} catch {}
         }
     }
 
-    function _authorizeUpgrade(address) internal override onlyRole(ADMIN_ROLE) {
-        _logToHub(IMonitoringHub.Severity.CRITICAL, "UPGRADE", "Auth upgrade requested");
+    /**
+     * @dev Kontrat yükseltmelerini yetkilendiren fonksiyon. Sadece Admin yapabilir.
+     * @param newImplementation Yeni uygulanacak kontrat adresi.
+     */
+    function _authorizeUpgrade(address newImplementation) internal override onlyRole(ADMIN_ROLE) {
+        // Parametre UUPS standardı gereği gereklidir ancak gövdede ek işlem gerekmez.
     }
-
-    // --- Storage Gap ---
-    uint256[43] private _gap;
 }

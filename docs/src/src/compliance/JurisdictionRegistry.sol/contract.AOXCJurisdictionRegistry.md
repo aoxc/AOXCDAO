@@ -1,5 +1,5 @@
 # AOXCJurisdictionRegistry
-[Git Source](https://github.com/aoxc/AOXCDAO/blob/4906edc2cee9ebf2ba59629225d505313f10268f/src/compliance/JurisdictionRegistry.sol)
+[Git Source](https://github.com/aoxc/AOXCDAO/blob/b2b85b9d29ffbff40854f57fed9136e5c88843dc/src/compliance/JurisdictionRegistry.sol)
 
 **Inherits:**
 [IJurisdictionRegistry](/src/interfaces/IJurisdictionRegistry.sol/interface.IJurisdictionRegistry.md), Initializable, AccessControlUpgradeable, PausableUpgradeable, UUPSUpgradeable

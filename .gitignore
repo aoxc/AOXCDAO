@@ -17,6 +17,7 @@ target/
 # --- 📦 DEPENDENCY MANAGEMENT (YARN BERRY / NPM) ---
 # Enforcing 'Zero-Install' stability while ignoring bloat
 node_modules/
+.node_modules/
 .pnp.*
 .yarn/*
 !.yarn/patches

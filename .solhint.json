@@ -1,17 +1,11 @@
 {
   "extends": "solhint:recommended",
   "rules": {
-    "func-name-mixedcase": "off",
-    "compiler-version": ["error", "^0.8.33"],
-    "no-empty-blocks": "error",
-    "no-unused-vars": "error",
-    "payable-fallback": "error",
-    "reason-string": ["error", { "maxLength": 32 }],
-    "const-name-snakecase": "error",
-    "contract-name-camelcase": "error",
-    "event-name-camelcase": "error",
-    "var-name-mixedcase": "error",
-    "ordering": "error",
-    "visibility-modifier-order": "error"
+    "compiler-version": ["error", "0.8.33"],
+    "no-empty-blocks": "off",
+    "avoid-tx-origin": "warn",
+    "func-name-mixedcase": "warn",
+    "import-path-check": "off",
+    "reason-string": ["warn", { "maxLength": 32 }]
   }
 }

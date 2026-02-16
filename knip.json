@@ -1,0 +1,17 @@
+{
+  "$schema": "https://unpkg.com/knip@5/schema.json",
+  "entry": [
+    "types/bootstrap.ts",
+    "scripts/*.sol",
+    "test/**/*.t.sol"
+  ],
+  "project": ["**/*.{ts,js,sol}"],
+  "ignoreBinaries": ["forge"],
+  "ignoreDependencies": [
+    "eslint",
+    "prettier",
+    "solhint",
+    "type-coverage",
+    "@eslint/js"
+  ]
+}
