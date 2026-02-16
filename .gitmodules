@@ -26,3 +26,9 @@
 # - No floating branches are permitted in production environments.
 # ==============================================================================
 
+[submodule "ANDROMEDA/openzeppelin-contracts"]
+	path = ANDROMEDA/openzeppelin-contracts
+	url = https://github.com/openzeppelin/openzeppelin-contracts
+[submodule "ANDROMEDA/openzeppelin-contracts-upgradeable"]
+	path = ANDROMEDA/openzeppelin-contracts-upgradeable
+	url = https://github.com/openzeppelin/openzeppelin-contracts-upgradeable
