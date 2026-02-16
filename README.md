@@ -1,62 +1,83 @@
 # 🏛️ AOXCDAO V2 – Akdeniz
+**Pre-Mainnet Institutional DAO Framework | Strategic Baseline | Solidity 0.8.33**
 
 ---
 
 <p align="center">
-  <img src="/image/aoxc_logo_001_2026.png" alt="AOXCDAO Banner Logo" width="150"/>
+  <img src="/image/aoxc_logo_001_2026.png" 
+       alt="AOXCDAO Banner Logo" 
+       width="240" 
+       style="border-radius: 65px; 
+              box-shadow: 0 25px 55px rgba(0,0,0,0.4), 0 0 20px rgba(0,0,0,0.1); 
+              border: 1.5px solid rgba(255,255,255,0.15);
+              display: block;
+              margin: 20px auto;
+              filter: brightness(1.02) contrast(1.05);"
+  />
+</p>
+
+<p align="center">
+  <i>"Engineered for Resilience. Sealed with Integrity. Governed by Merit."</i>
 </p>
 
 ---
 
-## 🚨 Advisory
-❌ Production Ready: **No**  
-🏗️ Status: **Level 1 – Construction Phase**  
-🧪 Testing: **Not yet performed**  
-🔒 Security Audit: **Pending**  
-⚠️ Risk: **End-user responsibility**  
+## 🚨 Institutional Advisory
+> **Current Status:** Under Architectural Hardening (Level 1)
+
+* ❌ **Production Ready:** No (Experimental Baseline)
+* 🏗️ **Phase:** Level 1 – Structural Construction & Forensic Anchoring
+* 🧪 **Verification:** In-progress (Unit & Invariant stress tests pending)
+* 🔒 **Security Audit:** Internal audit active | External audit scheduled
+* ⚠️ **Risk Vector:** High-entropy development environment (User discretion advised)
 
 ---
 
-## 🌟 Vision
-✨ **AOXCDAO V2 – Akdeniz** is a modular, institutional-grade token ecosystem.  
-It blends compliance, transparency, and governance into a unified framework.  
+## 🌟 Strategic Vision
+✨ **AOXCDAO V2 – Akdeniz** is a next-generation modular framework designed for institutional asset orchestration. It transcends traditional DAO limits by integrating regulatory compliance and forensic observability directly into the smart contract execution layer.
 
-- ⚖️ **Compliance Embedded** – Regulatory alignment at bytecode level  
-- 📡 **Transparency First** – Real-time telemetry and forensic visibility  
-- 🏛️ **Governance by Merit** – Reputation-weighted decision-making  
+* ⚖️ **Compliance Embedded:** Jurisdictional alignment enforced at the bytecode level.
+* 📡 **Forensic Transparency:** Real-time telemetry providing full state visibility.
+* 🏛️ **Governance by Merit:** Reputation-weighted consensus mechanisms for resilient decision-making.
 
 ---
 
-## 🏗️ Development Status
-> *“Foundations are being placed carefully. The shipyard is active, but the fleet is not yet complete.”*
+## 🏗️ Development Roadmap (V2 Fleet)
+> *“Foundations are being placed with mathematical precision. The shipyard is active, but the fleet remains in assembly.”*
 
-| 🔨 Phase | 🎯 Focus | 📊 Status |
+| 🔨 Milestone | 🎯 Technical Focus | 📊 Current Status |
 | :--- | :--- | :--- |
-| **Level 1** | Core architecture & schematics | 🏗️ In progress |
-| Level 2 | Intelligence & analytics integration | 📅 Planned |
-| Level 3 | Network Activation  launch | 🚀 Planned |
+| **Level 1** | Core architecture & EIP-1967 Schematics | 🏗️ **In Progress** |
+| **Level 2** | Sentinel Intelligence & Analytics Integration | 📅 Planned |
+| **Level 3** | Network Activation & Sovereign Deployment | 🚀 Planned |
 
 ---
 
-## 🏗️ System Layout
+## 📁 System Topology (Modular Shipyard)
 
 ```text
 src/
-├── ⚓ core            : Token logic & state anchor
-├── 📜 policy          : Behavioral rules & validation
-├── ⚖️ compliance      : Jurisdictional & identity alignment
-├── 💰 asset           : Supply discipline & asset backing
-├── 🏛️ governance      : DAO & decision-making layer
-├── 🛡️ security        : Threat mitigation & emergency halt
-├── 🌐 infrastructure  : Operational connectivity
-├── 📡 monitoring      : Telemetry & forensic logging
-├── 🔌 interfaces      : Unified standards
-└── 📚 libraries       : Gas optimization & zero-mock logic
-📝 Notes
-🏗️ Current phase: Construction, testing pending
+├── ⚓ core            : Execution kernel & EIP-1967 state anchor
+├── 📜 policy          : Behavioral constraints & validation logic
+├── ⚖️ compliance      : Identity registries & jurisdictional alignment
+├── 💰 asset           : Supply discipline & algorithmic asset backing
+├── 🏛️ governance      : Merit-based DAO & voting orchestration
+├── 🛡️ security        : Threat mitigation & circuit-breaker systems
+├── 🌐 infrastructure  : Low-level connectivity & external gateways
+├── 📡 monitoring      : Forensic pulse & real-time telemetry logging
+├── 🔌 interfaces      : Unified institutional standards
+└── 📚 libraries       : High-optimization math & zero-mock utility suite
+📝 Operational Notes
+🏗️ Construction Phase: All interfaces subject to refinement based on formal verification results.
 
-⛔ Legacy compatibility: Deprecated
+⛔ Legacy Policy: Zero compatibility with deprecated V1 non-structured patterns.
 
-🛠️ Tooling: Foundry + Solidity 0.8.33 baseline
+🛠️ Core Tooling: Foundry + Orchestrator V1.1.0 | Solidity 0.8.33 Baseline.
 
-"We build with patience, aiming for resilience and clarity."
+<p align="center">
+<b>Built with Patience. Sealed with Integrity. Governed by Merit.</b>
+
+
+
+<i>AOXCDAO Institutional Collective – Anno 2026</i>
+</p>
