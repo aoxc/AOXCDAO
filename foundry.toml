@@ -1,97 +1,60 @@
 [profile.default]
 
-# ==============================================================================
-# 🏢 SYSTEM TOPOLOGY & MODULE DOCKING
-# ==============================================================================
-# "src" remains the core forge. Ships are docked as explicit top-level modules 
-# to ensure absolute memory safety during compilation.
+# --- CORE PATHS ---
+# Standardized project hierarchy for robust source management
+src     = "src"
+out     = "out"
+test    = "test"
+script  = "scripts"
+libs    = ["lib"]
 
-src           = "src"
-out           = "out"
-test          = "test"
-script        = "scripts"
-cache_path    = "cache"
-
-# Explicit Module Injection (Prevents Recursive Stack Overflow)
-libs          = [
-    "lib", 
-    "ANDROMEDA", "VIRGO", "AQUILA", 
-    "CENTAURUS", "PEGASUS", "QUASAR", "SOMBRERO"
-]
-
-# ==============================================================================
-# 💎 COMPILER STRATEGY — Solidity 0.8.33 (Apex-Grade)
-# ==============================================================================
-
+# --- COMPILER SETTINGS ---
+# Optimized for EIP-4844 (Cancun) to ensure high-efficiency execution
 solc_version   = "0.8.33"
-via_ir         = true                  # Advanced Intermediate Representation optimization
+via_ir         = true
 optimizer      = true
-optimizer_runs = 1000                  # Increased for peak operational efficiency
-bytecode_hash  = "none"                # Ensures deterministic ship identification
-cbor_metadata  = false                # Strips metadata for lean deployment
-evm_version    = "cancun"              # Targets TSTORE/TLOAD for gas-efficient state management
+optimizer_runs = 1000
+evm_version    = "cancun"
 
-# ==============================================================================
-# 🔗 ARCHITECTURAL MAPPING (Fleet Virtualization)
-# ==============================================================================
-
+# --- LIBRARY & PROJECT REMAPPINGS ---
+# Unified path resolution for internal and external dependencies.
+# Absolute paths have been replaced with relative project paths to ensure portability.
 remappings = [
-    "@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/",
+    # OpenZeppelin v5.5.0 Upgradeable & Standard implementations
     "@openzeppelin/contracts-upgradeable/=lib/openzeppelin-contracts-upgradeable/contracts/",
-    "forge-std/=lib/forge-std/src/",
-    "@interfaces/=src/interfaces/",
-    "@libraries/=src/libraries/",
-    "@core/=src/core/",
-    "@security/=src/security/",
+    "@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/",
     
-    # --- 🌌 FLEET MODULE RE-ENTRY POINTS ---
-    "@andromeda/=ANDROMEDA/",
-    "@virgo/=VIRGO/",
-    "@aquila/=AQUILA/",
-    "@centaurus/=CENTAURUS/",
-    "@pegasus/=PEGASUS/",
-    "@quasar/=QUASAR/",
-    "@sombrero/=SOMBRERO/"
+    # Internal Protocol Modules
+    "@core/=src/core/",
+    "@libraries/=src/libraries/",
+    "@interfaces/=src/interfaces/",
+    
+    # Standard Development Frameworks
+    "forge-std/=lib/forge-std/src/",
+    "ds-test/=lib/forge-std/lib/ds-test/src/"
 ]
 
-# ==============================================================================
-# 🧪 INVARIANT & FUZZING ENGINE
-# ==============================================================================
+# --- DOCUMENTATION GENERATION ---
+# Configuration for 'forge doc' to maintain academic documentation standards
+[doc]
+out    = "docs"
+title  = "AOXC DAO Protocol Documentation"
+book   = "book.toml"
+ignore = ["test/**", "scripts/**", "lib/**"]
 
+# --- ADVANCED TESTING ---
+# Property-based testing (Fuzzing) configuration for formal verification
 [fuzz]
-runs = 10_000                          # Stress-testing ship integrity
-max_test_rejects = 131_072
+runs = 10_000
 
-[invariant]
-runs = 5_000                           # Ensuring fleet-wide state consistency
-depth = 500                            # Deep state-space exploration
-
-# ==============================================================================
-# 🏛️ INSTITUTIONAL FORMATTING & LINT GUARD
-# ==============================================================================
-
+# --- FORMATTING ---
+# Consistent style guide for academic-grade code quality
 [fmt]
-line_length           = 100
-tab_width             = 4
-bracket_spacing       = true
-check_functions_order = true
-multiline_func_header = "attributes_first"
-quote_style           = "double"
+line_length = 100
+tab_width   = 4
+bracket_spacing = true
 
-# Protects your Serial-ID naming standard from being altered
-ignore = [
-    "src/core/AOXC.sol",
-    "**/0000*.sol"                     
-]
-
-# ==============================================================================
-# 🌐 PROTOCOL ENDPOINTS (XLayer Native)
-# ==============================================================================
-
+# --- NETWORK INFRASTRUCTURE ---
 [rpc_endpoints]
 xlayer_mainnet = "https://rpc.xlayer.okx.com"
 xlayer_testnet = "https://testrpc.xlayer.okx.com"
-
-[etherscan]
-xlayer_mainnet = { key = "${XLAYER_API_KEY}", url = "https://www.oklink.com/api/v5/explorer/xlayer/api" }
-xlayer_testnet = { key = "${XLAYER_API_KEY}", url = "https://www.oklink.com/api/v5/explorer/xlayer-test/api" }

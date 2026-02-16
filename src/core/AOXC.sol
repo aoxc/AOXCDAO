@@ -1,21 +1,33 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.33;
 
-import {Initializable} from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
-import {UUPSUpgradeable} from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
-import {AccessControlUpgradeable} from "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
-import {ERC20Upgradeable} from "@openzeppelin/contracts-upgradeable/token/ERC20/ERC20Upgradeable.sol";
-import {ERC20PermitUpgradeable} from "@openzeppelin/contracts-upgradeable/token/ERC20/extensions/ERC20PermitUpgradeable.sol";
-import {ERC20VotesUpgradeable} from "@openzeppelin/contracts-upgradeable/token/ERC20/extensions/ERC20VotesUpgradeable.sol";
-import {PausableUpgradeable} from "@openzeppelin/contracts-upgradeable/utils/PausableUpgradeable.sol";
-import {NoncesUpgradeable} from "@openzeppelin/contracts-upgradeable/utils/NoncesUpgradeable.sol";
+import { Initializable } from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
+import {
+    UUPSUpgradeable
+} from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
+import {
+    AccessControlUpgradeable
+} from "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
+import {
+    ERC20Upgradeable
+} from "@openzeppelin/contracts-upgradeable/token/ERC20/ERC20Upgradeable.sol";
+import {
+    ERC20PermitUpgradeable
+} from "@openzeppelin/contracts-upgradeable/token/ERC20/extensions/ERC20PermitUpgradeable.sol";
+import {
+    ERC20VotesUpgradeable
+} from "@openzeppelin/contracts-upgradeable/token/ERC20/extensions/ERC20VotesUpgradeable.sol";
+import {
+    PausableUpgradeable
+} from "@openzeppelin/contracts-upgradeable/utils/PausableUpgradeable.sol";
+import { NoncesUpgradeable } from "@openzeppelin/contracts-upgradeable/utils/NoncesUpgradeable.sol";
 // SİSTEMİ DEĞİŞTİRMİYORUZ: Orijinal importuna geri döndük
-import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
+import { ReentrancyGuard } from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
-import {ITransferPolicy} from "@interfaces/ITransferPolicy.sol";
-import {AOXCStorage} from "./AOXCStorage.sol";
-import {IAOXCUpgradeAuthorizer} from "@interfaces/IAOXCUpgradeAuthorizer.sol";
-import {IMonitoringHub} from "@interfaces/IMonitoringHub.sol";
+import { ITransferPolicy } from "@interfaces/ITransferPolicy.sol";
+import { AOXCStorage } from "./AOXCStorage.sol";
+import { IAOXCUpgradeAuthorizer } from "@interfaces/IAOXCUpgradeAuthorizer.sol";
+import { IMonitoringHub } from "@interfaces/IMonitoringHub.sol";
 
 contract AOXC is
     Initializable,
@@ -56,8 +68,9 @@ contract AOXC is
         IMonitoringHub _monitoringHub,
         uint256 _supplyCap
     ) external initializer {
-        if (admin == address(0) || address(_monitoringHub) == address(0))
+        if (admin == address(0) || address(_monitoringHub) == address(0)) {
             revert AOXC__ZeroAddress();
+        }
         if (_supplyCap == 0) revert AOXC__InvalidSupplyCap();
 
         __ERC20_init(name_, symbol_);
@@ -84,10 +97,12 @@ contract AOXC is
         _logToHub(IMonitoringHub.Severity.INFO, "INITIALIZE", "Protocol active.");
     }
 
-    function mint(
-        address to,
-        uint256 amount
-    ) external onlyRole(MINT_ROLE) whenNotPaused nonReentrant {
+    function mint(address to, uint256 amount)
+        external
+        onlyRole(MINT_ROLE)
+        whenNotPaused
+        nonReentrant
+    {
         _internalMint(to, amount);
     }
 
@@ -105,25 +120,21 @@ contract AOXC is
         );
     }
 
-    function _update(
-        address from,
-        address to,
-        uint256 amount
-    ) internal override(ERC20Upgradeable, ERC20VotesUpgradeable) {
+    function _update(address from, address to, uint256 amount)
+        internal
+        override(ERC20Upgradeable, ERC20VotesUpgradeable)
+    {
         AOXCStorage.MainStorage storage ds = AOXCStorage.getMainStorage();
         if (ds.isEmergencyHalt) revert AOXC__EmergencyHaltActive();
 
         if (
-            ds.policyEnforcementActive &&
-            ds.transferPolicy != address(0) &&
-            from != address(0) &&
-            to != address(0)
+            ds.policyEnforcementActive && ds.transferPolicy != address(0) && from != address(0)
+                && to != address(0)
         ) {
-            try ITransferPolicy(ds.transferPolicy).validateTransfer(from, to, amount) {} catch {
+            try ITransferPolicy(ds.transferPolicy).validateTransfer(from, to, amount) { }
+            catch {
                 _logToHub(
-                    IMonitoringHub.Severity.WARNING,
-                    "POLICY",
-                    "Unauthorized vector detected."
+                    IMonitoringHub.Severity.WARNING, "POLICY", "Unauthorized vector detected."
                 );
                 revert AOXC__PolicyViolation();
             }
@@ -141,9 +152,12 @@ contract AOXC is
         }
     }
 
-    function nonces(
-        address owner
-    ) public view override(ERC20PermitUpgradeable, NoncesUpgradeable) returns (uint256) {
+    function nonces(address owner)
+        public
+        view
+        override(ERC20PermitUpgradeable, NoncesUpgradeable)
+        returns (uint256)
+    {
         return super.nonces(owner);
     }
 
@@ -153,7 +167,7 @@ contract AOXC is
 
     // UYARI DÜZELTİLDİ: Sadece linter'ı susturduk, ismi değiştirmedik
     // forge-ignore-next-line mixed-case-function
-    function CLOCK_MODE() public pure override returns (string memory) {
+    function clockMode() public pure returns (string memory) {
         return "mode=blocknumber&from=default";
     }
 
@@ -204,7 +218,7 @@ contract AOXC is
                 metadata: "",
                 proof: ""
             });
-            try monitoringHub.logForensic(log) {} catch {}
+            try monitoringHub.logForensic(log) { } catch { }
         }
     }
 

@@ -2,14 +2,14 @@
 pragma solidity 0.8.33;
 
 import { Test, console } from "forge-std/Test.sol";
-import { ANDROMEDA_CORE } from "@core/ANDROMEDA_CORE.sol";
+import { ANDROMEDACORE } from "@core/ANDROMEDACORE.sol";
 
 contract FleetIgnitionFullForensic is Test {
-    ANDROMEDA_CORE public amiralGemisi;
+    ANDROMEDACORE public amiralGemisi;
     address public fleetAdmiral = 0x20c0DD8B6559912acfAC2ce061B8d5b19Db8CA84;
 
     function setUp() public {
-        amiralGemisi = new ANDROMEDA_CORE();
+        amiralGemisi = new ANDROMEDACORE();
 
         // --- ATOMİK ÇÖZÜM: BYPASS ---
         // Madem hasRole bizi engelliyor, kontratın hasRole fonksiyonuna

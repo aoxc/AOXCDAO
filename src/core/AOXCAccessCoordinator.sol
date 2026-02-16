@@ -3,7 +3,9 @@
 // Academic Grade - AOXC Ultimate Pro Standard
 pragma solidity 0.8.33;
 
-import { AccessControlEnumerable } from "@openzeppelin/contracts/access/extensions/AccessControlEnumerable.sol";
+import {
+    AccessControlEnumerable
+} from "@openzeppelin/contracts/access/extensions/AccessControlEnumerable.sol";
 import { Pausable } from "@openzeppelin/contracts/utils/Pausable.sol";
 import { AOXCConstants } from "@libraries/AOXCConstants.sol";
 import { IAOXCAccessCoordinator } from "@interfaces/IAOXCAccessCoordinator.sol";
@@ -16,13 +18,17 @@ import { IMonitoringHub } from "@interfaces/IMonitoringHub.sol";
  * @dev Acts as the definitive source of truth for permissions and protocol-wide circuit breaking.
  */
 contract AOXCAccessCoordinator is IAOXCAccessCoordinator, AccessControlEnumerable, Pausable {
-    
     // --- Custom Errors ---
     error AOXCUnauthorizedAccount(address account, bytes32 neededRole);
     error AlreadyInState(SystemStatus status);
 
     // --- System States ---
-    enum SystemStatus { ACTIVE, DEGRADED, EMERGENCY_PAUSE, TERMINATED }
+    enum SystemStatus {
+        ACTIVE,
+        DEGRADED,
+        EMERGENCY_PAUSE,
+        TERMINATED
+    }
     SystemStatus public currentStatus;
 
     // --- State Variables ---
@@ -33,7 +39,9 @@ contract AOXCAccessCoordinator is IAOXCAccessCoordinator, AccessControlEnumerabl
     address public immutable SOVEREIGN_MULTISIG = 0x20c0DD8B6559912acfAC2ce061B8d5b19Db8CA84;
 
     // --- Events ---
-    event SystemStatusChanged(SystemStatus indexed previous, SystemStatus indexed current, address indexed actor);
+    event SystemStatusChanged(
+        SystemStatus indexed previous, SystemStatus indexed current, address indexed actor
+    );
     event EmergencyActionTriggered(string reason, address indexed sentinel);
     event SectorStatusUpdated(bytes32 indexed sectorId, bool status);
     event MonitoringHubUpdated(address indexed newHub);
@@ -48,7 +56,7 @@ contract AOXCAccessCoordinator is IAOXCAccessCoordinator, AccessControlEnumerabl
 
         _setRoleAdmin(AOXCConstants.UPGRADER_ROLE, AOXCConstants.ADMIN_ROLE);
         _setRoleAdmin(AOXCConstants.SENTINEL_ROLE, AOXCConstants.ADMIN_ROLE);
-        _setRoleAdmin(AOXCConstants.AUDITOR_ROLE, AOXCConstants.ADMIN_ROLE); 
+        _setRoleAdmin(AOXCConstants.AUDITOR_ROLE, AOXCConstants.ADMIN_ROLE);
 
         _monitoringHub = IMonitoringHub(initialHub);
         currentStatus = SystemStatus.ACTIVE;
@@ -108,9 +116,9 @@ contract AOXCAccessCoordinator is IAOXCAccessCoordinator, AccessControlEnumerabl
      */
     function triggerEmergencyPause(string calldata reason) external override {
         if (
-            !hasRole(AOXCConstants.SENTINEL_ROLE, msg.sender) && 
-            !hasRole(AOXCConstants.ADMIN_ROLE, msg.sender) &&
-            msg.sender != SOVEREIGN_MULTISIG
+            !hasRole(AOXCConstants.SENTINEL_ROLE, msg.sender)
+                && !hasRole(AOXCConstants.ADMIN_ROLE, msg.sender)
+                && msg.sender != SOVEREIGN_MULTISIG
         ) {
             revert AOXCUnauthorizedAccount(msg.sender, AOXCConstants.SENTINEL_ROLE);
         }
@@ -137,7 +145,12 @@ contract AOXCAccessCoordinator is IAOXCAccessCoordinator, AccessControlEnumerabl
     /**
      * @notice Checks if an operation is permitted under current system state.
      */
-    function isOperationAllowed(bytes32 role, address account) external view override returns (bool) {
+    function isOperationAllowed(bytes32 role, address account)
+        external
+        view
+        override
+        returns (bool)
+    {
         if (currentStatus == SystemStatus.TERMINATED) return false;
         if (paused() && role != AOXCConstants.ADMIN_ROLE) return false;
         return hasRole(role, account);

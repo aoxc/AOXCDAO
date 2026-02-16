@@ -2,9 +2,15 @@
 pragma solidity 0.8.33;
 
 import { Initializable } from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
-import { AccessControlUpgradeable } from "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
-import { PausableUpgradeable } from "@openzeppelin/contracts-upgradeable/utils/PausableUpgradeable.sol";
-import { UUPSUpgradeable } from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
+import {
+    AccessControlUpgradeable
+} from "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
+import {
+    PausableUpgradeable
+} from "@openzeppelin/contracts-upgradeable/utils/PausableUpgradeable.sol";
+import {
+    UUPSUpgradeable
+} from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 
 import { IIdentityRegistry } from "@interfaces/IIdentityRegistry.sol";
 import { IMonitoringHub } from "@interfaces/IMonitoringHub.sol";
@@ -69,10 +75,7 @@ contract AOXCIdentityRegistry is
     /// @param newId The new identity identifier.
     /// @param verifier The address of the entity that performed the update.
     event IdentityUpdated(
-        address indexed account, 
-        string oldId, 
-        string newId, 
-        address indexed verifier
+        address indexed account, string oldId, string newId, address indexed verifier
     );
 
     /// @custom:oz-upgrades-unsafe-allow constructor
@@ -96,7 +99,6 @@ contract AOXCIdentityRegistry is
 
         __AccessControl_init();
         __Pausable_init();
-        __UUPSUpgradeable_init();
 
         _grantRole(DEFAULT_ADMIN_ROLE, admin);
         _grantRole(ADMIN_ROLE, admin);

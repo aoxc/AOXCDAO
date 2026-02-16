@@ -2,9 +2,15 @@
 pragma solidity 0.8.33;
 
 import { Initializable } from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
-import { AccessControlUpgradeable } from "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
-import { PausableUpgradeable } from "@openzeppelin/contracts-upgradeable/utils/PausableUpgradeable.sol";
-import { UUPSUpgradeable } from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
+import {
+    AccessControlUpgradeable
+} from "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
+import {
+    PausableUpgradeable
+} from "@openzeppelin/contracts-upgradeable/utils/PausableUpgradeable.sol";
+import {
+    UUPSUpgradeable
+} from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 
 import { IJurisdictionRegistry } from "@interfaces/IJurisdictionRegistry.sol";
 import { IMonitoringHub } from "@interfaces/IMonitoringHub.sol";
@@ -62,10 +68,7 @@ contract AOXCJurisdictionRegistry is
     /// @param allowed Whether this jurisdiction is permitted by default.
     /// @param operator The address that performed the registration.
     event JurisdictionAdded(
-        uint256 indexed id, 
-        string name, 
-        bool indexed allowed, 
-        address indexed operator
+        uint256 indexed id, string name, bool indexed allowed, address indexed operator
     );
 
     /// @notice Emitted when a jurisdiction is removed from the registry.
@@ -78,9 +81,7 @@ contract AOXCJurisdictionRegistry is
     /// @param jurisdictionId The assigned jurisdiction identifier.
     /// @param operator The address that performed the assignment.
     event UserJurisdictionSet(
-        address indexed user, 
-        uint256 indexed jurisdictionId, 
-        address indexed operator
+        address indexed user, uint256 indexed jurisdictionId, address indexed operator
     );
 
     /// @notice Emitted when a user's jurisdiction assignment is removed.
@@ -109,7 +110,6 @@ contract AOXCJurisdictionRegistry is
 
         __AccessControl_init();
         __Pausable_init();
-        __UUPSUpgradeable_init();
 
         _grantRole(DEFAULT_ADMIN_ROLE, admin);
         _grantRole(ADMIN_ROLE, admin);
@@ -302,7 +302,7 @@ contract AOXCJurisdictionRegistry is
 
     /**
      * @dev High-fidelity 26-channel forensic logging.
-     * Note: `tx.origin` replaced with `msg.sender` to satisfy security linters 
+     * Note: `tx.origin` replaced with `msg.sender` to satisfy security linters
      * unless deep forensic origin is explicitly required.
      */
     function _logToHub(

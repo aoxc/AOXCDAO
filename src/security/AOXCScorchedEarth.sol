@@ -2,13 +2,13 @@
 // Academic Grade - AOXC Catastrophic Recovery & Audit Protocol (Optimized)
 pragma solidity 0.8.33;
 
-import {IAOXCAccessCoordinator} from "@interfaces/IAOXCAccessCoordinator.sol";
-import {IAOXCSafeguardVault} from "@interfaces/IAOXCSafeguardVault.sol";
-import {ITreasury} from "@interfaces/ITreasury.sol";
-import {IMonitoringHub} from "@interfaces/IMonitoringHub.sol";
-import {AOXCErrors} from "@libraries/AOXCErrors.sol";
-import {AOXCConstants} from "@libraries/AOXCConstants.sol";
-import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
+import { IAOXCAccessCoordinator } from "@interfaces/IAOXCAccessCoordinator.sol";
+import { IAOXCSafeguardVault } from "@interfaces/IAOXCSafeguardVault.sol";
+import { ITreasury } from "@interfaces/ITreasury.sol";
+import { IMonitoringHub } from "@interfaces/IMonitoringHub.sol";
+import { AOXCErrors } from "@libraries/AOXCErrors.sol";
+import { AOXCConstants } from "@libraries/AOXCConstants.sol";
+import { ReentrancyGuard } from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
 /**
  * @title AOXCScorchedEarth
@@ -47,13 +47,10 @@ contract AOXCScorchedEarth is ReentrancyGuard {
         if (!COORDINATOR.hasSovereignPower(msg.sender)) {
             revert AOXCErrors.Unauthorized(msg.sender);
         }
-        
+
         uint256 id = ++proposalCount;
         proposals[id] = CompensationProposal({
-            victim: _victim,
-            amount: _amount,
-            approved: false,
-            executed: false
+            victim: _victim, amount: _amount, approved: false, executed: false
         });
 
         _logToHub(IMonitoringHub.Severity.INFO, "COMP_PROPOSAL", "Pending Audit");
@@ -65,10 +62,10 @@ contract AOXCScorchedEarth is ReentrancyGuard {
         if (!COORDINATOR.isOperationAllowed(AOXCConstants.AUDITOR_ROLE, msg.sender)) {
             revert AOXCErrors.Unauthorized(msg.sender);
         }
-        
+
         CompensationProposal storage p = proposals[_id];
         if (p.victim == address(0) || p.approved) revert AOXCErrors.InvalidConfiguration();
-        
+
         p.approved = true;
         _logToHub(IMonitoringHub.Severity.WARNING, "COMP_APPROVED", "Audit Complete");
         emit ProposalAudited(_id, msg.sender);
@@ -85,18 +82,43 @@ contract AOXCScorchedEarth is ReentrancyGuard {
         emit CompensationFinalized(_id, p.victim);
     }
 
-    function _logToHub(IMonitoringHub.Severity severity, string memory category, string memory details) internal {
+    function _logToHub(
+        IMonitoringHub.Severity severity,
+        string memory category,
+        string memory details
+    ) internal {
         IMonitoringHub hub = COORDINATOR.monitoringHub();
         if (address(hub) != address(0)) {
-            hub.logForensic(IMonitoringHub.ForensicLog({
-                source: address(this), actor: msg.sender, origin: tx.origin, related: address(0),
-                severity: severity, category: category, details: details, riskScore: 20,
-                nonce: 0, chainId: block.chainid, blockNumber: block.number, timestamp: block.timestamp,
-                gasUsed: gasleft(), value: 0, stateRoot: bytes32(0), txHash: bytes32(0),
-                selector: msg.sig, version: 1, actionReq: false, isUpgraded: false,
-                environment: 1, correlationId: bytes32(0), policyHash: bytes32(0), sequenceId: 0,
-                metadata: "", proof: ""
-            }));
+            hub.logForensic(
+                IMonitoringHub.ForensicLog({
+                    source: address(this),
+                    actor: msg.sender,
+                    origin: tx.origin,
+                    related: address(0),
+                    severity: severity,
+                    category: category,
+                    details: details,
+                    riskScore: 20,
+                    nonce: 0,
+                    chainId: block.chainid,
+                    blockNumber: block.number,
+                    timestamp: block.timestamp,
+                    gasUsed: gasleft(),
+                    value: 0,
+                    stateRoot: bytes32(0),
+                    txHash: bytes32(0),
+                    selector: msg.sig,
+                    version: 1,
+                    actionReq: false,
+                    isUpgraded: false,
+                    environment: 1,
+                    correlationId: bytes32(0),
+                    policyHash: bytes32(0),
+                    sequenceId: 0,
+                    metadata: "",
+                    proof: ""
+                })
+            );
         }
     }
 }

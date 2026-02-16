@@ -2,9 +2,15 @@
 pragma solidity 0.8.33;
 
 import { Initializable } from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
-import { AccessControlUpgradeable } from "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
-import { UUPSUpgradeable } from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
-import { PausableUpgradeable } from "@openzeppelin/contracts-upgradeable/utils/PausableUpgradeable.sol";
+import {
+    AccessControlUpgradeable
+} from "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
+import {
+    UUPSUpgradeable
+} from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
+import {
+    PausableUpgradeable
+} from "@openzeppelin/contracts-upgradeable/utils/PausableUpgradeable.sol";
 
 import { IComplianceRegistry } from "@interfaces/IComplianceRegistry.sol";
 import { IMonitoringHub } from "@interfaces/IMonitoringHub.sol";
@@ -86,7 +92,6 @@ contract AOXCComplianceRegistry is
 
         __AccessControl_init();
         __Pausable_init();
-        __UUPSUpgradeable_init();
 
         _grantRole(DEFAULT_ADMIN_ROLE, admin);
         _grantRole(ADMIN_ROLE, admin);
@@ -265,7 +270,7 @@ contract AOXCComplianceRegistry is
                 version: 1,
                 actionReq: severity >= IMonitoringHub.Severity.CRITICAL,
                 isUpgraded: false,
-                environment: 0, 
+                environment: 0,
                 correlationId: bytes32(0),
                 policyHash: bytes32(0),
                 sequenceId: 0,

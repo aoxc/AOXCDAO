@@ -12,7 +12,10 @@
     }
   },
   "lib/forge-std": {
-    "rev": "aeb45e9f32ef8ca78f0aeda17596e9c46374da41"
+    "tag": {
+      "name": "v1.14.0",
+      "rev": "1801b0541f4fda118a10798fd3486bb7051c5dd6"
+    }
   },
   "lib/openzeppelin-contracts": {
     "tag": {
