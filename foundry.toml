@@ -1,19 +1,20 @@
 # ==============================================================================
-# PROCOL: AOXC MULTI-SHIP DAO SYSTEM (ULTIMATE ACADEMIC SPECIFICATION)
-# VERSION: 2.1.0
+# PROTOCOL: AOXC MULTI-SHIP DAO SYSTEM (ULTIMATE ACADEMIC SPECIFICATION)
+# VERSION: 2.0.0
 # COMPLIANCE: Solidity 0.8.33 & OpenZeppelin 5.5.0
+# NETWORK: X LAYER (OKX) - ZK-EVM Optimized
 # STATUS: Strictly Immutable Versioning
 # ==============================================================================
 
 [profile.default]
 
 # ------------------------------------------------------------------------------
-# I. CORE DIRECTORY ARCHITECTURE
+# I. CORE DIRECTORY ARCHITECTURE (Synchronized with 00-40 Hierarchy)
 # ------------------------------------------------------------------------------
 src          = "AOXCORE"
 out          = "out"
-test         = "test"
-script       = "scripts"
+test         = "TESTS"      # Academic plural form
+script       = "SCRIPTS"    # Academic plural form
 libs         = ["PROTOCOL"]
 install_path = "PROTOCOL"
 
@@ -21,18 +22,17 @@ install_path = "PROTOCOL"
 # II. COMPILER STRATEGY (STRICT ENFORCEMENT)
 # ------------------------------------------------------------------------------
 # @dev: Explicitly locked to v0.8.33 as per protocol mandate.
-solc_version   = "0.8.33"
-# 'auto_detect_solc = false' ensures no other versions are used.
+solc_version     = "0.8.33"
 auto_detect_solc = false 
-via_ir         = true
-optimizer      = true
-optimizer_runs = 1000
-evm_version    = "cancun"
+via_ir           = true
+optimizer        = true
+optimizer_runs   = 1000
+evm_version      = "cancun" # Optimized for X LAYER's latest execution environment
 
 # ------------------------------------------------------------------------------
-# III. GLOBAL PATH INDEXING & OZ 5.5.0 INTEGRATION
+# III. GLOBAL PATH INDEXING (Direct Linkage Model)
 # ------------------------------------------------------------------------------
-# @abstract: Unified access to internal modules and OZ 5.5.0 standard.
+# @abstract: Unified access via Aliases to eliminate relative path (../../) complexity.
 remappings = [
     # --- AOXCORE INTERNALS ---
     "@core/=AOXCORE/core/",
@@ -66,17 +66,17 @@ remappings = [
 out    = "docs"
 title  = "AOXC DAO FLEET: Technical Specification (Solc 0.8.33 / OZ 5.5.0)"
 book   = "book.toml"
-ignore = ["test/**", "scripts/**", "PROTOCOL/**", "report/**", "reports/**"]
+ignore = ["TESTS/**", "SCRIPTS/**", "PROTOCOL/**", "report/**", "reports/**"]
 
 # ------------------------------------------------------------------------------
-# V. FORMAL VERIFICATION & STOCHASTIC TESTING
+# V. FORMAL VERIFICATION & STOCHASTIC TESTING (High-Fidelity)
 # ------------------------------------------------------------------------------
 [fuzz]
 runs = 10_000
-seed = '0x414f5843'
+seed = '0x414f5843' # Hex for "AOXC"
 
 # ------------------------------------------------------------------------------
-# VI. NETWORK TOPOLOGY
+# VI. NETWORK TOPOLOGY (X LAYER Native)
 # ------------------------------------------------------------------------------
 [rpc_endpoints]
 xlayer_mainnet = "https://rpc.xlayer.okx.com"
