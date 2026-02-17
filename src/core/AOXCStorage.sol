@@ -12,7 +12,7 @@ library AOXCStorage {
      * @dev ERC-7201 Storage Slot calculation.
      * keccak256(abi.encode(uint256(keccak256("AOXC-DAO-V2-AKDENIZ-2026")) - 1)) & ~bytes32(uint256(0xff))
      */
-    bytes32 private constant STORAGE_SLOT =
+    bytes32 internal constant STORAGE_SLOT =
         0x367f3747805167389a19c11867e3a34a17951a37651a148972b260907d083100; // Pre-calculated for performance
 
     /// @custom:storage-location erc7201:AOXC-DAO-V2-AKDENIZ-2026
