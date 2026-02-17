@@ -1,10 +1,11 @@
 # ==============================================================================
-# 🏛️ AOXCDAO INSTITUTIONAL GIT EXCLUSION POLICY V2.0.0
-# 🛡️ ARCHITECTURE: Foundry Submodules / Yarn Berry / Hardhat Integration
+# 🏛️ AOXCDAO INSTITUTIONAL GIT EXCLUSION POLICY V2.1.0
+# 🛡️ ARCHITECTURE: Multi-Ship Foundry Submodules / XLayer Standard
 # 🎓 LEVEL: Pro Ultimate Academic (Enterprise Grade / 2026 Secured)
 # ==============================================================================
 
-# --- 🏗️ COMPILATION & BUILD ARTIFACTS ---
+# --- 🏗️ COMPILATION & BUILD ARTIFACTS (DETERMINISTIC) ---
+# Derleme sonucu oluşan tüm bytecode ve ABI dosyaları dışlanır.
 out/
 cache/
 artifacts/
@@ -13,7 +14,7 @@ typechain-types/
 cache_hardhat/
 target/
 
-# --- 📦 DEPENDENCY MANAGEMENT (YARN BERRY / NPM) ---
+# --- 📦 DEPENDENCY MANAGEMENT (PACKAGE MANAGERS) ---
 node_modules/
 .node_modules/
 .pnp.*
@@ -25,34 +26,33 @@ node_modules/
 !.yarn/versions
 !.yarn/install-state.gz
 
-# --- 🧶 YARN SPECIFIC NOISE ---
-yarn-error.log
-yarn-debug.log*
-.eslintcache
-.stylelintcache
-*.tsbuildinfo
+# --- 📚 LIBRARIES & SUBMODULE MANAGEMENT (CRITICAL SHIELD) ---
+# [RULE] Ana depo (Origin), kütüphanelerin ham kodunu taşımaz.
+# Sadece yerel (ns1) ortamda kalsın, 'git push' ile gitmesin.
+PROTOCOL/openzeppelin-contracts/
+PROTOCOL/openzeppelin-contracts-upgradeable/
+PROTOCOL/forge-std/
+PROTOCOL/ds-test/
 
-# --- 📚 LIBRARIES & SUBMODULE MANAGEMENT (CRITICAL) ---
-# [NEW] Strateji: Kütüphanelerin kodunu ana depoya (origin) göndermiyoruz.
-# Sadece lib klasörü yerelde (ns1) kalır, build için aktiftir.
-lib/openzeppelin-contracts/
-lib/openzeppelin-contracts-upgradeable/
-lib/forge-std/
+# Kütüphane içindeki gereksiz metadata ve test dosyalarını temizle
+PROTOCOL/*/.git
+PROTOCOL/*/.github
+PROTOCOL/*/.circleci
+PROTOCOL/*/test
+PROTOCOL/*/spec
+PROTOCOL/*/docs
 
-# Foundry specific junk removal within submodules
-lib/*/.git
-lib/*/.github
-lib/*/test
-lib/*/spec
-
-# --- 🧪 FOUNDRY & ANALYSIS ARTIFACTS ---
+# --- 🧪 FOUNDRY ANALYSIS & SNAPSHOTS ---
+# Gaz raporları ve test snapshot'ları sürüm kontrolüne girmez.
 .gas-snapshot
 .forge-snapshot
 gas-report.txt
 coverage/
 lcov.info
+broadcast/
 
-# --- 🔐 CRYPTOGRAPHIC & SENSITIVE DATA (CRITICAL) ---
+# --- 🔐 CRYPTOGRAPHIC & SENSITIVE DATA (ZERO TRUST) ---
+# Bu dosyalar asla commit edilmemelidir.
 .env
 .env.*
 .secrets
@@ -61,9 +61,9 @@ secrets.json
 *.key
 mnemonic.txt
 *password.txt
-broadcast/
 
-# --- 🔍 STATIC ANALYSIS & SECURITY AUDIT ---
+# --- 🔍 STATIC ANALYSIS & SECURITY AUDIT (ACADEMIC LOGS) ---
+# Güvenlik araçlarının yerel raporları.
 slither-reports/
 slither.db.json
 aderyn-report.json
@@ -77,17 +77,10 @@ corpus/
 .idea/
 *.swp
 *.swo
-.project
-.settings/
-.classpath
 
-# --- 🖥️ OPERATING SYSTEM ARTIFACTS ---
+# --- 🖥️ OPERATING SYSTEM & TEMP ARTIFACTS ---
 .DS_Store
 Thumbs.db
-.Spotlight-V100
-.Trashes
-
-# --- ♻️ TEMPORARY & RECOVERY FILES ---
 *.tmp
 *.bak
 *.old
@@ -96,7 +89,6 @@ Thumbs.db
 .foundry/
 
 # ==============================================================================
-# 📜 AOXCDAO QUALITY GATE
-# VERSION: 5.1.0 (Institutional Grade - 2026)
-# STATUS: Fully compliant with 0.8.33 Hybrid Architecture.
+# 📜 AOXCDAO QUALITY GATE - COMMIT READY
+# STATUS: Strictly excluding PROTOCOL source codes from origin.
 # ==============================================================================

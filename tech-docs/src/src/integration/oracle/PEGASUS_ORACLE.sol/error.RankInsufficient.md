@@ -1,8 +1,0 @@
-# RankInsufficient
-[Git Source](https://github.com/orcun/AOXCDAO/blob/4906edc2cee9ebf2ba59629225d505313f10268f/src/integration/oracle/PEGASUS_ORACLE.sol)
-
-
-```solidity
-error RankInsufficient(uint256 required, uint256 actual);
-```
-

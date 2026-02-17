@@ -1,60 +1,87 @@
+# ==============================================================================
+# PROCOL: AOXC MULTI-SHIP DAO SYSTEM (ULTIMATE ACADEMIC SPECIFICATION)
+# VERSION: 2.1.0
+# COMPLIANCE: Solidity 0.8.33 & OpenZeppelin 5.5.0
+# STATUS: Strictly Immutable Versioning
+# ==============================================================================
+
 [profile.default]
 
-# --- CORE PATHS ---
-# Standardized project hierarchy for robust source management
-src     = "src"
-out     = "out"
-test    = "test"
-script  = "scripts"
-libs    = ["lib"]
+# ------------------------------------------------------------------------------
+# I. CORE DIRECTORY ARCHITECTURE
+# ------------------------------------------------------------------------------
+src          = "AOXCORE"
+out          = "out"
+test         = "test"
+script       = "scripts"
+libs         = ["PROTOCOL"]
+install_path = "PROTOCOL"
 
-# --- COMPILER SETTINGS ---
-# Optimized for EIP-4844 (Cancun) to ensure high-efficiency execution
+# ------------------------------------------------------------------------------
+# II. COMPILER STRATEGY (STRICT ENFORCEMENT)
+# ------------------------------------------------------------------------------
+# @dev: Explicitly locked to v0.8.33 as per protocol mandate.
 solc_version   = "0.8.33"
+# 'auto_detect_solc = false' ensures no other versions are used.
+auto_detect_solc = false 
 via_ir         = true
 optimizer      = true
 optimizer_runs = 1000
 evm_version    = "cancun"
 
-# --- LIBRARY & PROJECT REMAPPINGS ---
-# Unified path resolution for internal and external dependencies.
-# Absolute paths have been replaced with relative project paths to ensure portability.
+# ------------------------------------------------------------------------------
+# III. GLOBAL PATH INDEXING & OZ 5.5.0 INTEGRATION
+# ------------------------------------------------------------------------------
+# @abstract: Unified access to internal modules and OZ 5.5.0 standard.
 remappings = [
-    # OpenZeppelin v5.5.0 Upgradeable & Standard implementations
-    "@openzeppelin/contracts-upgradeable/=lib/openzeppelin-contracts-upgradeable/contracts/",
-    "@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/",
+    # --- AOXCORE INTERNALS ---
+    "@core/=AOXCORE/core/",
+    "@interfaces/=AOXCORE/interfaces/",
+    "@security/=AOXCORE/security/",
+    "@monitoring/=AOXCORE/monitoring/",
+    "@infrastructure/=AOXCORE/infrastructure/",
+    "@libraries/=AOXCORE/libraries/",
     
-    # Internal Protocol Modules
-    "@core/=src/core/",
-    "@libraries/=src/libraries/",
-    "@interfaces/=src/interfaces/",
+    # --- FLEET UNITS (DAO SHIPS) ---
+    "@andromeda/=ANDROMEDA/",
+    "@aquila/=AQUILA/",
+    "@centaurus/=CENTAURUS/",
+    "@pegasus/=PEGASUS/",
+    "@quasar/=QUASAR/",
+    "@sombrero/=SOMBRERO/",
+    "@virgo/=VIRGO/",
     
-    # Standard Development Frameworks
-    "forge-std/=lib/forge-std/src/",
-    "ds-test/=lib/forge-std/lib/ds-test/src/"
+    # --- EXTERNAL STANDARDS (OpenZeppelin 5.5.0 Enforced) ---
+    "@protocol/=PROTOCOL/",
+    "@openzeppelin/=PROTOCOL/openzeppelin-contracts/contracts/",
+    "@openzeppelin-upgradeable/=PROTOCOL/openzeppelin-contracts-upgradeable/contracts/",
+    "forge-std/=PROTOCOL/forge-std/src/",
+    "ds-test/=PROTOCOL/forge-std/lib/ds-test/src/"
 ]
 
-# --- DOCUMENTATION GENERATION ---
-# Configuration for 'forge doc' to maintain academic documentation standards
+# ------------------------------------------------------------------------------
+# IV. ACADEMIC DOCUMENTATION & TECHNICAL SPECS
+# ------------------------------------------------------------------------------
 [doc]
 out    = "docs"
-title  = "AOXC DAO Protocol Documentation"
+title  = "AOXC DAO FLEET: Technical Specification (Solc 0.8.33 / OZ 5.5.0)"
 book   = "book.toml"
-ignore = ["test/**", "scripts/**", "lib/**"]
+ignore = ["test/**", "scripts/**", "PROTOCOL/**", "report/**", "reports/**"]
 
-# --- ADVANCED TESTING ---
-# Property-based testing (Fuzzing) configuration for formal verification
+# ------------------------------------------------------------------------------
+# V. FORMAL VERIFICATION & STOCHASTIC TESTING
+# ------------------------------------------------------------------------------
 [fuzz]
 runs = 10_000
+seed = '0x414f5843'
 
-# --- FORMATTING ---
-# Consistent style guide for academic-grade code quality
-[fmt]
-line_length = 100
-tab_width   = 4
-bracket_spacing = true
-
-# --- NETWORK INFRASTRUCTURE ---
+# ------------------------------------------------------------------------------
+# VI. NETWORK TOPOLOGY
+# ------------------------------------------------------------------------------
 [rpc_endpoints]
 xlayer_mainnet = "https://rpc.xlayer.okx.com"
 xlayer_testnet = "https://testrpc.xlayer.okx.com"
+
+# ==============================================================================
+# END OF SPECIFICATION - VERSION LOCK ACTIVE
+# ==============================================================================
