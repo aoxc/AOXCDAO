@@ -1,8 +1,10 @@
 
 
 # Contents
+- [IAOXCAccessCoordinator](IAOXCAccessCoordinator.sol/interface.IAOXCAccessCoordinator.md)
 - [IAOXCAndromedaCore](IAOXCAndromedaCore.sol/interface.IAOXCAndromedaCore.md)
 - [IAOXCLockManager](IAOXCLockManager.sol/interface.IAOXCLockManager.md)
+- [IAOXCSafeguardVault](IAOXCSafeguardVault.sol/interface.IAOXCSafeguardVault.md)
 - [IAOXCStorage](IAOXCStorage.sol/interface.IAOXCStorage.md)
 - [AOXCStorageLib](IAOXCStorage.sol/library.AOXCStorageLib.md)
 - [IAOXCSwap](IAOXCSwap.sol/interface.IAOXCSwap.md)

@@ -1,5 +1,5 @@
 # AOXCConstants
-[Git Source](https://github.com/aoxc/AOXCDAO/blob/b2b85b9d29ffbff40854f57fed9136e5c88843dc/src/libraries/AOXCConstants.sol)
+[Git Source](https://github.com/aoxc/AOXCDAO/blob/2a934811b2291dd4f15fb2ad8d8398e1deb3833b/src/libraries/AOXCConstants.sol)
 
 **Title:**
 AOXCConstants
@@ -10,7 +10,6 @@ AOXC Core Engineering
 Centralized library for system-wide constants, roles, and financial parameters.
 
 Optimized for Solidity 0.8.33. All constants are evaluated at compile-time to save gas.
-This library eliminates "Magic Numbers" across the 157+ contract ecosystem.
 
 
 ## State Variables
@@ -50,6 +49,17 @@ bytes32 public constant ORACLE_OPERATOR_ROLE = keccak256("ORACLE_OPERATOR_ROLE")
 ```
 
 
+### AUDITOR_ROLE
+This role provides the secondary approval for victim compensations.
+
+Role for management oversight and compensation approval (Auditors).
+
+
+```solidity
+bytes32 public constant AUDITOR_ROLE = keccak256("AUDITOR_ROLE")
+```
+
+
 ### MAX_BPS
 Basis points denominator representing 100.00% precision.
 
@@ -72,8 +82,6 @@ uint256 public constant BPS_DENOMINATOR = 10_000
 
 ### HEARTBEAT_INTERVAL
 Standard heartbeat interval for oracles and pulse monitoring (24 hours).
-
-Protocol components use this to detect "stale" or "dead" data feeds.
 
 
 ```solidity

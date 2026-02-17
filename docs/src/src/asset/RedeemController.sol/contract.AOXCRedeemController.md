@@ -1,5 +1,5 @@
 # AOXCRedeemController
-[Git Source](https://github.com/aoxc/AOXCDAO/blob/b2b85b9d29ffbff40854f57fed9136e5c88843dc/src/asset/RedeemController.sol)
+[Git Source](https://github.com/aoxc/AOXCDAO/blob/2a934811b2291dd4f15fb2ad8d8398e1deb3833b/src/asset/RedeemController.sol)
 
 **Inherits:**
 Initializable, AccessControlUpgradeable, PausableUpgradeable, UUPSUpgradeable, ReentrancyGuard
@@ -7,9 +7,10 @@ Initializable, AccessControlUpgradeable, PausableUpgradeable, UUPSUpgradeable, R
 **Title:**
 AOXCRedeemController
 
-Manages AOXC token destruction and the release of corresponding collateral backing.
+**Author:**
+AOXC Protocol Team
 
-Fully compliant with 26-channel MonitoringHub and UUPS Proxy pattern (OZ v5).
+Token imhası ve varlık tahliye yönetimi.
 
 
 ## State Variables
@@ -75,8 +76,6 @@ constructor() ;
 
 ### initialize
 
-Initializes the Redeem Controller.
-
 
 ```solidity
 function initialize(
@@ -89,8 +88,6 @@ function initialize(
 ```
 
 ### redeem
-
-Redeems AOXC tokens and updates collateral records in the ledger.
 
 
 ```solidity
@@ -117,8 +114,6 @@ function unpause() external onlyRole(ADMIN_ROLE);
 
 ### _logToHub
 
-High-fidelity 26-channel forensic logging.
-
 
 ```solidity
 function _logToHub(
@@ -132,7 +127,12 @@ function _logToHub(
 
 
 ```solidity
-function _authorizeUpgrade(address) internal override onlyRole(ADMIN_ROLE);
+function _authorizeUpgrade(
+    address /* newImplementation */
+)
+    internal
+    override
+    onlyRole(ADMIN_ROLE);
 ```
 
 ## Events
@@ -140,7 +140,7 @@ function _authorizeUpgrade(address) internal override onlyRole(ADMIN_ROLE);
 
 ```solidity
 event TokensRedeemed(
-    address indexed caller, address indexed from, uint256 amount, bytes32 assetId
+    address indexed caller, address indexed from, uint256 indexed amount, bytes32 assetId
 );
 ```
 

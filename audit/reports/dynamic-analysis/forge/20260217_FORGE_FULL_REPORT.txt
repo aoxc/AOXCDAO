@@ -1,0 +1,120 @@
+No files changed, compilation skipped
+
+Ran 1 test for test/01_Upgrade_System_Integration.t.sol:UpgradeSystemIntegrationTest
+[FAIL: call to non-contract address 0xeB9580c3946BB47d73AAE1d4f7A94148B554b2F4] test_ABSOLUTE_FINAL_REPORT() (gas: 3002)
+Traces:
+  [3002] UpgradeSystemIntegrationTest::test_ABSOLUTE_FINAL_REPORT()
+    ├─ [0] 0xeB9580c3946BB47d73AAE1d4f7A94148B554b2F4::totalSupply() [staticcall]
+    │   └─ ← [Stop]
+    └─ ← [Revert] call to non-contract address 0xeB9580c3946BB47d73AAE1d4f7A94148B554b2F4
+
+Backtrace:
+  at UpgradeSystemIntegrationTest.test_ABSOLUTE_FINAL_REPORT
+
+Suite result: FAILED. 0 passed; 1 failed; 0 skipped; finished in 704.19µs (52.78µs CPU time)
+
+Ran 1 test for test/00_Deploy_System_Integration.t.sol:DeploySystemIntegrationTest
+[FAIL: Error: Bytecode not found at local proxy address] test_ClonedContractDeployment() (gas: 17574)
+Logs:
+  === STAGE 00: CONTRACT CLONE DEPLOYMENT ===
+  Local Proxy Address: 0x362BcC17f27918034cdfa77B5D8E43966A6FbE62
+  Bytecode Size at Local Address: 0
+
+Traces:
+  [17574] DeploySystemIntegrationTest::test_ClonedContractDeployment()
+    ├─ [0] console::log("=== STAGE 00: CONTRACT CLONE DEPLOYMENT ===") [staticcall]
+    │   └─ ← [Stop]
+    ├─ [0] console::log("Local Proxy Address:", localProxy: [0x362BcC17f27918034cdfa77B5D8E43966A6FbE62]) [staticcall]
+    │   └─ ← [Stop]
+    ├─ [0] console::log("Bytecode Size at Local Address:", 0) [staticcall]
+    │   └─ ← [Stop]
+    ├─ [0] VM::assertTrue(false, "Error: Bytecode not found at local proxy address") [staticcall]
+    │   └─ ← [Revert] Error: Bytecode not found at local proxy address
+    └─ ← [Revert] Error: Bytecode not found at local proxy address
+
+Backtrace:
+  at VM.assertTrue
+  at DeploySystemIntegrationTest.test_ClonedContractDeployment
+
+Suite result: FAILED. 0 passed; 1 failed; 0 skipped; finished in 786.20µs (164.70µs CPU time)
+
+Ran 1 test for test/02_Fleet_Ignition_Full_Forensic.t.sol:FleetIgnitionFullForensic
+[PASS] test_FLEET_STRATEGIC_IGNITION() (gas: 57816)
+Logs:
+  ============================================================================
+                AOXC FLEET: 7-SHIP STRATEGIC IGNITION REPORT
+  ============================================================================
+  
+[SECTION 1: SECTOR DOCKING OPERATIONS]
+   - Sector 1 & 7 Docking:            SUCCESSFUL (MOCKED)
+  
+[SECTION 2: PROPULSION SYSTEMS CHECK]
+   - Kinetic Multiplier:               550% [ENGAGED]
+  
+[SECTION 4: FINAL AUDITOR VERDICT]
+   STATUS: ALL SECURITY BARRIERS BYPASSED FOR TESTING
+   RESULT: 7-SHIP MOTORS RUNNING IN PERFECT SYNCHRONICITY
+  ============================================================================
+
+
+Suite result: ok. 1 passed; 0 failed; 0 skipped; finished in 971.96µs (345.61µs CPU time)
+
+Ran 1 test for test/03_BlackHole_Stress_Test.t.sol:BlackHoleStressTest
+[PASS] test_BLACK_HOLE_PARADOX() (gas: 77448)
+Logs:
+  ================================================================
+  ALERT: FLEET ENTERING EVENT HORIZON - GRAVITY INCREASING!
+  ================================================================
+  
+[STEP 1: MAXIMIZING KINETIC DRIVE]
+   -> Engines at 600%. (Bypassed security for test)
+  
+[STEP 2: CRITICAL FAILURE - SECTOR 1 DISCONNECTED]
+   -> WARNING: Sector 1 is LOST. Fleet formation broken!
+  
+[STEP 3: AMIRAL STABILIZING THE FLEET]
+   -> Fleet stabilized. Monetary Guard: ACTIVE.
+  
+================================================================
+               MISSION SUCCESS: FLEET ESCAPED THE VOID
+     - Security Barriers:    OVERRIDDEN
+     - Stress Response:      VERIFIED
+     - Status:               ALL MOTORS SYNCED
+  ================================================================
+
+
+Suite result: ok. 1 passed; 0 failed; 0 skipped; finished in 616.94µs (229.64µs CPU time)
+
+╭---------------------------------------------------+-----------------+-----+--------+-----+---------╮
+| src/core/ANDROMEDACORE.sol:ANDROMEDACORE Contract |                 |     |        |     |         |
++====================================================================================================+
+| Deployment Cost                                   | Deployment Size |     |        |     |         |
+|---------------------------------------------------+-----------------+-----+--------+-----+---------|
+| 1512511                                           | 6820            |     |        |     |         |
+|---------------------------------------------------+-----------------+-----+--------+-----+---------|
+|                                                   |                 |     |        |     |         |
+|---------------------------------------------------+-----------------+-----+--------+-----+---------|
+| Function Name                                     | Min             | Avg | Median | Max | # Calls |
+|---------------------------------------------------+-----------------+-----+--------+-----+---------|
+| calibrateGlobalKinetic                            | 0               | 0   | 0      | 0   | 3       |
+|---------------------------------------------------+-----------------+-----+--------+-----+---------|
+| registerSector                                    | 0               | 0   | 0      | 0   | 2       |
+|---------------------------------------------------+-----------------+-----+--------+-----+---------|
+| removeSector                                      | 0               | 0   | 0      | 0   | 1       |
+|---------------------------------------------------+-----------------+-----+--------+-----+---------|
+| toggleMonetaryGuard                               | 0               | 0   | 0      | 0   | 1       |
+╰---------------------------------------------------+-----------------+-----+--------+-----+---------╯
+
+
+Ran 4 test suites in 12.53ms (3.08ms CPU time): 2 tests passed, 2 failed, 0 skipped (4 total tests)
+
+Failing tests:
+Encountered 1 failing test in test/00_Deploy_System_Integration.t.sol:DeploySystemIntegrationTest
+[FAIL: Error: Bytecode not found at local proxy address] test_ClonedContractDeployment() (gas: 17574)
+
+Encountered 1 failing test in test/01_Upgrade_System_Integration.t.sol:UpgradeSystemIntegrationTest
+[FAIL: call to non-contract address 0xeB9580c3946BB47d73AAE1d4f7A94148B554b2F4] test_ABSOLUTE_FINAL_REPORT() (gas: 3002)
+
+Encountered a total of 2 failing tests, 2 tests succeeded
+
+Tip: Run `forge test --rerun` to retry only the 2 failed tests

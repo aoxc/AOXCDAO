@@ -1,5 +1,5 @@
 # AOXCBridgeAdapter
-[Git Source](https://github.com/aoxc/AOXCDAO/blob/b2b85b9d29ffbff40854f57fed9136e5c88843dc/src/infrastructure/BridgeAdapter.sol)
+[Git Source](https://github.com/aoxc/AOXCDAO/blob/2a934811b2291dd4f15fb2ad8d8398e1deb3833b/src/infrastructure/BridgeAdapter.sol)
 
 **Inherits:**
 [IBridgeAdapter](/src/interfaces/IBridgeAdapter.sol/interface.IBridgeAdapter.md), Initializable, AccessControlUpgradeable, PausableUpgradeable, UUPSUpgradeable, ReentrancyGuard, [AOXCBaseReporter](/src/monitoring/AOXCBaseReporter.sol/abstract.AOXCBaseReporter.md)

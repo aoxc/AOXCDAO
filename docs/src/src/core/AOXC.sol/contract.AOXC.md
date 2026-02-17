@@ -1,5 +1,5 @@
 # AOXC
-[Git Source](https://github.com/aoxc/AOXCDAO/blob/b2b85b9d29ffbff40854f57fed9136e5c88843dc/src/core/AOXC.sol)
+[Git Source](https://github.com/aoxc/AOXCDAO/blob/2a934811b2291dd4f15fb2ad8d8398e1deb3833b/src/core/AOXC.sol)
 
 **Inherits:**
 Initializable, ERC20Upgradeable, ERC20PermitUpgradeable, ERC20VotesUpgradeable, AccessControlUpgradeable, UUPSUpgradeable, PausableUpgradeable, ReentrancyGuard
@@ -140,11 +140,11 @@ function nonces(address owner)
 function clock() public view override returns (uint48);
 ```
 
-### CLOCK_MODE
+### clockMode
 
 
 ```solidity
-function CLOCK_MODE() public pure override returns (string memory);
+function clockMode() public pure returns (string memory);
 ```
 
 ### _internalMint

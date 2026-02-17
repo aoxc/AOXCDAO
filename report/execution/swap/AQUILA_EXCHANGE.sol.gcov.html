@@ -1,0 +1,271 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - lcov.info - execution/swap/AQUILA_EXCHANGE.sol</title>
+  <link rel="stylesheet" type="text/css" href="../../gcov.css">
+</head>
+
+<body>
+
+          <table width="100%" border=0 cellspacing=0 cellpadding=0>
+            <tr><td class="title">LCOV - code coverage report</td></tr>
+            <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+
+            <tr>
+              <td width="100%">
+                <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="10%" class="headerValue"><a href="../../index.html" title="Click to go to top-level">top level</a> - <a href="index.html" title="Click to go to directory execution/swap">execution/swap</a> - AQUILA_EXCHANGE.sol<span style="font-size: 80%;"> (source / <a href="AQUILA_EXCHANGE.sol.func-c.html" title="Click to go to function table">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="5%"></td>
+            <td width="5%" class="headerCovTableHead">Coverage</td>
+            <td width="5%" class="headerCovTableHead" title="Covered + Uncovered code">Total</td>
+            <td width="5%" class="headerCovTableHead" title="Exercised code only">Hit</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">lcov.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntryLo">0.0&nbsp;%</td>
+            <td class="headerCovTableEntry">49</td>
+            <td class="headerCovTableEntry">0</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test Date:</td>
+            <td class="headerValue">2026-02-17 02:55:51</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntryLo">0.0&nbsp;%</td>
+            <td class="headerCovTableEntry">11</td>
+            <td class="headerCovTableEntry">0</td>
+          </tr>
+                  <tr><td><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+                </table>
+              </td>
+            </tr>
+
+            <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+          </table>
+
+          <table cellpadding=0 cellspacing=0 border=0>
+            <tr>
+              <td><br></td>
+            </tr>
+            <tr>
+              <td>
+<pre class="sourceHeading">            Line data    Source code</pre>
+<pre class="source">
+<span id="L1"><span class="lineNum">       1</span>              : // SPDX-License-Identifier: MIT</span>
+<span id="L2"><span class="lineNum">       2</span>              : pragma solidity 0.8.33;</span>
+<span id="L3"><span class="lineNum">       3</span>              : </span>
+<span id="L4"><span class="lineNum">       4</span>              : import { AccessControl } from &quot;@openzeppelin/contracts/access/AccessControl.sol&quot;;</span>
+<span id="L5"><span class="lineNum">       5</span>              : import { ReentrancyGuard } from &quot;@openzeppelin/contracts/utils/ReentrancyGuard.sol&quot;;</span>
+<span id="L6"><span class="lineNum">       6</span>              : import { ERC20 } from &quot;@openzeppelin/contracts/token/ERC20/ERC20.sol&quot;;</span>
+<span id="L7"><span class="lineNum">       7</span>              : import { SafeERC20 } from &quot;@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol&quot;;</span>
+<span id="L8"><span class="lineNum">       8</span>              : import { IERC20 } from &quot;@openzeppelin/contracts/token/ERC20/IERC20.sol&quot;;</span>
+<span id="L9"><span class="lineNum">       9</span>              : </span>
+<span id="L10"><span class="lineNum">      10</span>              : /**</span>
+<span id="L11"><span class="lineNum">      11</span>              :  * @dev Custom Errors - Gas tasarrufu ve net hata takibi sağlar.</span>
+<span id="L12"><span class="lineNum">      12</span>              :  */</span>
+<span id="L13"><span class="lineNum">      13</span>              : error RankInsufficient(uint256 required, uint256 actual);</span>
+<span id="L14"><span class="lineNum">      14</span>              : error ZeroAddressDetected();</span>
+<span id="L15"><span class="lineNum">      15</span>              : error MarketAlreadyHalted(bytes32 pair);</span>
+<span id="L16"><span class="lineNum">      16</span>              : error InsufficientLiquidity();</span>
+<span id="L17"><span class="lineNum">      17</span>              : </span>
+<span id="L18"><span class="lineNum">      18</span>              : // --- EXTERNAL INTERFACES ---</span>
+<span id="L19"><span class="lineNum">      19</span>              : interface IReputationManager {</span>
+<span id="L20"><span class="lineNum">      20</span>              :     function getRank(address account) external view returns (uint256);</span>
+<span id="L21"><span class="lineNum">      21</span>              : }</span>
+<span id="L22"><span class="lineNum">      22</span>              : </span>
+<span id="L23"><span class="lineNum">      23</span>              : interface IMonitoringHub {</span>
+<span id="L24"><span class="lineNum">      24</span>              :     enum Severity {</span>
+<span id="L25"><span class="lineNum">      25</span>              :         INFO,</span>
+<span id="L26"><span class="lineNum">      26</span>              :         DEBUG,</span>
+<span id="L27"><span class="lineNum">      27</span>              :         WARNING,</span>
+<span id="L28"><span class="lineNum">      28</span>              :         CRITICAL</span>
+<span id="L29"><span class="lineNum">      29</span>              :     }</span>
+<span id="L30"><span class="lineNum">      30</span>              :     function emitLog(</span>
+<span id="L31"><span class="lineNum">      31</span>              :         Severity severity,</span>
+<span id="L32"><span class="lineNum">      32</span>              :         string calldata sector,</span>
+<span id="L33"><span class="lineNum">      33</span>              :         string calldata category,</span>
+<span id="L34"><span class="lineNum">      34</span>              :         string calldata details</span>
+<span id="L35"><span class="lineNum">      35</span>              :     ) external;</span>
+<span id="L36"><span class="lineNum">      36</span>              : }</span>
+<span id="L37"><span class="lineNum">      37</span>              : </span>
+<span id="L38"><span class="lineNum">      38</span>              : // --- AQUILA TOKEN ---</span>
+<span id="L39"><span class="lineNum">      39</span>              : contract AquilaToken is ERC20 {</span>
+<span id="L40"><span class="lineNum">      40</span> <span class="tlaUNC">           0 :     constructor() ERC20(&quot;Aquila Exchange Token&quot;, &quot;AQUILA&quot;) {</span></span>
+<span id="L41"><span class="lineNum">      41</span> <span class="tlaUNC">           0 :         _mint(msg.sender, 1_000_000 * 10 ** 18);</span></span>
+<span id="L42"><span class="lineNum">      42</span>              :     }</span>
+<span id="L43"><span class="lineNum">      43</span>              : }</span>
+<span id="L44"><span class="lineNum">      44</span>              : </span>
+<span id="L45"><span class="lineNum">      45</span>              : /**</span>
+<span id="L46"><span class="lineNum">      46</span>              :  * @title AquilaExchange</span>
+<span id="L47"><span class="lineNum">      47</span>              :  * @notice SECTOR_ID 5: Economic Exchange and Liquidity Hub</span>
+<span id="L48"><span class="lineNum">      48</span>              :  * @dev Re-engineered for audit compliance and gas efficiency.</span>
+<span id="L49"><span class="lineNum">      49</span>              :  */</span>
+<span id="L50"><span class="lineNum">      50</span>              : contract AquilaExchange is AccessControl, ReentrancyGuard {</span>
+<span id="L51"><span class="lineNum">      51</span>              :     using SafeERC20 for IERC20;</span>
+<span id="L52"><span class="lineNum">      52</span>              :     using SafeERC20 for AquilaToken;</span>
+<span id="L53"><span class="lineNum">      53</span>              : </span>
+<span id="L54"><span class="lineNum">      54</span>              :     // --- CONSTANTS ---</span>
+<span id="L55"><span class="lineNum">      55</span>              :     string public constant SECTOR_NAME = &quot;AQUILA_EXCHANGE&quot;;</span>
+<span id="L56"><span class="lineNum">      56</span>              :     uint256 public constant SECTOR_ID = 5;</span>
+<span id="L57"><span class="lineNum">      57</span>              :     bytes32 public constant AQUILA_CAPTAIN_ROLE = keccak256(&quot;AQUILA_CAPTAIN_ROLE&quot;);</span>
+<span id="L58"><span class="lineNum">      58</span>              : </span>
+<span id="L59"><span class="lineNum">      59</span>              :     // --- DEPARTMENTS ---</span>
+<span id="L60"><span class="lineNum">      60</span>              :     bytes32 public constant AQUILA_APEX = keccak256(&quot;DEPT_AQUILA_APEX&quot;);</span>
+<span id="L61"><span class="lineNum">      61</span>              :     bytes32 public constant AQUILA_KINETIC = keccak256(&quot;DEPT_AQUILA_KINETIC&quot;);</span>
+<span id="L62"><span class="lineNum">      62</span>              :     bytes32 public constant AQUILA_FLUX = keccak256(&quot;DEPT_AQUILA_FLUX&quot;);</span>
+<span id="L63"><span class="lineNum">      63</span>              :     bytes32 public constant AQUILA_NEURAL = keccak256(&quot;DEPT_AQUILA_NEURAL&quot;);</span>
+<span id="L64"><span class="lineNum">      64</span>              :     bytes32 public constant AQUILA_AEGIS = keccak256(&quot;DEPT_AQUILA_AEGIS&quot;);</span>
+<span id="L65"><span class="lineNum">      65</span>              :     bytes32 public constant AQUILA_PULSE = keccak256(&quot;DEPT_AQUILA_PULSE&quot;);</span>
+<span id="L66"><span class="lineNum">      66</span>              : </span>
+<span id="L67"><span class="lineNum">      67</span>              :     // --- IMMUTABLES (Naming Convention Fixed) ---</span>
+<span id="L68"><span class="lineNum">      68</span>              :     IReputationManager public immutable REPUTATION_MANAGER;</span>
+<span id="L69"><span class="lineNum">      69</span>              :     IMonitoringHub public immutable MONITORING_HUB;</span>
+<span id="L70"><span class="lineNum">      70</span>              :     IERC20 public immutable AOXC_TOKEN;</span>
+<span id="L71"><span class="lineNum">      71</span>              :     AquilaToken public immutable AQUILA_TOKEN;</span>
+<span id="L72"><span class="lineNum">      72</span>              : </span>
+<span id="L73"><span class="lineNum">      73</span>              :     struct MarketPair {</span>
+<span id="L74"><span class="lineNum">      74</span>              :         uint256 tradeFee;</span>
+<span id="L75"><span class="lineNum">      75</span>              :         uint256 volumeLimit;</span>
+<span id="L76"><span class="lineNum">      76</span>              :         bool isTradingEnabled;</span>
+<span id="L77"><span class="lineNum">      77</span>              :     }</span>
+<span id="L78"><span class="lineNum">      78</span>              : </span>
+<span id="L79"><span class="lineNum">      79</span>              :     mapping(bytes32 =&gt; MarketPair) public registry;</span>
+<span id="L80"><span class="lineNum">      80</span>              : </span>
+<span id="L81"><span class="lineNum">      81</span>              :     // --- EVENTS ---</span>
+<span id="L82"><span class="lineNum">      82</span>              :     event TradeExecuted(address indexed trader, bytes32 indexed pair, uint256 amount);</span>
+<span id="L83"><span class="lineNum">      83</span>              :     event LiquidityInjected(bytes32 indexed pair, uint256 amount);</span>
+<span id="L84"><span class="lineNum">      84</span>              :     event MarketHalted(bytes32 indexed pair, string reason);</span>
+<span id="L85"><span class="lineNum">      85</span>              :     event SwapToAoxc(address indexed user, uint256 aquilaAmount, uint256 aoxcAmount);</span>
+<span id="L86"><span class="lineNum">      86</span>              :     event SwapFromAoxc(address indexed user, uint256 aoxcAmount, uint256 aquilaAmount);</span>
+<span id="L87"><span class="lineNum">      87</span>              : </span>
+<span id="L88"><span class="lineNum">      88</span> <span class="tlaUNC">           0 :     modifier onlyQualified(bytes32 _deptId) {</span></span>
+<span id="L89"><span class="lineNum">      89</span> <span class="tlaUNC">           0 :         _checkRank(_deptId);</span></span>
+<span id="L90"><span class="lineNum">      90</span>              :         _;</span>
+<span id="L91"><span class="lineNum">      91</span>              :     }</span>
+<span id="L92"><span class="lineNum">      92</span>              : </span>
+<span id="L93"><span class="lineNum">      93</span> <span class="tlaUNC">           0 :     constructor(</span></span>
+<span id="L94"><span class="lineNum">      94</span>              :         address _reputation,</span>
+<span id="L95"><span class="lineNum">      95</span>              :         address _monitoring,</span>
+<span id="L96"><span class="lineNum">      96</span>              :         address _andromeda,</span>
+<span id="L97"><span class="lineNum">      97</span>              :         address _captain,</span>
+<span id="L98"><span class="lineNum">      98</span>              :         address _aoxcToken</span>
+<span id="L99"><span class="lineNum">      99</span>              :     ) {</span>
+<span id="L100"><span class="lineNum">     100</span> <span class="tlaUNC">           0 :         if (_reputation == address(0) || _monitoring == address(0) || _aoxcToken == address(0)) {</span></span>
+<span id="L101"><span class="lineNum">     101</span> <span class="tlaUNC">           0 :             revert ZeroAddressDetected();</span></span>
+<span id="L102"><span class="lineNum">     102</span>              :         }</span>
+<span id="L103"><span class="lineNum">     103</span>              : </span>
+<span id="L104"><span class="lineNum">     104</span> <span class="tlaUNC">           0 :         REPUTATION_MANAGER = IReputationManager(_reputation);</span></span>
+<span id="L105"><span class="lineNum">     105</span> <span class="tlaUNC">           0 :         MONITORING_HUB = IMonitoringHub(_monitoring);</span></span>
+<span id="L106"><span class="lineNum">     106</span> <span class="tlaUNC">           0 :         AOXC_TOKEN = IERC20(_aoxcToken);</span></span>
+<span id="L107"><span class="lineNum">     107</span> <span class="tlaUNC">           0 :         AQUILA_TOKEN = new AquilaToken();</span></span>
+<span id="L108"><span class="lineNum">     108</span>              : </span>
+<span id="L109"><span class="lineNum">     109</span> <span class="tlaUNC">           0 :         _grantRole(DEFAULT_ADMIN_ROLE, _andromeda);</span></span>
+<span id="L110"><span class="lineNum">     110</span> <span class="tlaUNC">           0 :         _grantRole(AQUILA_CAPTAIN_ROLE, _captain);</span></span>
+<span id="L111"><span class="lineNum">     111</span>              :     }</span>
+<span id="L112"><span class="lineNum">     112</span>              : </span>
+<span id="L113"><span class="lineNum">     113</span>              :     // --- CORE OPERATIONS ---</span>
+<span id="L114"><span class="lineNum">     114</span>              : </span>
+<span id="L115"><span class="lineNum">     115</span>              :     /**</span>
+<span id="L116"><span class="lineNum">     116</span>              :      * @dev Liquidity management now emits event with data.</span>
+<span id="L117"><span class="lineNum">     117</span>              :      * In a real DEX, this would interact with a pool contract.</span>
+<span id="L118"><span class="lineNum">     118</span>              :      */</span>
+<span id="L119"><span class="lineNum">     119</span> <span class="tlaUNC">           0 :     function manageLiquidity(bytes32 _pair, uint256 _amount)</span></span>
+<span id="L120"><span class="lineNum">     120</span>              :         external</span>
+<span id="L121"><span class="lineNum">     121</span>              :         onlyQualified(AQUILA_FLUX)</span>
+<span id="L122"><span class="lineNum">     122</span>              :         nonReentrant</span>
+<span id="L123"><span class="lineNum">     123</span>              :     {</span>
+<span id="L124"><span class="lineNum">     124</span>              :         // Audit Fix: Veriyi state'e yansıtıyoruz veya event ile doğruluyoruz</span>
+<span id="L125"><span class="lineNum">     125</span> <span class="tlaUNC">           0 :         registry[_pair].volumeLimit += _amount;</span></span>
+<span id="L126"><span class="lineNum">     126</span>              : </span>
+<span id="L127"><span class="lineNum">     127</span> <span class="tlaUNC">           0 :         _log(IMonitoringHub.Severity.INFO, &quot;LIQUIDITY&quot;, &quot;Liquidity adjustment executed.&quot;);</span></span>
+<span id="L128"><span class="lineNum">     128</span> <span class="tlaUNC">           0 :         emit LiquidityInjected(_pair, _amount);</span></span>
+<span id="L129"><span class="lineNum">     129</span>              :     }</span>
+<span id="L130"><span class="lineNum">     130</span>              : </span>
+<span id="L131"><span class="lineNum">     131</span> <span class="tlaUNC">           0 :     function recalibratePricing(bytes32 _pair, uint256 _newFee)</span></span>
+<span id="L132"><span class="lineNum">     132</span>              :         external</span>
+<span id="L133"><span class="lineNum">     133</span>              :         onlyQualified(AQUILA_NEURAL)</span>
+<span id="L134"><span class="lineNum">     134</span>              :     {</span>
+<span id="L135"><span class="lineNum">     135</span> <span class="tlaUNC">           0 :         registry[_pair].tradeFee = _newFee;</span></span>
+<span id="L136"><span class="lineNum">     136</span> <span class="tlaUNC">           0 :         _log(IMonitoringHub.Severity.WARNING, &quot;ECONOMY&quot;, &quot;Pricing model updated.&quot;);</span></span>
+<span id="L137"><span class="lineNum">     137</span>              :     }</span>
+<span id="L138"><span class="lineNum">     138</span>              : </span>
+<span id="L139"><span class="lineNum">     139</span> <span class="tlaUNC">           0 :     function haltMarket(bytes32 _pair, string calldata _reason)</span></span>
+<span id="L140"><span class="lineNum">     140</span>              :         external</span>
+<span id="L141"><span class="lineNum">     141</span>              :         onlyQualified(AQUILA_AEGIS)</span>
+<span id="L142"><span class="lineNum">     142</span>              :     {</span>
+<span id="L143"><span class="lineNum">     143</span> <span class="tlaUNC">           0 :         if (!registry[_pair].isTradingEnabled) {</span></span>
+<span id="L144"><span class="lineNum">     144</span> <span class="tlaUNC">           0 :             revert MarketAlreadyHalted(_pair);</span></span>
+<span id="L145"><span class="lineNum">     145</span>              :         }</span>
+<span id="L146"><span class="lineNum">     146</span>              : </span>
+<span id="L147"><span class="lineNum">     147</span> <span class="tlaUNC">           0 :         registry[_pair].isTradingEnabled = false;</span></span>
+<span id="L148"><span class="lineNum">     148</span> <span class="tlaUNC">           0 :         _log(IMonitoringHub.Severity.CRITICAL, &quot;SECURITY&quot;, &quot;Market operation halted.&quot;);</span></span>
+<span id="L149"><span class="lineNum">     149</span> <span class="tlaUNC">           0 :         emit MarketHalted(_pair, _reason);</span></span>
+<span id="L150"><span class="lineNum">     150</span>              :     }</span>
+<span id="L151"><span class="lineNum">     151</span>              : </span>
+<span id="L152"><span class="lineNum">     152</span>              :     // --- SWAP FUNCTIONS (SafeERC20 Enforced) ---</span>
+<span id="L153"><span class="lineNum">     153</span>              : </span>
+<span id="L154"><span class="lineNum">     154</span> <span class="tlaUNC">           0 :     function swapToAoxc(uint256 _aquilaAmount) external nonReentrant {</span></span>
+<span id="L155"><span class="lineNum">     155</span>              :         // SafeTransferFrom balance kontrolünü otomatik yapar</span>
+<span id="L156"><span class="lineNum">     156</span> <span class="tlaUNC">           0 :         AQUILA_TOKEN.safeTransferFrom(msg.sender, address(this), _aquilaAmount);</span></span>
+<span id="L157"><span class="lineNum">     157</span>              : </span>
+<span id="L158"><span class="lineNum">     158</span>              :         // AOXC transferi</span>
+<span id="L159"><span class="lineNum">     159</span> <span class="tlaUNC">           0 :         AOXC_TOKEN.safeTransfer(msg.sender, _aquilaAmount);</span></span>
+<span id="L160"><span class="lineNum">     160</span>              : </span>
+<span id="L161"><span class="lineNum">     161</span> <span class="tlaUNC">           0 :         emit SwapToAoxc(msg.sender, _aquilaAmount, _aquilaAmount);</span></span>
+<span id="L162"><span class="lineNum">     162</span>              :     }</span>
+<span id="L163"><span class="lineNum">     163</span>              : </span>
+<span id="L164"><span class="lineNum">     164</span> <span class="tlaUNC">           0 :     function swapFromAoxc(uint256 _aoxcAmount) external nonReentrant {</span></span>
+<span id="L165"><span class="lineNum">     165</span> <span class="tlaUNC">           0 :         AOXC_TOKEN.safeTransferFrom(msg.sender, address(this), _aoxcAmount);</span></span>
+<span id="L166"><span class="lineNum">     166</span> <span class="tlaUNC">           0 :         AQUILA_TOKEN.safeTransfer(msg.sender, _aoxcAmount);</span></span>
+<span id="L167"><span class="lineNum">     167</span>              : </span>
+<span id="L168"><span class="lineNum">     168</span> <span class="tlaUNC">           0 :         emit SwapFromAoxc(msg.sender, _aoxcAmount, _aoxcAmount);</span></span>
+<span id="L169"><span class="lineNum">     169</span>              :     }</span>
+<span id="L170"><span class="lineNum">     170</span>              : </span>
+<span id="L171"><span class="lineNum">     171</span>              :     // --- INTERNAL HELPERS ---</span>
+<span id="L172"><span class="lineNum">     172</span>              : </span>
+<span id="L173"><span class="lineNum">     173</span> <span class="tlaUNC">           0 :     function _checkRank(bytes32 _deptId) internal view {</span></span>
+<span id="L174"><span class="lineNum">     174</span> <span class="tlaUNC">           0 :         uint256 currentRank = REPUTATION_MANAGER.getRank(msg.sender);</span></span>
+<span id="L175"><span class="lineNum">     175</span> <span class="tlaUNC">           0 :         uint256 required = _getRankRequirement(_deptId);</span></span>
+<span id="L176"><span class="lineNum">     176</span> <span class="tlaUNC">           0 :         if (currentRank &lt; required) {</span></span>
+<span id="L177"><span class="lineNum">     177</span> <span class="tlaUNC">           0 :             revert RankInsufficient(required, currentRank);</span></span>
+<span id="L178"><span class="lineNum">     178</span>              :         }</span>
+<span id="L179"><span class="lineNum">     179</span>              :     }</span>
+<span id="L180"><span class="lineNum">     180</span>              : </span>
+<span id="L181"><span class="lineNum">     181</span> <span class="tlaUNC">           0 :     function _getRankRequirement(bytes32 _deptId) internal pure returns (uint256) {</span></span>
+<span id="L182"><span class="lineNum">     182</span> <span class="tlaUNC">           0 :         if (_deptId == AQUILA_APEX) return 6;</span></span>
+<span id="L183"><span class="lineNum">     183</span> <span class="tlaUNC">           0 :         if (_deptId == AQUILA_NEURAL) return 5;</span></span>
+<span id="L184"><span class="lineNum">     184</span> <span class="tlaUNC">           0 :         if (_deptId == AQUILA_KINETIC || _deptId == AQUILA_AEGIS) return 4;</span></span>
+<span id="L185"><span class="lineNum">     185</span> <span class="tlaUNC">           0 :         if (_deptId == AQUILA_FLUX) return 3;</span></span>
+<span id="L186"><span class="lineNum">     186</span> <span class="tlaUNC">           0 :         if (_deptId == AQUILA_PULSE) return 2;</span></span>
+<span id="L187"><span class="lineNum">     187</span> <span class="tlaUNC">           0 :         return 255;</span></span>
+<span id="L188"><span class="lineNum">     188</span>              :     }</span>
+<span id="L189"><span class="lineNum">     189</span>              : </span>
+<span id="L190"><span class="lineNum">     190</span> <span class="tlaUNC">           0 :     function _log(IMonitoringHub.Severity _sev, string memory _cat, string memory _det) internal {</span></span>
+<span id="L191"><span class="lineNum">     191</span> <span class="tlaUNC">           0 :         if (address(MONITORING_HUB) != address(0)) {</span></span>
+<span id="L192"><span class="lineNum">     192</span> <span class="tlaUNC">           0 :             MONITORING_HUB.emitLog(_sev, SECTOR_NAME, _cat, _det);</span></span>
+<span id="L193"><span class="lineNum">     193</span>              :         }</span>
+<span id="L194"><span class="lineNum">     194</span>              :     }</span>
+<span id="L195"><span class="lineNum">     195</span>              : }</span>
+        </pre>
+              </td>
+            </tr>
+          </table>
+          <br>
+
+          <table width="100%" border=0 cellspacing=0 cellpadding=0>
+            <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+            <tr><td class="versionInfo">Generated by: <a href="https://github.com//linux-test-project/lcov" target="_parent">LCOV version 2.0-1</a></td></tr>
+          </table>
+          <br>
+
+</body>
+</html>

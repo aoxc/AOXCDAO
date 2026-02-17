@@ -1,62 +1,66 @@
-# 🏛️ AOXCDAO V2 – Akdeniz
+## Foundry
 
----
+**Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
 
-<p align="center">
-  <img src="/image/aoxc_logo_001_2026.png" alt="AOXCDAO Banner Logo" width="150"/>
-</p>
+Foundry consists of:
 
----
+- **Forge**: Ethereum testing framework (like Truffle, Hardhat and DappTools).
+- **Cast**: Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
+- **Anvil**: Local Ethereum node, akin to Ganache, Hardhat Network.
+- **Chisel**: Fast, utilitarian, and verbose solidity REPL.
 
-## 🚨 Advisory
-❌ Production Ready: **No**  
-🏗️ Status: **Level 1 – Construction Phase**  
-🧪 Testing: **Not yet performed**  
-🔒 Security Audit: **Pending**  
-⚠️ Risk: **End-user responsibility**  
+## Documentation
 
----
+https://book.getfoundry.sh/
 
-## 🌟 Vision
-✨ **AOXCDAO V2 – Akdeniz** is a modular, institutional-grade token ecosystem.  
-It blends compliance, transparency, and governance into a unified framework.  
+## Usage
 
-- ⚖️ **Compliance Embedded** – Regulatory alignment at bytecode level  
-- 📡 **Transparency First** – Real-time telemetry and forensic visibility  
-- 🏛️ **Governance by Merit** – Reputation-weighted decision-making  
+### Build
 
----
+```shell
+$ forge build
+```
 
-## 🏗️ Development Status
-> *“Foundations are being placed carefully. The shipyard is active, but the fleet is not yet complete.”*
+### Test
 
-| 🔨 Phase | 🎯 Focus | 📊 Status |
-| :--- | :--- | :--- |
-| **Level 1** | Core architecture & schematics | 🏗️ In progress |
-| Level 2 | Intelligence & analytics integration | 📅 Planned |
-| Level 3 | Network Activation  launch | 🚀 Planned |
+```shell
+$ forge test
+```
 
----
+### Format
 
-## 🏗️ System Layout
+```shell
+$ forge fmt
+```
 
-```text
-src/
-├── ⚓ core            : Token logic & state anchor
-├── 📜 policy          : Behavioral rules & validation
-├── ⚖️ compliance      : Jurisdictional & identity alignment
-├── 💰 asset           : Supply discipline & asset backing
-├── 🏛️ governance      : DAO & decision-making layer
-├── 🛡️ security        : Threat mitigation & emergency halt
-├── 🌐 infrastructure  : Operational connectivity
-├── 📡 monitoring      : Telemetry & forensic logging
-├── 🔌 interfaces      : Unified standards
-└── 📚 libraries       : Gas optimization & zero-mock logic
-📝 Notes
-🏗️ Current phase: Construction, testing pending
+### Gas Snapshots
 
-⛔ Legacy compatibility: Deprecated
+```shell
+$ forge snapshot
+```
 
-🛠️ Tooling: Foundry + Solidity 0.8.33 baseline
+### Anvil
 
-"We build with patience, aiming for resilience and clarity."
+```shell
+$ anvil
+```
+
+### Deploy
+
+```shell
+$ forge script script/Counter.s.sol:CounterScript --rpc-url <your_rpc_url> --private-key <your_private_key>
+```
+
+### Cast
+
+```shell
+$ cast <subcommand>
+```
+
+### Help
+
+```shell
+$ forge --help
+$ anvil --help
+$ cast --help
+```

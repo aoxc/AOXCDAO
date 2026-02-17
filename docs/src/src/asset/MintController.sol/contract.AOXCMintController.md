@@ -1,5 +1,5 @@
 # AOXCMintController
-[Git Source](https://github.com/aoxc/AOXCDAO/blob/b2b85b9d29ffbff40854f57fed9136e5c88843dc/src/asset/MintController.sol)
+[Git Source](https://github.com/aoxc/AOXCDAO/blob/2a934811b2291dd4f15fb2ad8d8398e1deb3833b/src/asset/MintController.sol)
 
 **Inherits:**
 Initializable, AccessControlUpgradeable, PausableUpgradeable, UUPSUpgradeable, ReentrancyGuard
@@ -7,9 +7,10 @@ Initializable, AccessControlUpgradeable, PausableUpgradeable, UUPSUpgradeable, R
 **Title:**
 AOXCMintController
 
-Central hub for backed token issuance and redemption.
+**Author:**
+AOXC Protocol Team
 
-Manages the relationship between assets in the Ledger and AOXC token supply.
+Varlık dayanaklı token basımı ve itfası için merkezi hub.
 
 
 ## State Variables
@@ -96,8 +97,6 @@ constructor() ;
 
 ### initialize
 
-Initializes the Mint Controller.
-
 
 ```solidity
 function initialize(
@@ -110,8 +109,6 @@ function initialize(
 
 ### mint
 
-Mints new AOXC by utilizing asset backing from the Ledger.
-
 
 ```solidity
 function mint(address to, uint256 amount, bytes32 assetId)
@@ -122,8 +119,6 @@ function mint(address to, uint256 amount, bytes32 assetId)
 ```
 
 ### redeem
-
-Burns AOXC and restores the backing asset in the Ledger.
 
 
 ```solidity
@@ -151,9 +146,21 @@ function setSafetyLimit(bytes32 assetId, uint256 limit) external onlyRole(ADMIN_
 function toggleFreeze(bytes32 assetId, bool status) external onlyRole(OPERATOR_ROLE);
 ```
 
-### _notifyHub
+### pause
 
-High-fidelity 26-channel forensic logging.
+
+```solidity
+function pause() external onlyRole(ADMIN_ROLE);
+```
+
+### unpause
+
+
+```solidity
+function unpause() external onlyRole(ADMIN_ROLE);
+```
+
+### _notifyHub
 
 
 ```solidity
@@ -168,7 +175,12 @@ function _notifyHub(
 
 
 ```solidity
-function _authorizeUpgrade(address) internal override onlyRole(ADMIN_ROLE);
+function _authorizeUpgrade(
+    address /* newImplementation */
+)
+    internal
+    override
+    onlyRole(ADMIN_ROLE);
 ```
 
 ## Events
@@ -193,12 +205,6 @@ event TokensRedeemed(
 
 ```solidity
 error AOXC__ZeroAddress();
-```
-
-### AOXC__InsufficientBacking
-
-```solidity
-error AOXC__InsufficientBacking();
 ```
 
 ### AOXC__ExceedsMintLimit

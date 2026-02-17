@@ -1,5 +1,5 @@
 # AssetBackingLedger
-[Git Source](https://github.com/aoxc/AOXCDAO/blob/b2b85b9d29ffbff40854f57fed9136e5c88843dc/src/asset/AssetBackingLedger.sol)
+[Git Source](https://github.com/aoxc/AOXCDAO/blob/2a934811b2291dd4f15fb2ad8d8398e1deb3833b/src/asset/AssetBackingLedger.sol)
 
 **Inherits:**
 Initializable, AccessControlUpgradeable, PausableUpgradeable, UUPSUpgradeable, ReentrancyGuard
@@ -8,11 +8,11 @@ Initializable, AccessControlUpgradeable, PausableUpgradeable, UUPSUpgradeable, R
 AssetBackingLedger
 
 **Author:**
-AOXC Core Engineering
+AOXCDAO
 
-Central accounting module for collateral assets in the AOXC ecosystem.
+RWA muhasebe motoru ve sistem limit yönetim merkezi.
 
-Fully compliant with 26-channel MonitoringHub and UUPS Proxy pattern (OZ v5).
+UUPS mimarisi ve 26-parametre Forensic standartlarına tam uyumlu profesyonel sürüm.
 
 
 ## State Variables
@@ -30,10 +30,24 @@ bytes32 public constant ASSET_MANAGER_ROLE = keccak256("AOXC_ASSET_MANAGER_ROLE"
 ```
 
 
-### OPERATOR_ROLE
+### EXTERNAL_AI_AGENT_ROLE
 
 ```solidity
-bytes32 public constant OPERATOR_ROLE = keccak256("AOXC_OPERATOR_ROLE")
+bytes32 public constant EXTERNAL_AI_AGENT_ROLE = keccak256("EXTERNAL_AI_AGENT_ROLE")
+```
+
+
+### ACTION_DEPOSIT
+
+```solidity
+bytes32 public constant ACTION_DEPOSIT = keccak256("ACTION_ASSET_DEPOSIT")
+```
+
+
+### ACTION_WITHDRAW
+
+```solidity
+bytes32 public constant ACTION_WITHDRAW = keccak256("ACTION_ASSET_WITHDRAW")
 ```
 
 
@@ -86,10 +100,24 @@ mapping(bytes32 => bool) private _isAssetKnown
 ```
 
 
+### _agentRegistry
+
+```solidity
+mapping(address => AiAgentMetadata) private _agentRegistry
+```
+
+
+### activeAgentCount
+
+```solidity
+uint256 public activeAgentCount
+```
+
+
 ### _gap
 
 ```solidity
-uint256[43] private _gap
+uint256[40] private _gap
 ```
 
 
@@ -106,7 +134,7 @@ constructor() ;
 
 ### initialize
 
-Proxy initialization.
+Kontrat başlatıcı fonksiyon.
 
 
 ```solidity
@@ -137,31 +165,89 @@ function withdrawAsset(bytes32 assetId, uint256 amount)
     nonReentrant;
 ```
 
+### _processAccounting
+
+
+```solidity
+function _processAccounting(bytes32 assetId, uint256 amount, bool isIncrease) internal;
+```
+
 ### setSystemLimit
 
 
 ```solidity
-function setSystemLimit(uint256 newLimit) external onlyRole(DEFAULT_ADMIN_ROLE);
+function setSystemLimit(uint256 newLimit) external onlyRole(ADMIN_ROLE);
+```
+
+### registerAiAgent
+
+
+```solidity
+function registerAiAgent(address agent, bytes32 contractHash) external onlyRole(ADMIN_ROLE);
+```
+
+### updateDependencies
+
+
+```solidity
+function updateDependencies(address hub, address rep) external onlyRole(ADMIN_ROLE);
+```
+
+### pause
+
+
+```solidity
+function pause() external onlyRole(ADMIN_ROLE);
+```
+
+### unpause
+
+
+```solidity
+function unpause() external onlyRole(ADMIN_ROLE);
+```
+
+### getAssetBalance
+
+
+```solidity
+function getAssetBalance(bytes32 assetId) external view returns (uint256);
+```
+
+### getAllAssetIds
+
+
+```solidity
+function getAllAssetIds() external view returns (bytes32[] memory);
+```
+
+### _triggerReputation
+
+
+```solidity
+function _triggerReputation(bytes32 actionType) internal;
 ```
 
 ### _logToHub
 
-High-fidelity 26-channel forensic logging.
-
 
 ```solidity
-function _logToHub(
-    IMonitoringHub.Severity severity,
-    string memory action,
-    string memory details
-) internal;
+function _logToHub(IMonitoringHub.Severity severity, string memory cat, string memory details)
+    internal;
 ```
 
 ### _authorizeUpgrade
 
+UUPS upgrade yetkilendirmesi.
+
 
 ```solidity
-function _authorizeUpgrade(address) internal override onlyRole(ADMIN_ROLE);
+function _authorizeUpgrade(
+    address /* newImplementation */
+)
+    internal
+    override
+    onlyRole(ADMIN_ROLE);
 ```
 
 ## Events
@@ -169,7 +255,7 @@ function _authorizeUpgrade(address) internal override onlyRole(ADMIN_ROLE);
 
 ```solidity
 event AssetDeposited(
-    address indexed caller, bytes32 indexed assetId, uint256 amount, uint256 timestamp
+    address indexed manager, bytes32 indexed assetId, uint256 amount, uint256 total
 );
 ```
 
@@ -177,20 +263,26 @@ event AssetDeposited(
 
 ```solidity
 event AssetWithdrawn(
-    address indexed caller, bytes32 indexed assetId, uint256 amount, uint256 timestamp
+    address indexed manager, bytes32 indexed assetId, uint256 amount, uint256 total
 );
-```
-
-### TotalAssetsUpdated
-
-```solidity
-event TotalAssetsUpdated(uint256 oldTotal, uint256 newTotal, uint256 timestamp);
 ```
 
 ### SystemLimitUpdated
 
 ```solidity
 event SystemLimitUpdated(uint256 oldLimit, uint256 newLimit);
+```
+
+### AiAgentRegistered
+
+```solidity
+event AiAgentRegistered(address indexed agent, bytes32 indexed contractHash);
+```
+
+### DependencyUpdated
+
+```solidity
+event DependencyUpdated(address indexed monitoringHub, address indexed reputationManager);
 ```
 
 ## Errors
@@ -221,12 +313,30 @@ error AOXC__InvalidAssetId();
 ### AOXC__SystemCapReached
 
 ```solidity
-error AOXC__SystemCapReached(uint256 currentTotal, uint256 limit);
+error AOXC__SystemCapReached(uint256 current, uint256 limit);
 ```
 
-### AOXC__OnlyTimelock
+### AOXC__AgentAlreadyRegistered
 
 ```solidity
-error AOXC__OnlyTimelock();
+error AOXC__AgentAlreadyRegistered(address agent);
+```
+
+### AOXC__InvalidContractHash
+
+```solidity
+error AOXC__InvalidContractHash();
+```
+
+## Structs
+### AiAgentMetadata
+
+```solidity
+struct AiAgentMetadata {
+    bytes32 contractHash;
+    uint256 registeredAt;
+    uint256 totalOperations;
+    bool isActive;
+}
 ```
 

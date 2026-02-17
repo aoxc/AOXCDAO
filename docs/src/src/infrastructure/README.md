@@ -1,6 +1,7 @@
 
 
 # Contents
+- [AOXCSafeguardVault](AOXCSafeguardVault.sol/contract.AOXCSafeguardVault.md)
 - [ITreasury](AOXCSwap.sol/interface.ITreasury.md)
 - [IPyth](AOXCSwap.sol/interface.IPyth.md)
 - [AOXCSwap](AOXCSwap.sol/contract.AOXCSwap.md)

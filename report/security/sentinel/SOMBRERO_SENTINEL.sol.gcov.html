@@ -1,0 +1,266 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - lcov.info - security/sentinel/SOMBRERO_SENTINEL.sol</title>
+  <link rel="stylesheet" type="text/css" href="../../gcov.css">
+</head>
+
+<body>
+
+          <table width="100%" border=0 cellspacing=0 cellpadding=0>
+            <tr><td class="title">LCOV - code coverage report</td></tr>
+            <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+
+            <tr>
+              <td width="100%">
+                <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="10%" class="headerValue"><a href="../../index.html" title="Click to go to top-level">top level</a> - <a href="index.html" title="Click to go to directory security/sentinel">security/sentinel</a> - SOMBRERO_SENTINEL.sol<span style="font-size: 80%;"> (source / <a href="SOMBRERO_SENTINEL.sol.func-c.html" title="Click to go to function table">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="5%"></td>
+            <td width="5%" class="headerCovTableHead">Coverage</td>
+            <td width="5%" class="headerCovTableHead" title="Covered + Uncovered code">Total</td>
+            <td width="5%" class="headerCovTableHead" title="Exercised code only">Hit</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">lcov.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntryLo">0.0&nbsp;%</td>
+            <td class="headerCovTableEntry">49</td>
+            <td class="headerCovTableEntry">0</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test Date:</td>
+            <td class="headerValue">2026-02-17 02:55:51</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntryLo">0.0&nbsp;%</td>
+            <td class="headerCovTableEntry">11</td>
+            <td class="headerCovTableEntry">0</td>
+          </tr>
+                  <tr><td><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+                </table>
+              </td>
+            </tr>
+
+            <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+          </table>
+
+          <table cellpadding=0 cellspacing=0 border=0>
+            <tr>
+              <td><br></td>
+            </tr>
+            <tr>
+              <td>
+<pre class="sourceHeading">            Line data    Source code</pre>
+<pre class="source">
+<span id="L1"><span class="lineNum">       1</span>              : // SPDX-License-Identifier: MIT</span>
+<span id="L2"><span class="lineNum">       2</span>              : pragma solidity 0.8.33;</span>
+<span id="L3"><span class="lineNum">       3</span>              : </span>
+<span id="L4"><span class="lineNum">       4</span>              : import { AccessControl } from &quot;@openzeppelin/contracts/access/AccessControl.sol&quot;;</span>
+<span id="L5"><span class="lineNum">       5</span>              : import { ReentrancyGuard } from &quot;@openzeppelin/contracts/utils/ReentrancyGuard.sol&quot;;</span>
+<span id="L6"><span class="lineNum">       6</span>              : import { ERC20 } from &quot;@openzeppelin/contracts/token/ERC20/ERC20.sol&quot;;</span>
+<span id="L7"><span class="lineNum">       7</span>              : import { SafeERC20 } from &quot;@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol&quot;;</span>
+<span id="L8"><span class="lineNum">       8</span>              : import { IERC20 } from &quot;@openzeppelin/contracts/token/ERC20/IERC20.sol&quot;;</span>
+<span id="L9"><span class="lineNum">       9</span>              : </span>
+<span id="L10"><span class="lineNum">      10</span>              : // --- CUSTOM ERRORS ---</span>
+<span id="L11"><span class="lineNum">      11</span>              : error RankInsufficient(uint256 required, uint256 actual);</span>
+<span id="L12"><span class="lineNum">      12</span>              : error RedAlertRestrictionActive();</span>
+<span id="L13"><span class="lineNum">      13</span>              : error ZeroAddressDetected();</span>
+<span id="L14"><span class="lineNum">      14</span>              : </span>
+<span id="L15"><span class="lineNum">      15</span>              : // --- EXTERNAL INTERFACES ---</span>
+<span id="L16"><span class="lineNum">      16</span>              : interface IReputationManager {</span>
+<span id="L17"><span class="lineNum">      17</span>              :     function getRank(address account) external view returns (uint256);</span>
+<span id="L18"><span class="lineNum">      18</span>              : }</span>
+<span id="L19"><span class="lineNum">      19</span>              : </span>
+<span id="L20"><span class="lineNum">      20</span>              : interface IMonitoringHub {</span>
+<span id="L21"><span class="lineNum">      21</span>              :     enum Severity {</span>
+<span id="L22"><span class="lineNum">      22</span>              :         INFO,</span>
+<span id="L23"><span class="lineNum">      23</span>              :         DEBUG,</span>
+<span id="L24"><span class="lineNum">      24</span>              :         WARNING,</span>
+<span id="L25"><span class="lineNum">      25</span>              :         CRITICAL</span>
+<span id="L26"><span class="lineNum">      26</span>              :     }</span>
+<span id="L27"><span class="lineNum">      27</span>              :     function emitLog(</span>
+<span id="L28"><span class="lineNum">      28</span>              :         Severity severity,</span>
+<span id="L29"><span class="lineNum">      29</span>              :         string calldata sector,</span>
+<span id="L30"><span class="lineNum">      30</span>              :         string calldata category,</span>
+<span id="L31"><span class="lineNum">      31</span>              :         string calldata details</span>
+<span id="L32"><span class="lineNum">      32</span>              :     ) external;</span>
+<span id="L33"><span class="lineNum">      33</span>              : }</span>
+<span id="L34"><span class="lineNum">      34</span>              : </span>
+<span id="L35"><span class="lineNum">      35</span>              : // --- SOMBRERO TOKEN ---</span>
+<span id="L36"><span class="lineNum">      36</span>              : contract SombreroToken is ERC20 {</span>
+<span id="L37"><span class="lineNum">      37</span> <span class="tlaUNC">           0 :     constructor() ERC20(&quot;Sombrero Sentinel Token&quot;, &quot;SOMBRERO&quot;) {</span></span>
+<span id="L38"><span class="lineNum">      38</span> <span class="tlaUNC">           0 :         _mint(msg.sender, 1_000_000 * 10 ** 18);</span></span>
+<span id="L39"><span class="lineNum">      39</span>              :     }</span>
+<span id="L40"><span class="lineNum">      40</span>              : }</span>
+<span id="L41"><span class="lineNum">      41</span>              : </span>
+<span id="L42"><span class="lineNum">      42</span>              : /**</span>
+<span id="L43"><span class="lineNum">      43</span>              :  * @title SombreroSentinel</span>
+<span id="L44"><span class="lineNum">      44</span>              :  * @notice SECTOR_ID 2: Security Surveillance and Intervention</span>
+<span id="L45"><span class="lineNum">      45</span>              :  * @dev Re-engineered to solve Error 9553 (calldata/memory mismatch)</span>
+<span id="L46"><span class="lineNum">      46</span>              :  */</span>
+<span id="L47"><span class="lineNum">      47</span>              : contract SombreroSentinel is AccessControl, ReentrancyGuard {</span>
+<span id="L48"><span class="lineNum">      48</span>              :     using SafeERC20 for IERC20;</span>
+<span id="L49"><span class="lineNum">      49</span>              :     using SafeERC20 for SombreroToken;</span>
+<span id="L50"><span class="lineNum">      50</span>              : </span>
+<span id="L51"><span class="lineNum">      51</span>              :     // --- CONSTANTS ---</span>
+<span id="L52"><span class="lineNum">      52</span>              :     string public constant SECTOR_NAME = &quot;SOMBRERO_SENTINEL&quot;;</span>
+<span id="L53"><span class="lineNum">      53</span>              :     uint256 public constant SECTOR_ID = 2;</span>
+<span id="L54"><span class="lineNum">      54</span>              :     bytes32 public constant SOMBRERO_CAPTAIN_ROLE = keccak256(&quot;SOMBRERO_CAPTAIN_ROLE&quot;);</span>
+<span id="L55"><span class="lineNum">      55</span>              : </span>
+<span id="L56"><span class="lineNum">      56</span>              :     // --- DEPARTMENTS ---</span>
+<span id="L57"><span class="lineNum">      57</span>              :     bytes32 public constant SOMBRERO_APEX = keccak256(&quot;DEPT_SOMBRERO_APEX&quot;);</span>
+<span id="L58"><span class="lineNum">      58</span>              :     bytes32 public constant SOMBRERO_KINETIC = keccak256(&quot;DEPT_SOMBRERO_KINETIC&quot;);</span>
+<span id="L59"><span class="lineNum">      59</span>              :     bytes32 public constant SOMBRERO_FLUX = keccak256(&quot;DEPT_SOMBRERO_FLUX&quot;);</span>
+<span id="L60"><span class="lineNum">      60</span>              :     bytes32 public constant SOMBRERO_NEURAL = keccak256(&quot;DEPT_SOMBRERO_NEURAL&quot;);</span>
+<span id="L61"><span class="lineNum">      61</span>              :     bytes32 public constant SOMBRERO_AEGIS = keccak256(&quot;DEPT_SOMBRERO_AEGIS&quot;);</span>
+<span id="L62"><span class="lineNum">      62</span>              :     bytes32 public constant SOMBRERO_PULSE = keccak256(&quot;DEPT_SOMBRERO_PULSE&quot;);</span>
+<span id="L63"><span class="lineNum">      63</span>              : </span>
+<span id="L64"><span class="lineNum">      64</span>              :     // --- IMMUTABLES ---</span>
+<span id="L65"><span class="lineNum">      65</span>              :     IReputationManager public immutable REPUTATION_MANAGER;</span>
+<span id="L66"><span class="lineNum">      66</span>              :     IMonitoringHub public immutable MONITORING_HUB;</span>
+<span id="L67"><span class="lineNum">      67</span>              :     IERC20 public immutable AOXC_TOKEN;</span>
+<span id="L68"><span class="lineNum">      68</span>              :     SombreroToken public immutable SOMBRERO_TOKEN;</span>
+<span id="L69"><span class="lineNum">      69</span>              : </span>
+<span id="L70"><span class="lineNum">      70</span>              :     struct SecurityProtocol {</span>
+<span id="L71"><span class="lineNum">      71</span>              :         uint256 minRank;</span>
+<span id="L72"><span class="lineNum">      72</span>              :         bool alertActive;</span>
+<span id="L73"><span class="lineNum">      73</span>              :         uint256 incidentCount;</span>
+<span id="L74"><span class="lineNum">      74</span>              :     }</span>
+<span id="L75"><span class="lineNum">      75</span>              : </span>
+<span id="L76"><span class="lineNum">      76</span>              :     mapping(bytes32 =&gt; SecurityProtocol) public protocols;</span>
+<span id="L77"><span class="lineNum">      77</span>              :     bool public fleetWideRedAlert;</span>
+<span id="L78"><span class="lineNum">      78</span>              : </span>
+<span id="L79"><span class="lineNum">      79</span>              :     // --- EVENTS ---</span>
+<span id="L80"><span class="lineNum">      80</span>              :     event ThreatDetected(string threatType, address indexed suspect, uint256 severity);</span>
+<span id="L81"><span class="lineNum">      81</span>              :     event FleetStateChanged(bool isRedAlert, address indexed commander);</span>
+<span id="L82"><span class="lineNum">      82</span>              :     event InterventionExecuted(address indexed targetSector, string reason);</span>
+<span id="L83"><span class="lineNum">      83</span>              :     event SwapToAoxc(address indexed user, uint256 sombreroAmount, uint256 aoxcAmount);</span>
+<span id="L84"><span class="lineNum">      84</span>              :     event SwapFromAoxc(address indexed user, uint256 aoxcAmount, uint256 sombreroAmount);</span>
+<span id="L85"><span class="lineNum">      85</span>              : </span>
+<span id="L86"><span class="lineNum">      86</span> <span class="tlaUNC">           0 :     modifier onlyQualified(bytes32 _deptId) {</span></span>
+<span id="L87"><span class="lineNum">      87</span> <span class="tlaUNC">           0 :         _checkQualification(_deptId);</span></span>
+<span id="L88"><span class="lineNum">      88</span>              :         _;</span>
+<span id="L89"><span class="lineNum">      89</span>              :     }</span>
+<span id="L90"><span class="lineNum">      90</span>              : </span>
+<span id="L91"><span class="lineNum">      91</span> <span class="tlaUNC">           0 :     constructor(</span></span>
+<span id="L92"><span class="lineNum">      92</span>              :         address _reputation,</span>
+<span id="L93"><span class="lineNum">      93</span>              :         address _monitoring,</span>
+<span id="L94"><span class="lineNum">      94</span>              :         address _andromeda,</span>
+<span id="L95"><span class="lineNum">      95</span>              :         address _captain,</span>
+<span id="L96"><span class="lineNum">      96</span>              :         address _aoxcToken</span>
+<span id="L97"><span class="lineNum">      97</span>              :     ) {</span>
+<span id="L98"><span class="lineNum">      98</span> <span class="tlaUNC">           0 :         if (_reputation == address(0) || _monitoring == address(0) || _aoxcToken == address(0)) {</span></span>
+<span id="L99"><span class="lineNum">      99</span> <span class="tlaUNC">           0 :             revert ZeroAddressDetected();</span></span>
+<span id="L100"><span class="lineNum">     100</span>              :         }</span>
+<span id="L101"><span class="lineNum">     101</span>              : </span>
+<span id="L102"><span class="lineNum">     102</span> <span class="tlaUNC">           0 :         REPUTATION_MANAGER = IReputationManager(_reputation);</span></span>
+<span id="L103"><span class="lineNum">     103</span> <span class="tlaUNC">           0 :         MONITORING_HUB = IMonitoringHub(_monitoring);</span></span>
+<span id="L104"><span class="lineNum">     104</span> <span class="tlaUNC">           0 :         AOXC_TOKEN = IERC20(_aoxcToken);</span></span>
+<span id="L105"><span class="lineNum">     105</span> <span class="tlaUNC">           0 :         SOMBRERO_TOKEN = new SombreroToken();</span></span>
+<span id="L106"><span class="lineNum">     106</span>              : </span>
+<span id="L107"><span class="lineNum">     107</span> <span class="tlaUNC">           0 :         _grantRole(DEFAULT_ADMIN_ROLE, _andromeda);</span></span>
+<span id="L108"><span class="lineNum">     108</span> <span class="tlaUNC">           0 :         _grantRole(SOMBRERO_CAPTAIN_ROLE, _captain);</span></span>
+<span id="L109"><span class="lineNum">     109</span>              : </span>
+<span id="L110"><span class="lineNum">     110</span> <span class="tlaUNC">           0 :         _initializeProtocols();</span></span>
+<span id="L111"><span class="lineNum">     111</span>              :     }</span>
+<span id="L112"><span class="lineNum">     112</span>              : </span>
+<span id="L113"><span class="lineNum">     113</span> <span class="tlaUNC">           0 :     function _initializeProtocols() internal {</span></span>
+<span id="L114"><span class="lineNum">     114</span> <span class="tlaUNC">           0 :         protocols[SOMBRERO_APEX] =</span></span>
+<span id="L115"><span class="lineNum">     115</span>              :             SecurityProtocol({ minRank: 6, alertActive: false, incidentCount: 0 });</span>
+<span id="L116"><span class="lineNum">     116</span> <span class="tlaUNC">           0 :         protocols[SOMBRERO_KINETIC] =</span></span>
+<span id="L117"><span class="lineNum">     117</span>              :             SecurityProtocol({ minRank: 4, alertActive: false, incidentCount: 0 });</span>
+<span id="L118"><span class="lineNum">     118</span> <span class="tlaUNC">           0 :         protocols[SOMBRERO_NEURAL] =</span></span>
+<span id="L119"><span class="lineNum">     119</span>              :             SecurityProtocol({ minRank: 5, alertActive: false, incidentCount: 0 });</span>
+<span id="L120"><span class="lineNum">     120</span> <span class="tlaUNC">           0 :         protocols[SOMBRERO_AEGIS] =</span></span>
+<span id="L121"><span class="lineNum">     121</span>              :             SecurityProtocol({ minRank: 4, alertActive: false, incidentCount: 0 });</span>
+<span id="L122"><span class="lineNum">     122</span> <span class="tlaUNC">           0 :         protocols[SOMBRERO_PULSE] =</span></span>
+<span id="L123"><span class="lineNum">     123</span>              :             SecurityProtocol({ minRank: 2, alertActive: false, incidentCount: 0 });</span>
+<span id="L124"><span class="lineNum">     124</span>              :     }</span>
+<span id="L125"><span class="lineNum">     125</span>              : </span>
+<span id="L126"><span class="lineNum">     126</span>              :     // --- CORE SECURITY OPERATIONS ---</span>
+<span id="L127"><span class="lineNum">     127</span>              : </span>
+<span id="L128"><span class="lineNum">     128</span> <span class="tlaUNC">           0 :     function triggerRedAlert(bool _active) external onlyQualified(SOMBRERO_APEX) {</span></span>
+<span id="L129"><span class="lineNum">     129</span> <span class="tlaUNC">           0 :         fleetWideRedAlert = _active;</span></span>
+<span id="L130"><span class="lineNum">     130</span> <span class="tlaUNC">           0 :         _log(IMonitoringHub.Severity.CRITICAL, &quot;DEFENSE&quot;, &quot;Global Fleet Red Alert Toggled.&quot;);</span></span>
+<span id="L131"><span class="lineNum">     131</span> <span class="tlaUNC">           0 :         emit FleetStateChanged(_active, msg.sender);</span></span>
+<span id="L132"><span class="lineNum">     132</span>              :     }</span>
+<span id="L133"><span class="lineNum">     133</span>              : </span>
+<span id="L134"><span class="lineNum">     134</span> <span class="tlaUNC">           0 :     function reportAnomaly(string calldata _threatType, address _suspect)</span></span>
+<span id="L135"><span class="lineNum">     135</span>              :         external</span>
+<span id="L136"><span class="lineNum">     136</span>              :         onlyQualified(SOMBRERO_PULSE)</span>
+<span id="L137"><span class="lineNum">     137</span>              :     {</span>
+<span id="L138"><span class="lineNum">     138</span> <span class="tlaUNC">           0 :         protocols[SOMBRERO_PULSE].incidentCount++;</span></span>
+<span id="L139"><span class="lineNum">     139</span>              :         // calldata'dan gelen _threatType doğrudan iletilebilir</span>
+<span id="L140"><span class="lineNum">     140</span> <span class="tlaUNC">           0 :         _log(IMonitoringHub.Severity.WARNING, &quot;SURVEILLANCE&quot;, _threatType);</span></span>
+<span id="L141"><span class="lineNum">     141</span> <span class="tlaUNC">           0 :         emit ThreatDetected(_threatType, _suspect, 1);</span></span>
+<span id="L142"><span class="lineNum">     142</span>              :     }</span>
+<span id="L143"><span class="lineNum">     143</span>              : </span>
+<span id="L144"><span class="lineNum">     144</span> <span class="tlaUNC">           0 :     function executeIntervention(address _targetSector, string calldata _reason)</span></span>
+<span id="L145"><span class="lineNum">     145</span>              :         external</span>
+<span id="L146"><span class="lineNum">     146</span>              :         onlyQualified(SOMBRERO_KINETIC)</span>
+<span id="L147"><span class="lineNum">     147</span>              :     {</span>
+<span id="L148"><span class="lineNum">     148</span> <span class="tlaUNC">           0 :         _log(IMonitoringHub.Severity.CRITICAL, &quot;TACTICAL&quot;, &quot;Intervention broadcasted.&quot;);</span></span>
+<span id="L149"><span class="lineNum">     149</span> <span class="tlaUNC">           0 :         emit InterventionExecuted(_targetSector, _reason);</span></span>
+<span id="L150"><span class="lineNum">     150</span>              :     }</span>
+<span id="L151"><span class="lineNum">     151</span>              : </span>
+<span id="L152"><span class="lineNum">     152</span>              :     // --- SWAP FUNCTIONS ---</span>
+<span id="L153"><span class="lineNum">     153</span>              : </span>
+<span id="L154"><span class="lineNum">     154</span> <span class="tlaUNC">           0 :     function swapToAoxc(uint256 _sombreroAmount) external nonReentrant {</span></span>
+<span id="L155"><span class="lineNum">     155</span> <span class="tlaUNC">           0 :         SOMBRERO_TOKEN.safeTransferFrom(msg.sender, address(this), _sombreroAmount);</span></span>
+<span id="L156"><span class="lineNum">     156</span> <span class="tlaUNC">           0 :         AOXC_TOKEN.safeTransfer(msg.sender, _sombreroAmount);</span></span>
+<span id="L157"><span class="lineNum">     157</span> <span class="tlaUNC">           0 :         emit SwapToAoxc(msg.sender, _sombreroAmount, _sombreroAmount);</span></span>
+<span id="L158"><span class="lineNum">     158</span>              :     }</span>
+<span id="L159"><span class="lineNum">     159</span>              : </span>
+<span id="L160"><span class="lineNum">     160</span> <span class="tlaUNC">           0 :     function swapFromAoxc(uint256 _aoxcAmount) external nonReentrant {</span></span>
+<span id="L161"><span class="lineNum">     161</span> <span class="tlaUNC">           0 :         AOXC_TOKEN.safeTransferFrom(msg.sender, address(this), _aoxcAmount);</span></span>
+<span id="L162"><span class="lineNum">     162</span> <span class="tlaUNC">           0 :         SOMBRERO_TOKEN.safeTransfer(msg.sender, _aoxcAmount);</span></span>
+<span id="L163"><span class="lineNum">     163</span> <span class="tlaUNC">           0 :         emit SwapFromAoxc(msg.sender, _aoxcAmount, _aoxcAmount);</span></span>
+<span id="L164"><span class="lineNum">     164</span>              :     }</span>
+<span id="L165"><span class="lineNum">     165</span>              : </span>
+<span id="L166"><span class="lineNum">     166</span>              :     // --- HELPERS ---</span>
+<span id="L167"><span class="lineNum">     167</span>              : </span>
+<span id="L168"><span class="lineNum">     168</span> <span class="tlaUNC">           0 :     function _checkQualification(bytes32 _deptId) internal view {</span></span>
+<span id="L169"><span class="lineNum">     169</span> <span class="tlaUNC">           0 :         uint256 currentRank = REPUTATION_MANAGER.getRank(msg.sender);</span></span>
+<span id="L170"><span class="lineNum">     170</span> <span class="tlaUNC">           0 :         uint256 required = protocols[_deptId].minRank;</span></span>
+<span id="L171"><span class="lineNum">     171</span>              : </span>
+<span id="L172"><span class="lineNum">     172</span> <span class="tlaUNC">           0 :         if (currentRank &lt; required) {</span></span>
+<span id="L173"><span class="lineNum">     173</span> <span class="tlaUNC">           0 :             revert RankInsufficient(required, currentRank);</span></span>
+<span id="L174"><span class="lineNum">     174</span>              :         }</span>
+<span id="L175"><span class="lineNum">     175</span>              : </span>
+<span id="L176"><span class="lineNum">     176</span> <span class="tlaUNC">           0 :         if (fleetWideRedAlert &amp;&amp; _deptId != SOMBRERO_APEX) {</span></span>
+<span id="L177"><span class="lineNum">     177</span> <span class="tlaUNC">           0 :             revert RedAlertRestrictionActive();</span></span>
+<span id="L178"><span class="lineNum">     178</span>              :         }</span>
+<span id="L179"><span class="lineNum">     179</span>              :     }</span>
+<span id="L180"><span class="lineNum">     180</span>              : </span>
+<span id="L181"><span class="lineNum">     181</span>              :     /**</span>
+<span id="L182"><span class="lineNum">     182</span>              :      * @dev FIX: Parametreleri 'memory' yaparak literal string kabulünü sağlıyoruz.</span>
+<span id="L183"><span class="lineNum">     183</span>              :      */</span>
+<span id="L184"><span class="lineNum">     184</span> <span class="tlaUNC">           0 :     function _log(IMonitoringHub.Severity _sev, string memory _cat, string memory _det) internal {</span></span>
+<span id="L185"><span class="lineNum">     185</span> <span class="tlaUNC">           0 :         if (address(MONITORING_HUB) != address(0)) {</span></span>
+<span id="L186"><span class="lineNum">     186</span>              :             // Interface calldata beklediği için burada iletim yapıyoruz</span>
+<span id="L187"><span class="lineNum">     187</span> <span class="tlaUNC">           0 :             MONITORING_HUB.emitLog(_sev, SECTOR_NAME, _cat, _det);</span></span>
+<span id="L188"><span class="lineNum">     188</span>              :         }</span>
+<span id="L189"><span class="lineNum">     189</span>              :     }</span>
+<span id="L190"><span class="lineNum">     190</span>              : }</span>
+        </pre>
+              </td>
+            </tr>
+          </table>
+          <br>
+
+          <table width="100%" border=0 cellspacing=0 cellpadding=0>
+            <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+            <tr><td class="versionInfo">Generated by: <a href="https://github.com//linux-test-project/lcov" target="_parent">LCOV version 2.0-1</a></td></tr>
+          </table>
+          <br>
+
+</body>
+</html>
