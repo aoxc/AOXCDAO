@@ -16,7 +16,6 @@ out          = "out"
 test         = "TESTS"      # Academic plural form
 script       = "SCRIPTS"    # Academic plural form
 libs         = ["PROTOCOL"]
-install_path = "PROTOCOL"
 
 # ------------------------------------------------------------------------------
 # II. COMPILER STRATEGY (STRICT ENFORCEMENT)
@@ -32,33 +31,26 @@ evm_version      = "cancun" # Optimized for X LAYER's latest execution environme
 # ------------------------------------------------------------------------------
 # III. GLOBAL PATH INDEXING (Direct Linkage Model)
 # ------------------------------------------------------------------------------
-# @abstract: Unified access via Aliases to eliminate relative path (../../) complexity.
-remappings = [
-    # --- AOXCORE INTERNALS ---
-    "@core/=AOXCORE/core/",
-    "@interfaces/=AOXCORE/interfaces/",
-    "@security/=AOXCORE/security/",
-    "@monitoring/=AOXCORE/monitoring/",
-    "@infrastructure/=AOXCORE/infrastructure/",
-    "@libraries/=AOXCORE/libraries/",
-    
-    # --- FLEET UNITS (DAO SHIPS) ---
-    "@andromeda/=ANDROMEDA/",
-    "@aquila/=AQUILA/",
-    "@centaurus/=CENTAURUS/",
-    "@pegasus/=PEGASUS/",
-    "@quasar/=QUASAR/",
-    "@sombrero/=SOMBRERO/",
-    "@virgo/=VIRGO/",
-    
-    # --- EXTERNAL STANDARDS (OpenZeppelin 5.5.0 Enforced) ---
-    "@protocol/=PROTOCOL/",
-    "@openzeppelin/=PROTOCOL/openzeppelin-contracts/contracts/",
-    "@openzeppelin-upgradeable/=PROTOCOL/openzeppelin-contracts-upgradeable/contracts/",
-    "forge-std/=PROTOCOL/forge-std/src/",
-    "ds-test/=PROTOCOL/forge-std/lib/ds-test/src/"
-]
 
+remappings = [
+    # Kendi modüllerimiz (Net ve ayrıştırılmış)
+    '@api/=AOXCORE/api/',
+    '@core/=AOXCORE/core/',
+    '@auth/=AOXCORE/auth/',
+    '@bank/=AOXCORE/bank/',
+    '@data/=AOXCORE/data/',
+    '@safe/=AOXCORE/safe/',
+    '@vote/=AOXCORE/vote/',
+    '@link/=AOXCORE/link/',
+    '@interfaces/=AOXCORE/api/',
+    '@libraries/=AOXCORE/core/',
+
+    # Harici Protokoller (Dolambaçsız bağlantı)
+    # Önemli: Sağ taraftaki yollar 'contracts/' ile BİTMEMELİ, bir üst dizinde kalmalı.
+    '@openzeppelin/contracts/=/home/orcun/AOXCDAO/PROTOCOL/openzeppelin-contracts/contracts/',
+    '@openzeppelin-upgradeable/=/home/orcun/AOXCDAO/PROTOCOL/openzeppelin-contracts-upgradeable/contracts/',
+    'forge-std/=/home/orcun/AOXCDAO/PROTOCOL/forge-std/src/'
+]
 # ------------------------------------------------------------------------------
 # IV. ACADEMIC DOCUMENTATION & TECHNICAL SPECS
 # ------------------------------------------------------------------------------

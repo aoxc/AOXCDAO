@@ -2,9 +2,9 @@
 // Academic Grade - AOXC Operational Command Interface
 pragma solidity 0.8.33;
 
-import {IAOXCAccessCoordinator} from "@interfaces/IAOXCAccessCoordinator.sol";
-import {IMonitoringHub} from "@interfaces/IMonitoringHub.sol";
-import {AOXCErrors} from "@libraries/AOXCErrors.sol";
+import {IAOXCAccessCoordinator} from "@interfaces/api03_IAoxcAccessCoordinator_170226.sol";
+import {IMonitoringHub} from "@api/api29_IMonitoringHub_170226.sol";
+import {AOXCErrors} from "@libraries/core08_AoxcErrorDefinitions_170226.sol";
 
 /**
  * @title AOXCSovereignCommander

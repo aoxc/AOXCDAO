@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.33;
 
-import { Test, console } from "forge-std/Test.sol";
-import { ANDROMEDACORE } from "@core/ANDROMEDACORE.sol";
+import {Test, console} from "forge-std/Test.sol";
+import {ANDROMEDACORE} from "@core/ANDROMEDACORE.sol";
 
 contract BlackHoleStressTest is Test {
     ANDROMEDACORE public amiralGemisi;
@@ -24,27 +24,15 @@ contract BlackHoleStressTest is Test {
         // Bu sayede modifier'lar (onlyRole) tamamen baypas edilir.
 
         vm.mockCall(
-            address(amiralGemisi),
-            abi.encodeWithSelector(amiralGemisi.calibrateGlobalKinetic.selector),
-            abi.encode()
+            address(amiralGemisi), abi.encodeWithSelector(amiralGemisi.calibrateGlobalKinetic.selector), abi.encode()
         );
 
-        vm.mockCall(
-            address(amiralGemisi),
-            abi.encodeWithSelector(amiralGemisi.registerSector.selector),
-            abi.encode()
-        );
+        vm.mockCall(address(amiralGemisi), abi.encodeWithSelector(amiralGemisi.registerSector.selector), abi.encode());
+
+        vm.mockCall(address(amiralGemisi), abi.encodeWithSelector(amiralGemisi.removeSector.selector), abi.encode());
 
         vm.mockCall(
-            address(amiralGemisi),
-            abi.encodeWithSelector(amiralGemisi.removeSector.selector),
-            abi.encode()
-        );
-
-        vm.mockCall(
-            address(amiralGemisi),
-            abi.encodeWithSelector(amiralGemisi.toggleMonetaryGuard.selector),
-            abi.encode()
+            address(amiralGemisi), abi.encodeWithSelector(amiralGemisi.toggleMonetaryGuard.selector), abi.encode()
         );
 
         vm.startPrank(fleetAdmiral);

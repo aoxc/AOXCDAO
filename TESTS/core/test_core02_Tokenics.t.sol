@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.33;
 
-import { Test } from "forge-std/Test.sol";
-import { AOXC } from "../../src/core/AOXC.sol";
-import { AOXCMonitoringHub } from "../../src/monitoring/MonitoringHub.sol";
-import { ERC1967Proxy } from "@openzeppelin/contracts/proxy/ERC1967/ERC1967Proxy.sol";
-import { IMonitoringHub } from "../../src/interfaces/IMonitoringHub.sol";
+import {Test} from "forge-std/Test.sol";
+import {AOXC} from "../../src/core/AOXC.sol";
+import {AOXCMonitoringHub} from "../../src/monitoring/MonitoringHub.sol";
+import {ERC1967Proxy} from "@openzeppelin/contracts/proxy/ERC1967/ERC1967Proxy.sol";
+import {IMonitoringHub} from "../../src/interfaces/IMonitoringHub.sol";
 
 /**
  * @title AOXC Ecosystem Integrated Security Test
@@ -50,7 +50,8 @@ contract AOXCHubIntegrationTest is Test {
         ERC1967Proxy tokenProxy = new ERC1967Proxy(address(tokenImpl), tokenInit);
         token = AOXC(address(tokenProxy));
 
-        /** * @dev CRITICAL STEP: The Hub's logForensic is protected by REPORTER_ROLE.
+        /**
+         * @dev CRITICAL STEP: The Hub's logForensic is protected by REPORTER_ROLE.
          * The AOXC token contract must be authorized to report its own forensic data.
          */
         hub.grantRole(hub.REPORTER_ROLE(), address(token));
@@ -64,7 +65,7 @@ contract AOXCHubIntegrationTest is Test {
      */
     function testForensicFlowOnMint() public {
         vm.startPrank(admin);
-        
+
         uint256 mintAmount = 1000 ether;
         token.mint(user, mintAmount);
 
@@ -88,14 +89,14 @@ contract AOXCHubIntegrationTest is Test {
      */
     function testLogRateLimiting() public {
         vm.startPrank(admin);
-        
+
         // Success: First mint
         token.mint(user, 1 ether);
 
         // Failure: Immediate second mint (Cooldown is 1s, severity is INFO < CRITICAL)
         // Note: AOXC uses try-catch for logging, so the tx won't revert, but the log won't be saved.
         token.mint(user, 1 ether);
-        
+
         uint256 countAfterSpam = hub.getRecordCount();
         // Record count shouldn't increase if the Hub's logForensic reverts due to cooldown
         // (Assuming the try-catch in AOXC.sol is working as intended)

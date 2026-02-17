@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.33;
 
-import { Test } from "forge-std/Test.sol";
-import { AOXC } from "../../src/core/AOXC.sol";
-import { ERC1967Proxy } from "@openzeppelin/contracts/proxy/ERC1967/ERC1967Proxy.sol";
+import {Test} from "forge-std/Test.sol";
+import {AOXC} from "../../src/core/AOXC.sol";
+import {ERC1967Proxy} from "@openzeppelin/contracts/proxy/ERC1967/ERC1967Proxy.sol";
 
 /**
  * @title AOXC UUPS Upgrade Security Test Suite
@@ -27,14 +27,7 @@ contract AOXCUpgradeTest is Test {
 
         // 2. Initialization Verisi
         bytes memory initData = abi.encodeWithSelector(
-            AOXC.initialize.selector,
-            "AOXC Token",
-            "AOXC",
-            admin,
-            address(0),
-            address(0),
-            address(0),
-            1_000_000 ether
+            AOXC.initialize.selector, "AOXC Token", "AOXC", admin, address(0), address(0), address(0), 1_000_000 ether
         );
 
         // 3. Proxy Deploy: V1'e yönlendirilir
@@ -43,7 +36,7 @@ contract AOXCUpgradeTest is Test {
 
     /**
      * @notice Yükseltme yetkisinin (UPGRADER_ROLE) erişim kontrolünü doğrular.
-     * @dev Akademik bir güvenlik testi olarak hem yetkisiz erişimi (negative test) 
+     * @dev Akademik bir güvenlik testi olarak hem yetkisiz erişimi (negative test)
      * hem de yetkili erişimi (positive test) kapsar.
      */
     function testUpgradeAccessControl() public {
@@ -53,7 +46,7 @@ contract AOXCUpgradeTest is Test {
         // SENARYO 1: Yetkisiz bir adres (Attacker) yükseltme yapmaya çalışır
         vm.prank(attacker);
         // Not: OpenZeppelin AccessControl hata mesajı veya özel AOXC hatası beklenir
-        vm.expectRevert(); 
+        vm.expectRevert();
         proxyToken.upgradeToAndCall(address(newImplementation), "");
 
         // SENARYO 2: Yetkili adres (Admin) yükseltme yapar
@@ -63,8 +56,11 @@ contract AOXCUpgradeTest is Test {
 
         // Başarılı yükseltme sonrası yeni implementasyonun adresi kontrol edilebilir
         // (ERC1967 depolama slotu olan 0x360... üzerinden kontrol akademik bir yaklaşımdır)
-        bytes32 implementationSlot = vm.load(address(proxyToken), 0x360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc);
-        assertEq(address(uint160(uint256(implementationSlot))), address(newImplementation), "Upgrade verification failed");
+        bytes32 implementationSlot =
+            vm.load(address(proxyToken), 0x360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc);
+        assertEq(
+            address(uint160(uint256(implementationSlot))), address(newImplementation), "Upgrade verification failed"
+        );
     }
 
     /**

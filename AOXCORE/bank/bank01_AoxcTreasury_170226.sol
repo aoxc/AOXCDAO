@@ -1,19 +1,19 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.33;
 
-import {Initializable} from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
-import {AccessControlUpgradeable} from "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
-import {PausableUpgradeable} from "@openzeppelin/contracts-upgradeable/utils/PausableUpgradeable.sol";
-import {UUPSUpgradeable} from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
+import {Initializable} from "@openzeppelin-upgradeable/proxy/utils/Initializable.sol";
+import {AccessControlUpgradeable} from "@openzeppelin-upgradeable/access/AccessControlUpgradeable.sol";
+import {PausableUpgradeable} from "@openzeppelin-upgradeable/utils/PausableUpgradeable.sol";
+import {UUPSUpgradeable} from "@openzeppelin-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 // Rules: Use standard ReentrancyGuard from @openzeppelin/contracts as per instruction.
 import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 import {SafeERC20, IERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 
-import {ITreasury} from "@interfaces/ITreasury.sol";
-import {IMonitoringHub} from "@interfaces/IMonitoringHub.sol";
-import {IBridgeAdapter} from "@interfaces/IBridgeAdapter.sol";
-import {IReputationManager} from "@interfaces/IReputationManager.sol";
-import {AOXCErrors} from "@libraries/AOXCErrors.sol";
+import {ITreasury} from "@interfaces/api13_ITreasury_170226.sol";
+import {IMonitoringHub} from "@api/api29_IMonitoringHub_170226.sol";
+import {IBridgeAdapter} from "@interfaces/api20_IBridgeAdapter_170226.sol";
+import {IReputationManager} from "@interfaces/api08_IReputationManager_170226.sol";
+import {AOXCErrors} from "@libraries/core08_AoxcErrorDefinitions_170226.sol";
 
 /**
  * @title Treasury

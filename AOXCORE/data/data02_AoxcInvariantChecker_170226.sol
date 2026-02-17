@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.33;
 
-import {IMonitoringHub} from "@interfaces/IMonitoringHub.sol";
-import {AOXCBaseReporter} from "../monitoring/AOXCBaseReporter.sol";
+import {IMonitoringHub} from "@api/api29_IMonitoringHub_170226.sol";
+import {AOXCBaseReporter} from "data/data08_AoxcBaseReporter_170226.sol";
 
 contract AOXCInvariantChecker is AOXCBaseReporter {
     // Örn: Arz (Supply) asla Rezervden (Backing) fazla olamaz.

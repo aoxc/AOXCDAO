@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.33;
 
-import { Test, console } from "forge-std/Test.sol";
-import { AOXC } from "../src/core/AOXC.sol";
-import { AOXCStorage } from "../src/core/AOXCStorage.sol";
+import {Test, console} from "forge-std/Test.sol";
+import {AOXC} from "../src/core/AOXC.sol";
+import {AOXCStorage} from "../src/core/core02_AoxcStorageLayout_170226.sol";
 
 /**
  * @title AOXC_V2
@@ -25,8 +25,7 @@ contract AOXC_V2 is AOXC {
 
 contract UpgradeSystemIntegrationTest is Test {
     address public constant PROXY_TOKEN = 0xeB9580c3946BB47d73AAE1d4f7A94148B554b2F4;
-    bytes32 internal constant IMPL_SLOT =
-        0x360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc;
+    bytes32 internal constant IMPL_SLOT = 0x360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc;
 
     function setUp() public {
         AOXC v1Impl = new AOXC();
@@ -42,8 +41,7 @@ contract UpgradeSystemIntegrationTest is Test {
         vm.store(PROXY_TOKEN, IMPL_SLOT, bytes32(uint256(uint160(address(v2Logic)))));
 
         // PHASE 3: Low-Level Logic & Storage Verification
-        (bool success, bytes memory data) =
-            PROXY_TOKEN.staticcall(abi.encodeWithSignature("REVISION_NUMBER()"));
+        (bool success, bytes memory data) = PROXY_TOKEN.staticcall(abi.encodeWithSignature("REVISION_NUMBER()"));
 
         uint256 rev;
         if (success) {
@@ -54,9 +52,7 @@ contract UpgradeSystemIntegrationTest is Test {
         }
 
         // PHASE 4: State Transition via Proxy Call or Storage Injection
-        (bool upSuccess,) = PROXY_TOKEN.call(
-            abi.encodeWithSignature("updateSupplyCap(uint256)", 10_000_000_000 * 1e18)
-        );
+        (bool upSuccess,) = PROXY_TOKEN.call(abi.encodeWithSignature("updateSupplyCap(uint256)", 10_000_000_000 * 1e18));
 
         if (!upSuccess) {
             console.log("State Injection via Storage Mapping");

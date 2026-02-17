@@ -2,10 +2,10 @@
 // Academic Grade - AOXC Ultimate Pro Standard
 pragma solidity 0.8.33;
 
-import {AOXCConstants} from "@libraries/AOXCConstants.sol";
-import {IAssetBackingLedger} from "@interfaces/IAssetBackingLedger.sol";
-import {IAOXP} from "@interfaces/IAOXP.sol";
-import {PriceOracleAdapter} from "../infrastructure/PriceOracleAdapter.sol";
+import {AOXCConstants} from "@libraries/core07_AoxcConstants_170226.sol";
+import {IAssetBackingLedger} from "@interfaces/api15_IAssetBackingLedger_170226.sol";
+import {IAOXP} from "@interfaces/api18_IAoxp_170226.sol";
+import {PriceOracleAdapter} from "../link/link02_AoxcPriceOracleAdapter_170226.sol";
 import {AccessControl} from "@openzeppelin/contracts/access/AccessControl.sol";
 
 /**

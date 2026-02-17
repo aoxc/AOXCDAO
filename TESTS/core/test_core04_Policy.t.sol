@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.33;
 
-import { Test } from "forge-std/Test.sol";
-import { AOXC } from "../../src/core/AOXC.sol";
-import { ERC1967Proxy } from "@openzeppelin/contracts/proxy/ERC1967/ERC1967Proxy.sol";
-import { IMonitoringHub } from "../../src/interfaces/IMonitoringHub.sol";
-import { ITransferPolicy } from "../../src/interfaces/ITransferPolicy.sol";
+import {Test} from "forge-std/Test.sol";
+import {AOXC} from "../../src/core/AOXC.sol";
+import {ERC1967Proxy} from "@openzeppelin/contracts/proxy/ERC1967/ERC1967Proxy.sol";
+import {IMonitoringHub} from "../../src/interfaces/IMonitoringHub.sol";
+import {ITransferPolicy} from "../../src/interfaces/ITransferPolicy.sol";
 
 /**
  * @title AOXCTransferPolicyEngine
@@ -38,7 +38,11 @@ contract AOXCTransferPolicyEngine is ITransferPolicy {
         address from,
         address to,
         uint256 /* amount */
-    ) external view override {
+    )
+        external
+        view
+        override
+    {
         if (!isActive) return;
         if (blacklisted[from]) revert Policy__Blacklisted(from);
         if (blacklisted[to]) revert Policy__Blacklisted(to);

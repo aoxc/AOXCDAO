@@ -1,16 +1,16 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.33;
 
-import {Initializable} from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
+import {Initializable} from "@openzeppelin-upgradeable/proxy/utils/Initializable.sol";
 import {
     AccessControlEnumerableUpgradeable
-} from "@openzeppelin/contracts-upgradeable/access/extensions/AccessControlEnumerableUpgradeable.sol";
-import {PausableUpgradeable} from "@openzeppelin/contracts-upgradeable/utils/PausableUpgradeable.sol";
-import {UUPSUpgradeable} from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
+} from "@openzeppelin-upgradeable/access/extensions/AccessControlEnumerableUpgradeable.sol";
+import {PausableUpgradeable} from "@openzeppelin-upgradeable/utils/PausableUpgradeable.sol";
+import {UUPSUpgradeable} from "@openzeppelin-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
-import {IAOXCUpgradeAuthorizer} from "@interfaces/IAOXCUpgradeAuthorizer.sol";
-import {IMonitoringHub} from "@interfaces/IMonitoringHub.sol";
+import {IAOXCUpgradeAuthorizer} from "@api/api04_IAoxcUpgradeAuthorizer_170226.sol";
+import {IMonitoringHub} from "@api/api29_IMonitoringHub_170226.sol";
 
 /**
  * @title AOXCUpgradeAuthorizer

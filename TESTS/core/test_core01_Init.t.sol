@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.33;
 
-import { Test } from "forge-std/Test.sol";
-import { AOXC } from "../../src/core/AOXC.sol";
-import { ERC1967Proxy } from "@openzeppelin/contracts/proxy/ERC1967/ERC1967Proxy.sol";
-import { IMonitoringHub } from "../../src/interfaces/IMonitoringHub.sol";
+import {Test} from "forge-std/Test.sol";
+import {AOXC} from "../../src/core/AOXC.sol";
+import {ERC1967Proxy} from "@openzeppelin/contracts/proxy/ERC1967/ERC1967Proxy.sol";
+import {IMonitoringHub} from "../../src/interfaces/IMonitoringHub.sol";
 
 /**
  * @title Monitoring Hub Implementation for Testing Environment
@@ -26,10 +26,21 @@ contract MonitoringHub is IMonitoringHub {
     /**
      * @inheritdoc IMonitoringHub
      */
-    function getRecordCount() external view override returns (uint256) { return 0; }
-    function isMonitoringActive() external view override returns (bool) { return true; }
-    function isMonitoringActive() external view override returns (bool) { return true; }
-    function getRecordCount() external view override returns (uint256) { return 0; }
+    function getRecordCount() external view override returns (uint256) {
+        return 0;
+    }
+
+    function isMonitoringActive() external view override returns (bool) {
+        return true;
+    }
+
+    function isMonitoringActive() external view override returns (bool) {
+        return true;
+    }
+
+    function getRecordCount() external view override returns (uint256) {
+        return 0;
+    }
     function logSecurityAlert(string calldata reason, IMonitoringHub.Severity severity) external override {
         // Implementation for security alert tracking in tests
     }
@@ -104,7 +115,7 @@ contract AOXCInitTest is Test {
      * @dev Validates the execution of _disableInitializers() in the constructor.
      */
     function testImplementationCannotBeInitialized() public {
-        vm.expectRevert(); 
+        vm.expectRevert();
         implementation.initialize("Fake", "FAKE", admin, policy, authorizer, IMonitoringHub(address(hub)), INITIAL_CAP);
     }
 

@@ -7,9 +7,9 @@ import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol
 import {AccessControl} from "@openzeppelin/contracts/access/AccessControl.sol";
 import {Pausable} from "@openzeppelin/contracts/utils/Pausable.sol";
 
-import {AOXCErrors} from "@libraries/AOXCErrors.sol";
-import {IReputationManager} from "@interfaces/IReputationManager.sol";
-import {IMonitoringHub} from "@interfaces/IMonitoringHub.sol";
+import {AOXCErrors} from "@libraries/core08_AoxcErrorDefinitions_170226.sol";
+import {IReputationManager} from "@interfaces/api08_IReputationManager_170226.sol";
+import {IMonitoringHub} from "@api/api29_IMonitoringHub_170226.sol";
 
 /**
  * @title AOXCLockManager

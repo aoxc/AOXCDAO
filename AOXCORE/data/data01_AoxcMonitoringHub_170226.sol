@@ -1,17 +1,17 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.33;
 
-import {Initializable} from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
-import {AccessControlUpgradeable} from "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
-import {UUPSUpgradeable} from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
+import {Initializable} from "@openzeppelin-upgradeable/proxy/utils/Initializable.sol";
+import {AccessControlUpgradeable} from "@openzeppelin-upgradeable/access/AccessControlUpgradeable.sol";
+import {UUPSUpgradeable} from "@openzeppelin-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 
 /**
  * @dev V5 Compliance: Standard ReentrancyGuard is used as it is stateless in V5.
  */
 import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
-import {IMonitoringHub} from "@interfaces/IMonitoringHub.sol";
-import {AOXCErrors} from "@libraries/AOXCErrors.sol";
+import {IMonitoringHub} from "@api/api29_IMonitoringHub_170226.sol";
+import {AOXCErrors} from "@libraries/core08_AoxcErrorDefinitions_170226.sol";
 
 /**
  * @title AOXCMonitoringHub

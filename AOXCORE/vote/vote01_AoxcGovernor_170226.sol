@@ -12,28 +12,28 @@
  */
 pragma solidity 0.8.33;
 
-import {Initializable} from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
-import {AccessControlUpgradeable} from "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
-import {GovernorUpgradeable} from "@openzeppelin/contracts-upgradeable/governance/GovernorUpgradeable.sol";
+import {Initializable} from "@openzeppelin-upgradeable/proxy/utils/Initializable.sol";
+import {AccessControlUpgradeable} from "@openzeppelin-upgradeable/access/AccessControlUpgradeable.sol";
+import {GovernorUpgradeable} from "@openzeppelin-upgradeable/governance/GovernorUpgradeable.sol";
 import {
     GovernorCountingSimpleUpgradeable
-} from "@openzeppelin/contracts-upgradeable/governance/extensions/GovernorCountingSimpleUpgradeable.sol";
+} from "@openzeppelin-upgradeable/governance/extensions/GovernorCountingSimpleUpgradeable.sol";
 import {
     GovernorVotesUpgradeable
-} from "@openzeppelin/contracts-upgradeable/governance/extensions/GovernorVotesUpgradeable.sol";
+} from "@openzeppelin-upgradeable/governance/extensions/GovernorVotesUpgradeable.sol";
 import {
     GovernorTimelockControlUpgradeable
-} from "@openzeppelin/contracts-upgradeable/governance/extensions/GovernorTimelockControlUpgradeable.sol";
+} from "@openzeppelin-upgradeable/governance/extensions/GovernorTimelockControlUpgradeable.sol";
 import {
     TimelockControllerUpgradeable
-} from "@openzeppelin/contracts-upgradeable/governance/TimelockControllerUpgradeable.sol";
+} from "@openzeppelin-upgradeable/governance/TimelockControllerUpgradeable.sol";
 import {IVotes} from "@openzeppelin/contracts/governance/utils/IVotes.sol";
-import {UUPSUpgradeable} from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
+import {UUPSUpgradeable} from "@openzeppelin-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
 // --- 🔗 AOXC DAO Technical Interfaces ---
-import {IAOXCAndromedaCore} from "@interfaces/IAOXCAndromedaCore.sol";
-import {IReputationManager} from "@interfaces/IReputationManager.sol";
+import {IAOXCAndromedaCore} from "@interfaces/api01_IAoxcAndromedaCore_170226.sol";
+import {IReputationManager} from "@interfaces/api08_IReputationManager_170226.sol";
 
 contract AOXCGovernor is
     Initializable,

@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.33;
 
-import {IMonitoringHub} from "@interfaces/IMonitoringHub.sol";
-import {IEmergencyPauseGuard} from "@interfaces/IEmergencyPauseGuard.sol";
-import {AccessControlUpgradeable} from "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
-import {AOXCErrors} from "@libraries/AOXCErrors.sol";
-import {Initializable} from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
+import {IMonitoringHub} from "@api/api29_IMonitoringHub_170226.sol";
+import {IEmergencyPauseGuard} from "@interfaces/api28_IEmergencyPauseGuard_170226.sol";
+import {AccessControlUpgradeable} from "@openzeppelin-upgradeable/access/AccessControlUpgradeable.sol";
+import {AOXCErrors} from "@libraries/core08_AoxcErrorDefinitions_170226.sol";
+import {Initializable} from "@openzeppelin-upgradeable/proxy/utils/Initializable.sol";
 
 /**
  * @title AOXCSentinelExecutor

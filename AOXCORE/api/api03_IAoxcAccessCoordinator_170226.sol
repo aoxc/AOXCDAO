@@ -2,7 +2,7 @@
 // Academic Grade - AOXC Access Control Interface Standard
 pragma solidity 0.8.33;
 
-import {IMonitoringHub} from "./IMonitoringHub.sol";
+import {IMonitoringHub} from "@api/api29_IMonitoringHub_170226.sol";
 
 /**
  * @title IAOXCAccessCoordinator

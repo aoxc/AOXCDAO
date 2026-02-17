@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.33;
 
-import { Test } from "forge-std/Test.sol";
-import { AOXC } from "../../src/core/AOXC.sol";
-import { ERC1967Proxy } from "@openzeppelin/contracts/proxy/ERC1967/ERC1967Proxy.sol";
-import { IAccessControl } from "@openzeppelin/contracts/access/IAccessControl.sol";
+import {Test} from "forge-std/Test.sol";
+import {AOXC} from "../../src/core/AOXC.sol";
+import {ERC1967Proxy} from "@openzeppelin/contracts/proxy/ERC1967/ERC1967Proxy.sol";
+import {IAccessControl} from "@openzeppelin/contracts/access/IAccessControl.sol";
 
 /**
  * @title AOXC Role-Based Access Control (RBAC) Integrity Test
@@ -13,7 +13,7 @@ import { IAccessControl } from "@openzeppelin/contracts/access/IAccessControl.so
  */
 contract AOXCAccessTest is Test {
     AOXC private token;
-    
+
     /// @dev Test aktörleri
     address private admin = makeAddr("admin");
     address private minter = makeAddr("minter");
@@ -26,14 +26,7 @@ contract AOXCAccessTest is Test {
     function setUp() public {
         AOXC implementation = new AOXC();
         bytes memory initData = abi.encodeWithSelector(
-            AOXC.initialize.selector,
-            "AOXC Token",
-            "AOXC",
-            admin,
-            address(0),
-            address(0),
-            address(0),
-            1_000_000 ether
+            AOXC.initialize.selector, "AOXC Token", "AOXC", admin, address(0), address(0), address(0), 1_000_000 ether
         );
         token = AOXC(address(new ERC1967Proxy(address(implementation), initData)));
 
@@ -50,7 +43,7 @@ contract AOXCAccessTest is Test {
         // 1. İzolasyon Testi: Minter bakiye basabilir ama yakamaz (BURN_ROLE yoktur)
         vm.startPrank(minter);
         token.mint(minter, 100 ether); // Başarılı olmalı
-        
+
         vm.expectRevert(); // Minter'ın yakma yetkisi yok
         token.burn(minter, 10 ether);
         vm.stopPrank();
@@ -62,7 +55,7 @@ contract AOXCAccessTest is Test {
         // 3. Negatif Test: Artık minter rolü olmayan adres mint yapamamalı
         vm.prank(minter);
         // Akademik olarak hata mesajının AccessControl spesifik olduğunu doğrulamak iyidir
-        vm.expectRevert(); 
+        vm.expectRevert();
         token.mint(minter, 10 ether);
     }
 
@@ -73,12 +66,12 @@ contract AOXCAccessTest is Test {
         // Admin'in burner rolünü atayabilmesi
         vm.prank(admin);
         token.grantRole(token.BURN_ROLE(), burner);
-        
+
         assertTrue(token.hasRole(token.BURN_ROLE(), burner), "Admin should be able to grant roles");
 
         // Yetkisiz bir kullanıcının rol atamaya çalışması (Güvenlik ihlali denemesi)
         vm.prank(unauthorizedUser);
-        vm.expectRevert(); 
+        vm.expectRevert();
         token.grantRole(token.MINT_ROLE(), unauthorizedUser);
     }
 }

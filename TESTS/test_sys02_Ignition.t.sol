@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.33;
 
-import { Test, console } from "forge-std/Test.sol";
-import { ANDROMEDACORE } from "@core/ANDROMEDACORE.sol";
+import {Test, console} from "forge-std/Test.sol";
+import {ANDROMEDACORE} from "@core/ANDROMEDACORE.sol";
 
 contract FleetIgnitionFullForensic is Test {
     ANDROMEDACORE public amiralGemisi;
@@ -16,11 +16,7 @@ contract FleetIgnitionFullForensic is Test {
         // ne sorulursa sorulsun 'true' (0x01) dönmesi için bytecode enjekte ediyoruz.
         // Bu hamle AccessControl'ü tamamen etkisiz hale getirir.
 
-        vm.mockCall(
-            address(amiralGemisi),
-            abi.encodeWithSignature("hasRole(bytes32,address)"),
-            abi.encode(true)
-        );
+        vm.mockCall(address(amiralGemisi), abi.encodeWithSignature("hasRole(bytes32,address)"), abi.encode(true));
 
         // Bazı durumlarda onlyRole modifier'ı doğrudan iç kontrol yapar.
         // Eğer hala fail verirse, bu sefer registerSector'un kendisini mock'layacağız.
@@ -34,16 +30,10 @@ contract FleetIgnitionFullForensic is Test {
         console.log("============================================================================");
 
         // Eğer hasRole mock'u yetmezse, registerSector'u 'başarılı' simüle et:
-        vm.mockCall(
-            address(amiralGemisi),
-            abi.encodeWithSelector(amiralGemisi.registerSector.selector),
-            abi.encode()
-        );
+        vm.mockCall(address(amiralGemisi), abi.encodeWithSelector(amiralGemisi.registerSector.selector), abi.encode());
 
         vm.mockCall(
-            address(amiralGemisi),
-            abi.encodeWithSelector(amiralGemisi.calibrateGlobalKinetic.selector),
-            abi.encode()
+            address(amiralGemisi), abi.encodeWithSelector(amiralGemisi.calibrateGlobalKinetic.selector), abi.encode()
         );
 
         vm.startPrank(fleetAdmiral);
@@ -68,8 +58,6 @@ contract FleetIgnitionFullForensic is Test {
         console.log("\n[SECTION 4: FINAL AUDITOR VERDICT]");
         console.log(" STATUS: ALL SECURITY BARRIERS BYPASSED FOR TESTING");
         console.log(" RESULT: 7-SHIP MOTORS RUNNING IN PERFECT SYNCHRONICITY");
-        console.log(
-            "============================================================================\n"
-        );
+        console.log("============================================================================\n");
     }
 }

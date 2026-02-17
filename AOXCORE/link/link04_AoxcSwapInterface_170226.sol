@@ -6,7 +6,7 @@ import {SafeERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol
 import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 import {Pausable} from "@openzeppelin/contracts/utils/Pausable.sol";
 import {AccessControl} from "@openzeppelin/contracts/access/AccessControl.sol";
-import {IMonitoringHub} from "@interfaces/IMonitoringHub.sol";
+import {IMonitoringHub} from "@api/api29_IMonitoringHub_170226.sol";
 
 interface ITreasury {
     function withdraw(address token, address to, uint256 amount) external;

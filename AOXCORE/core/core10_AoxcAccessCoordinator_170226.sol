@@ -5,9 +5,9 @@ pragma solidity 0.8.33;
 
 import {AccessControlEnumerable} from "@openzeppelin/contracts/access/extensions/AccessControlEnumerable.sol";
 import {Pausable} from "@openzeppelin/contracts/utils/Pausable.sol";
-import {AOXCConstants} from "@libraries/AOXCConstants.sol";
-import {IAOXCAccessCoordinator} from "@interfaces/IAOXCAccessCoordinator.sol";
-import {IMonitoringHub} from "@interfaces/IMonitoringHub.sol";
+import {AOXCConstants} from "@libraries/core07_AoxcConstants_170226.sol";
+import {IAOXCAccessCoordinator} from "@interfaces/api03_IAoxcAccessCoordinator_170226.sol";
+import {IMonitoringHub} from "@api/api29_IMonitoringHub_170226.sol";
 
 /**
  * @title AOXCAccessCoordinator

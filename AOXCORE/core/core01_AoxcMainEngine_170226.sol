@@ -1,25 +1,31 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.33;
 
-import {Initializable} from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
-import {UUPSUpgradeable} from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
-import {AccessControlUpgradeable} from "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
-import {ERC20Upgradeable} from "@openzeppelin/contracts-upgradeable/token/ERC20/ERC20Upgradeable.sol";
+/**
+ * @title AOXC Main Engine
+ * @dev Central governance token and logic engine for AOXCDAO
+ * @notice Academic-grade UUPS upgradeable implementation with forensic monitoring.
+ */
+
+import {Initializable} from "@openzeppelin-upgradeable/proxy/utils/Initializable.sol";
+import {UUPSUpgradeable} from "@openzeppelin-upgradeable/proxy/utils/UUPSUpgradeable.sol";
+import {AccessControlUpgradeable} from "@openzeppelin-upgradeable/access/AccessControlUpgradeable.sol";
+import {ERC20Upgradeable} from "@openzeppelin-upgradeable/token/ERC20/ERC20Upgradeable.sol";
 import {
     ERC20PermitUpgradeable
-} from "@openzeppelin/contracts-upgradeable/token/ERC20/extensions/ERC20PermitUpgradeable.sol";
+} from "@openzeppelin-upgradeable/token/ERC20/extensions/ERC20PermitUpgradeable.sol";
 import {
     ERC20VotesUpgradeable
-} from "@openzeppelin/contracts-upgradeable/token/ERC20/extensions/ERC20VotesUpgradeable.sol";
-import {PausableUpgradeable} from "@openzeppelin/contracts-upgradeable/utils/PausableUpgradeable.sol";
-import {NoncesUpgradeable} from "@openzeppelin/contracts-upgradeable/utils/NoncesUpgradeable.sol";
-// SİSTEMİ DEĞİŞTİRMİYORUZ: Orijinal importuna geri döndük
+} from "@openzeppelin-upgradeable/token/ERC20/extensions/ERC20VotesUpgradeable.sol";
+import {PausableUpgradeable} from "@openzeppelin-upgradeable/utils/PausableUpgradeable.sol";
+import {NoncesUpgradeable} from "@openzeppelin-upgradeable/utils/NoncesUpgradeable.sol";
 import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
-import {ITransferPolicy} from "@interfaces/ITransferPolicy.sol";
-import {AOXCStorage} from "./AOXCStorage.sol";
-import {IAOXCUpgradeAuthorizer} from "@interfaces/IAOXCUpgradeAuthorizer.sol";
-import {IMonitoringHub} from "@interfaces/IMonitoringHub.sol";
+// TOML remapping (@api/ and @core/) ile tam uyumlu yollar
+import {ITransferPolicy} from "@api/api26_ITransferPolicy_170226.sol";
+import {AOXCStorage} from "@core/core02_AoxcStorageLayout_170226.sol"; // @ eklendi
+import {IAOXCUpgradeAuthorizer} from "@api/api04_IAoxcUpgradeAuthorizer_170226.sol";
+import {IMonitoringHub} from "@api/api29_IMonitoringHub_170226.sol";
 
 contract AOXC is
     Initializable,
@@ -70,6 +76,7 @@ contract AOXC is
         __ERC20Votes_init();
         __AccessControl_init();
         __Pausable_init();
+        __UUPSUpgradeable_init(); // UUPS standardı için eklendi
 
         _grantRole(DEFAULT_ADMIN_ROLE, admin);
         _grantRole(ADMIN_ROLE, admin);
@@ -142,9 +149,7 @@ contract AOXC is
         return uint48(block.number);
     }
 
-    // UYARI DÜZELTİLDİ: Sadece linter'ı susturduk, ismi değiştirmedik
-    // forge-ignore-next-line mixed-case-function
-    function clockMode() public pure returns (string memory) {
+    function clockMode() public pure override returns (string memory) {
         return "mode=blocknumber&from=default";
     }
 
@@ -162,7 +167,6 @@ contract AOXC is
 
     function _logToHub(IMonitoringHub.Severity severity, string memory category, string memory details) internal {
         if (address(monitoringHub) != address(0)) {
-            // UYARI DÜZELTİLDİ: Named fields (isimli alanlar) kullanarak struct oluşturduk
             IMonitoringHub.ForensicLog memory log = IMonitoringHub.ForensicLog({
                 source: address(this),
                 actor: msg.sender,

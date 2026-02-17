@@ -1,13 +1,13 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.33;
 
-import {Initializable} from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
+import {Initializable} from "@openzeppelin-upgradeable/proxy/utils/Initializable.sol";
 import {
     TimelockControllerUpgradeable
-} from "@openzeppelin/contracts-upgradeable/governance/TimelockControllerUpgradeable.sol";
-import {UUPSUpgradeable} from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
-import {IMonitoringHub} from "@interfaces/IMonitoringHub.sol";
-import {AOXCErrors} from "@libraries/AOXCErrors.sol";
+} from "@openzeppelin-upgradeable/governance/TimelockControllerUpgradeable.sol";
+import {UUPSUpgradeable} from "@openzeppelin-upgradeable/proxy/utils/UUPSUpgradeable.sol";
+import {IMonitoringHub} from "@api/api29_IMonitoringHub_170226.sol";
+import {AOXCErrors} from "@libraries/core08_AoxcErrorDefinitions_170226.sol";
 
 contract AOXCTimelock is Initializable, TimelockControllerUpgradeable, UUPSUpgradeable {
     IMonitoringHub public monitoringHub;

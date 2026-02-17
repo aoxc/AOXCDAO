@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.33;
 
-import { Test } from "forge-std/Test.sol";
-import { AOXCStorage } from "../../src/core/AOXCStorage.sol";
+import {Test} from "forge-std/Test.sol";
+import {AOXCStorage} from "../../src/core/core02_AoxcStorageLayout_170226.sol";
 
 /**
  * @title AOXC Storage Slot Integrity & ERC-7201 Compliance Test
@@ -15,20 +15,15 @@ contract AOXCStorageTest is Test {
      * @dev Formül: keccak256(abi.encode(uint256(keccak256(id)) - 1)) & ~bytes32(uint256(0xff))
      */
     function testStorageSlotCalculation() public pure {
-        // AOXCStorage.sol içinde tanımlanan benzersiz namespace kimliği
+        // core02_AoxcStorageLayout_170226.sol içinde tanımlanan benzersiz namespace kimliği
         string memory storageId = "AOXC-DAO-V2-AKDENIZ-2026";
 
         // Standart formül uygulaması
-        bytes32 expectedSlot = keccak256(abi.encode(uint256(keccak256(bytes(storageId))) - 1)) 
-            & ~bytes32(uint256(0xff));
+        bytes32 expectedSlot = keccak256(abi.encode(uint256(keccak256(bytes(storageId))) - 1)) & ~bytes32(uint256(0xff));
 
         // Kütüphanedeki sabit (constant) değer ile hesaplanan değerin eşleşmesi gerekir
         // Not: AOXCStorage içinde STORAGE_SLOT public/internal ise doğrudan karşılaştırılabilir.
-        assertEq(
-            AOXCStorage.STORAGE_SLOT, 
-            expectedSlot, 
-            "ERC-7201: Storage slot mismatch. Potential collision risk!"
-        );
+        assertEq(AOXCStorage.STORAGE_SLOT, expectedSlot, "ERC-7201: Storage slot mismatch. Potential collision risk!");
     }
 
     /**
@@ -74,7 +69,7 @@ contract AOXCStorageTest is Test {
      */
     function testStorageIsolation() public {
         AOXCStorage.MainStorage storage ds = AOXCStorage.layout();
-        
+
         // Slot 0 gibi standart slotlara yazma yapıldığında namespace'in etkilenmediğini simüle et
         uint256 initialCap = 1000;
         ds.supplyCap = initialCap;

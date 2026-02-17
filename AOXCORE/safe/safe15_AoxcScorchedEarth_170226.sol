@@ -2,12 +2,12 @@
 // Academic Grade - AOXC Catastrophic Recovery & Audit Protocol (Optimized)
 pragma solidity 0.8.33;
 
-import {IAOXCAccessCoordinator} from "@interfaces/IAOXCAccessCoordinator.sol";
-import {IAOXCSafeguardVault} from "@interfaces/IAOXCSafeguardVault.sol";
-import {ITreasury} from "@interfaces/ITreasury.sol";
-import {IMonitoringHub} from "@interfaces/IMonitoringHub.sol";
-import {AOXCErrors} from "@libraries/AOXCErrors.sol";
-import {AOXCConstants} from "@libraries/AOXCConstants.sol";
+import {IAOXCAccessCoordinator} from "@interfaces/api03_IAoxcAccessCoordinator_170226.sol";
+import {IAOXCSafeguardVault} from "@interfaces/api14_IAoxcSafeguardVault_170226.sol";
+import {ITreasury} from "@interfaces/api13_ITreasury_170226.sol";
+import {IMonitoringHub} from "@api/api29_IMonitoringHub_170226.sol";
+import {AOXCErrors} from "@libraries/core08_AoxcErrorDefinitions_170226.sol";
+import {AOXCConstants} from "@libraries/core07_AoxcConstants_170226.sol";
 import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
 /**

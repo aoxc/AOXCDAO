@@ -1,15 +1,15 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.33;
 
-import {Initializable} from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
-import {AccessControlUpgradeable} from "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
-import {UUPSUpgradeable} from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
-import {PausableUpgradeable} from "@openzeppelin/contracts-upgradeable/utils/PausableUpgradeable.sol";
+import {Initializable} from "@openzeppelin-upgradeable/proxy/utils/Initializable.sol";
+import {AccessControlUpgradeable} from "@openzeppelin-upgradeable/access/AccessControlUpgradeable.sol";
+import {UUPSUpgradeable} from "@openzeppelin-upgradeable/proxy/utils/UUPSUpgradeable.sol";
+import {PausableUpgradeable} from "@openzeppelin-upgradeable/utils/PausableUpgradeable.sol";
 
-import {IComplianceRegistry} from "@interfaces/IComplianceRegistry.sol";
-import {IMonitoringHub} from "@interfaces/IMonitoringHub.sol";
-import {IReputationManager} from "@interfaces/IReputationManager.sol";
-import {AOXCErrors} from "@libraries/AOXCErrors.sol";
+import {IComplianceRegistry} from "@interfaces/api09_IComplianceRegistry_170226.sol";
+import {IMonitoringHub} from "@api/api29_IMonitoringHub_170226.sol";
+import {IReputationManager} from "@interfaces/api08_IReputationManager_170226.sol";
+import {AOXCErrors} from "@libraries/core08_AoxcErrorDefinitions_170226.sol";
 
 /**
  * @title AOXCComplianceRegistry

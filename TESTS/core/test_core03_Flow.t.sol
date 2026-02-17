@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.33;
 
-import { Test } from "forge-std/Test.sol";
-import { AOXC } from "../../src/core/AOXC.sol";
-import { ERC1967Proxy } from "@openzeppelin/contracts/proxy/ERC1967/ERC1967Proxy.sol";
-import { IMonitoringHub } from "../../src/interfaces/IMonitoringHub.sol";
+import {Test} from "forge-std/Test.sol";
+import {AOXC} from "../../src/core/AOXC.sol";
+import {ERC1967Proxy} from "@openzeppelin/contracts/proxy/ERC1967/ERC1967Proxy.sol";
+import {IMonitoringHub} from "../../src/interfaces/IMonitoringHub.sol";
 
 /**
  * @title MonitoringHub (Academic Test Implementation)
@@ -23,11 +23,22 @@ contract MonitoringHub is IMonitoringHub {
     /**
      * @notice Güvenlik uyarılarını işleyen fonksiyon.
      */
-    function getRecordCount() external view override returns (uint256) { return 0; }
-    function isMonitoringActive() external view override returns (bool) { return true; }
-    function isMonitoringActive() external view override returns (bool) { return true; }
-    function getRecordCount() external view override returns (uint256) { return 0; }
-    function logSecurityAlert(string calldata reason, IMonitoringHub.Severity severity) external override { }
+    function getRecordCount() external view override returns (uint256) {
+        return 0;
+    }
+
+    function isMonitoringActive() external view override returns (bool) {
+        return true;
+    }
+
+    function isMonitoringActive() external view override returns (bool) {
+        return true;
+    }
+
+    function getRecordCount() external view override returns (uint256) {
+        return 0;
+    }
+    function logSecurityAlert(string calldata reason, IMonitoringHub.Severity severity) external override {}
 
     /**
      * @notice Belirli bir kaydı döndüren fonksiyon.

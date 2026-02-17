@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.33;
 
-import { Test } from "forge-std/Test.sol";
-import { AOXC } from "../../src/core/AOXC.sol";
-import { ERC1967Proxy } from "@openzeppelin/contracts/proxy/ERC1967/ERC1967Proxy.sol";
+import {Test} from "forge-std/Test.sol";
+import {AOXC} from "../../src/core/AOXC.sol";
+import {ERC1967Proxy} from "@openzeppelin/contracts/proxy/ERC1967/ERC1967Proxy.sol";
 
 /**
  * @title AOXC Governance & Voting Power Test Suite
@@ -67,7 +67,7 @@ contract AOXCGovernanceTest is Test {
         vm.prank(user1);
         bool success = token.transfer(user2, TRANSFER_AMOUNT);
         assertTrue(success, "Transfer should return true");
-        
+
         assertEq(
             token.getVotes(user1),
             USER1_INITIAL_BALANCE - TRANSFER_AMOUNT,
@@ -90,28 +90,24 @@ contract AOXCGovernanceTest is Test {
         // Blok 1: Delegasyon başlar
         vm.prank(user1);
         token.delegate(user1);
-        
+
         uint256 snapshotBlock = block.number;
-        
+
         // Blok 2: Zamanı ilerlet (Yeni bir checkpoint oluşması için)
         vm.roll(snapshotBlock + 1);
-        
+
         // Blok 3: Bakiye değişimi
         vm.prank(admin);
         token.mint(user1, 500 ether);
-        
+
         // Geçmişe dönük kontrol: Snapshot bloğundaki oy gücü değişmemiş olmalı
         assertEq(
-            token.getPastVotes(user1, snapshotBlock), 
-            USER1_INITIAL_BALANCE, 
+            token.getPastVotes(user1, snapshotBlock),
+            USER1_INITIAL_BALANCE,
             "Historical voting power must remain constant"
         );
-        
+
         // Güncel oy gücü artmış olmalı
-        assertEq(
-            token.getVotes(user1), 
-            USER1_INITIAL_BALANCE + 500 ether, 
-            "Current voting power mismatch after mint"
-        );
+        assertEq(token.getVotes(user1), USER1_INITIAL_BALANCE + 500 ether, "Current voting power mismatch after mint");
     }
 }

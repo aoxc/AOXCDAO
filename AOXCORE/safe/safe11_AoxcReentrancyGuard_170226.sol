@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.33;
 
-import {AOXCConstants} from "@libraries/AOXCConstants.sol";
+import {AOXCConstants} from "@libraries/core07_AoxcConstants_170226.sol";
 import {AccessControl} from "@openzeppelin/contracts/access/AccessControl.sol";
 
 /**

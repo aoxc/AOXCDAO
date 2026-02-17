@@ -1,13 +1,13 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.33;
 
-import {AOXCBaseReporter} from "../monitoring/AOXCBaseReporter.sol";
-import {IMonitoringHub} from "@interfaces/IMonitoringHub.sol";
-import {AOXCErrors} from "@libraries/AOXCErrors.sol";
-import {AOXCConstants} from "@libraries/AOXCConstants.sol";
-import {AOXCAccessCoordinator} from "../core/AOXCAccessCoordinator.sol";
-import {AccessControlUpgradeable} from "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
-import {Initializable} from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
+import {AOXCBaseReporter} from "data/data08_AoxcBaseReporter_170226.sol";
+import {IMonitoringHub} from "@api/api29_IMonitoringHub_170226.sol";
+import {AOXCErrors} from "@libraries/core08_AoxcErrorDefinitions_170226.sol";
+import {AOXCConstants} from "@libraries/core07_AoxcConstants_170226.sol";
+import {AOXCAccessCoordinator} from "../core/core10_AoxcAccessCoordinator_170226.sol";
+import {AccessControlUpgradeable} from "@openzeppelin-upgradeable/access/AccessControlUpgradeable.sol";
+import {Initializable} from "@openzeppelin-upgradeable/proxy/utils/Initializable.sol";
 
 /**
  * @title AOXCCircuitBreaker
