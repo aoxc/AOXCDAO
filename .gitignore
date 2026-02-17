@@ -15,32 +15,27 @@ cache_hardhat/
 target/
 
 # --- 📦 DEPENDENCY MANAGEMENT (PACKAGE MANAGERS) ---
+# .yarn ve node_modules yapısı tamamen yerel (ns1) ortamda kalır.
 node_modules/
 .node_modules/
 .pnp.*
-.yarn/*
+.yarn/
 !.yarn/patches
 !.yarn/plugins
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
 !.yarn/install-state.gz
+yarn-error.log
+.pnp.cjs
+.pnp.loader.mjs
 
-# --- 📚 LIBRARIES & SUBMODULE MANAGEMENT (CRITICAL SHIELD) ---
-# [RULE] Ana depo (Origin), kütüphanelerin ham kodunu taşımaz.
-# Sadece yerel (ns1) ortamda kalsın, 'git push' ile gitmesin.
-PROTOCOL/openzeppelin-contracts/
-PROTOCOL/openzeppelin-contracts-upgradeable/
-PROTOCOL/forge-std/
-PROTOCOL/ds-test/
-
-# Kütüphane içindeki gereksiz metadata ve test dosyalarını temizle
-PROTOCOL/*/.git
-PROTOCOL/*/.github
-PROTOCOL/*/.circleci
-PROTOCOL/*/test
-PROTOCOL/*/spec
-PROTOCOL/*/docs
+# --- 📚 LIBRARIES & PROTOCOL SHIELD (CRITICAL) ---
+# [RULE] PROTOCOL klasörü altındaki hiçbir kaynak kod GitHub'a gitmez.
+# Bu klasör sadece yerel geliştirme ve derleme için ns1:~/AOXCDAO/ üzerinde yaşar.
+PROTOCOL/
+PROTOCOL/**
+!PROTOCOL/.gitkeep
 
 # --- 🧪 FOUNDRY ANALYSIS & SNAPSHOTS ---
 # Gaz raporları ve test snapshot'ları sürüm kontrolüne girmez.
@@ -90,5 +85,5 @@ Thumbs.db
 
 # ==============================================================================
 # 📜 AOXCDAO QUALITY GATE - COMMIT READY
-# STATUS: Strictly excluding PROTOCOL source codes from origin.
+# STATUS: Strictly excluding PROTOCOL & .yarn source codes from origin.
 # ==============================================================================
