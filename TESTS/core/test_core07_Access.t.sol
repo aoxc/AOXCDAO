@@ -2,17 +2,16 @@
 pragma solidity 0.8.33;
 
 import {Test} from "forge-std/Test.sol";
-import {AOXC} from "../../src/core/AOXC.sol";
+import {AOXCMainEngine} from "@core/core01_AoxcMainEngine_170226.sol";
 import {ERC1967Proxy} from "@openzeppelin/contracts/proxy/ERC1967/ERC1967Proxy.sol";
-import {IAccessControl} from "@openzeppelin/contracts/access/IAccessControl.sol";
 
 /**
- * @title AOXC Role-Based Access Control (RBAC) Integrity Test
+ * @title AOXCMainEngine Role-Based Access Control (RBAC) Integrity Test
  * @notice Rollerin birbirinden izolasyonunu ve yetki iptal süreçlerini test eder.
  * @dev Akademik düzeyde yetki hiyerarşisi ve izolasyon doğrulaması sağlar.
  */
 contract AOXCAccessTest is Test {
-    AOXC private token;
+    AOXCMainEngine private token;
 
     /// @dev Test aktörleri
     address private admin = makeAddr("admin");
@@ -24,11 +23,11 @@ contract AOXCAccessTest is Test {
      * @notice Test ortamını ilklendirir ve temel rolleri atar.
      */
     function setUp() public {
-        AOXC implementation = new AOXC();
+        AOXCMainEngine implementation = new AOXCMainEngine();
         bytes memory initData = abi.encodeWithSelector(
-            AOXC.initialize.selector, "AOXC Token", "AOXC", admin, address(0), address(0), address(0), 1_000_000 ether
+            AOXCMainEngine.initialize.selector, "AOXCMainEngine Token", "AOXCMainEngine", admin, address(0), address(0), address(0), 1_000_000 ether
         );
-        token = AOXC(address(new ERC1967Proxy(address(implementation), initData)));
+        token = AOXCMainEngine(address(new ERC1967Proxy(address(implementation), initData)));
 
         // Admin tarafından Minter rolünün atanması
         vm.prank(admin);

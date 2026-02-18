@@ -13,8 +13,8 @@ import {AOXCErrors} from "@libraries/core08_AoxcErrorDefinitions_170226.sol";
 
 /**
  * @title AOXCIdentityRegistry
- * @author AOXC Core Engineering
- * @notice Central identity and verification registry for the AOXC Ecosystem.
+ * @author AOXCMainEngine Core Engineering
+ * @notice Central identity and verification registry for the AOXCMainEngine Ecosystem.
  * @dev Fully implements IIdentityRegistry with 26-channel forensic monitoring support.
  * This contract acts as the primary source of truth for verified on-chain identities.
  */

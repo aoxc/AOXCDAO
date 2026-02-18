@@ -2,19 +2,19 @@
 pragma solidity 0.8.33;
 
 import {Test, console} from "forge-std/Test.sol";
-import {AOXC} from "../src/core/AOXC.sol";
+import {AOXCMainEngine} from "@core/core01_AoxcMainEngine_170226.sol";
 
 /**
  * @title DeploySystemIntegrationTest
- * @notice Validates AOXC deployment mechanics via bytecode cloning.
+ * @notice Validates AOXCMainEngine deployment mechanics via bytecode cloning.
  * @dev Fixed: Removed mainnet dependency by using a local implementation for etching.
  */
 contract DeploySystemIntegrationTest is Test {
-    AOXC public clonedAoxc;
+    AOXCMainEngine public clonedAoxc;
 
     function setUp() public {
         // 1. Deploy a local implementation to get valid bytecode
-        AOXC implementation = new AOXC();
+        AOXCMainEngine implementation = new AOXCMainEngine();
 
         // 2. Create a deterministic address for the proxy
         address localProxy = makeAddr("localProxy");
@@ -23,12 +23,12 @@ contract DeploySystemIntegrationTest is Test {
         // This ensures codeSize > 0 regardless of network state
         vm.etch(localProxy, address(implementation).code);
 
-        // 4. Wrap the address as an AOXC instance
-        clonedAoxc = AOXC(localProxy);
+        // 4. Wrap the address as an AOXCMainEngine instance
+        clonedAoxc = AOXCMainEngine(localProxy);
     }
 
     /**
-     * @notice Verifies that the local proxy contains valid AOXC bytecode.
+     * @notice Verifies that the local proxy contains valid AOXCMainEngine bytecode.
      */
     function test_ClonedContractDeployment() public view {
         console.log("=== STAGE 00: CONTRACT CLONE DEPLOYMENT ===");

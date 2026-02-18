@@ -9,12 +9,12 @@ import {UUPSUpgradeable} from "@openzeppelin-upgradeable/proxy/utils/UUPSUpgrade
 import {IMonitoringHub} from "@api/api29_IMonitoringHub_170226.sol";
 import {IThreatSurface} from "@interfaces/api24_IThreatSurface_170226.sol";
 import {IReputationManager} from "@interfaces/api08_IReputationManager_170226.sol";
-import {AOXCBaseReporter} from "data/data08_AoxcBaseReporter_170226.sol";
+import {AOXCBaseReporter} from "@data/data08_AoxcBaseReporter_170226.sol";
 import {AOXCErrors} from "@libraries/core08_AoxcErrorDefinitions_170226.sol";
 
 /**
  * @title AOXCThreatSurface
- * @author AOXC Core Engineering
+ * @author AOXCMainEngine Core Engineering
  * @notice Enterprise-grade threat detection and pattern analysis module.
  * @dev Re-engineered for Akdeniz V2 with wrapped modifiers and high-fidelity forensic logging.
  * Compliance: OpenZeppelin 5.5.x, Solidity 0.8.33.

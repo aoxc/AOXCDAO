@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-// Academic Grade - AOXC Ultimate Pro Standard
+// Academic Grade - AOXCMainEngine Ultimate Pro Standard
 pragma solidity 0.8.33;
 
 import {AccessControl} from "@openzeppelin/contracts/access/AccessControl.sol";
@@ -19,8 +19,8 @@ interface IAggregatorV3 {
 
 /**
  * @title PriceOracleAdapter
- * @author AOXC Core Engineering
- * @notice Standardized price feed aggregator for the AOXC ecosystem.
+ * @author AOXCMainEngine Core Engineering
+ * @notice Standardized price feed aggregator for the AOXCMainEngine ecosystem.
  * @dev Normalizes all price data to 18 decimals and enforces strict staleness checks.
  * Optimized for Solidity 0.8.33 with zero-lint warning policy.
  */
@@ -28,7 +28,7 @@ contract PriceOracleAdapter is AccessControl {
     // --- Constants ---
 
     /**
-     * @dev The target decimals for all normalized prices within the AOXC ecosystem.
+     * @dev The target decimals for all normalized prices within the AOXCMainEngine ecosystem.
      */
     uint8 public constant TARGET_DECIMALS = 18;
 

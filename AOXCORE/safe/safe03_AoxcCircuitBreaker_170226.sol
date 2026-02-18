@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.33;
 
-import {AOXCBaseReporter} from "data/data08_AoxcBaseReporter_170226.sol";
+import {AOXCBaseReporter} from "@data/data08_AoxcBaseReporter_170226.sol";
 import {IMonitoringHub} from "@api/api29_IMonitoringHub_170226.sol";
 import {AOXCErrors} from "@libraries/core08_AoxcErrorDefinitions_170226.sol";
 import {AOXCConstants} from "@libraries/core07_AoxcConstants_170226.sol";
@@ -11,7 +11,7 @@ import {Initializable} from "@openzeppelin-upgradeable/proxy/utils/Initializable
 
 /**
  * @title AOXCCircuitBreaker
- * @author AOXC Core Engineering
+ * @author AOXCMainEngine Core Engineering
  * @notice Enterprise-grade circuit breaker to prevent bank runs and flash-loan exploits.
  * @dev Re-engineered for Akdeniz V2. Integrated with Global Coordinator for atomic system-wide protection.
  */

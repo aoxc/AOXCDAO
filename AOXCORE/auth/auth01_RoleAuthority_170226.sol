@@ -4,7 +4,7 @@ pragma solidity 0.8.33;
 /**
  * @title RoleAuthority
  * @dev Academic-grade Access Control Management for AOXCDAO
- * @author AOXC Core Team
+ * @author AOXCMainEngine Core Team
  * @notice Compatibility: OpenZeppelin v5.5.0
  */
 

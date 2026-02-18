@@ -1,12 +1,12 @@
 // SPDX-License-Identifier: MIT
-// Academic Grade - AOXC Access Control Interface Standard
+// Academic Grade - AOXCMainEngine Access Control Interface Standard
 pragma solidity 0.8.33;
 
 import {IMonitoringHub} from "@api/api29_IMonitoringHub_170226.sol";
 
 /**
  * @title IAOXCAccessCoordinator
- * @notice Interface defining the core authority and emergency signaling of the AOXC Fleet.
+ * @notice Interface defining the core authority and emergency signaling of the AOXCMainEngine Fleet.
  * @dev This bridge allows modular components (CircuitBreaker, ScorchedEarth, etc.) to
  * communicate with the central nervous system.
  */

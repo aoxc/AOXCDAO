@@ -3,18 +3,18 @@ pragma solidity 0.8.33;
 
 /**
  * @title AOXCStorage
- * @notice Centralized storage layout for AOXC token (ERC-7201 compliant).
+ * @notice Centralized storage layout for AOXCMainEngine token (ERC-7201 compliant).
  * @dev Provides upgrade-safe storage slots using Namespaced Storage Pattern.
- * Identity: "AOXC-DAO-V2-AKDENIZ-2026"
+ * Identity: "AOXCMainEngine-DAO-V2-AKDENIZ-2026"
  */
 library AOXCStorage {
     /**
      * @dev ERC-7201 Storage Slot calculation.
-     * keccak256(abi.encode(uint256(keccak256("AOXC-DAO-V2-AKDENIZ-2026")) - 1)) & ~bytes32(uint256(0xff))
+     * keccak256(abi.encode(uint256(keccak256("AOXCMainEngine-DAO-V2-AKDENIZ-2026")) - 1)) & ~bytes32(uint256(0xff))
      */
     bytes32 internal constant STORAGE_SLOT = 0x367f3747805167389a19c11867e3a34a17951a37651a148972b260907d083100; // Pre-calculated for performance
 
-    /// @custom:storage-location erc7201:AOXC-DAO-V2-AKDENIZ-2026
+    /// @custom:storage-location erc7201:AOXCMainEngine-DAO-V2-AKDENIZ-2026
     struct MainStorage {
         // --- Governance & Policy ---
         address transferPolicy;
@@ -39,7 +39,7 @@ library AOXCStorage {
     }
 
     /**
-     * @dev Returns the storage layout for AOXC.
+     * @dev Returns the storage layout for AOXCMainEngine.
      * Renamed from 'layout' to 'getMainStorage' to avoid parser conflicts in Forge Doc.
      */
     function getMainStorage() internal pure returns (MainStorage storage ds) {

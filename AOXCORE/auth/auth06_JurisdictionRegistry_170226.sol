@@ -13,8 +13,8 @@ import {AOXCErrors} from "@libraries/core08_AoxcErrorDefinitions_170226.sol";
 
 /**
  * @title AOXCJurisdictionRegistry
- * @author AOXC Core Engineering
- * @notice Regional compliance and jurisdiction management for the AOXC ecosystem.
+ * @author AOXCMainEngine Core Engineering
+ * @notice Regional compliance and jurisdiction management for the AOXCMainEngine ecosystem.
  * @dev Fully implements IJurisdictionRegistry with 26-channel forensic monitoring.
  * This registry tracks which users belong to which legal jurisdictions and their status.
  */

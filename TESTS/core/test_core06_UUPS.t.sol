@@ -2,17 +2,17 @@
 pragma solidity 0.8.33;
 
 import {Test} from "forge-std/Test.sol";
-import {AOXC} from "../../src/core/AOXC.sol";
+import {AOXCMainEngine} from "@core/core01_AoxcMainEngine_170226.sol";
 import {ERC1967Proxy} from "@openzeppelin/contracts/proxy/ERC1967/ERC1967Proxy.sol";
 
 /**
- * @title AOXC UUPS Upgrade Security Test Suite
+ * @title AOXCMainEngine UUPS Upgrade Security Test Suite
  * @notice Yükseltilebilirlik (upgradability) mekanizmasının yetkilendirme katmanını test eder.
  * @dev OpenZeppelin 5.x UUPS standartlarına uygun olarak tasarlanmıştır.
  */
 contract AOXCUpgradeTest is Test {
-    /// @notice Proxy üzerinden erişilen AOXC token örneği
-    AOXC private proxyToken;
+    /// @notice Proxy üzerinden erişilen AOXCMainEngine token örneği
+    AOXCMainEngine private proxyToken;
 
     /// @dev Test rolleri
     address private admin = makeAddr("admin");
@@ -23,15 +23,15 @@ contract AOXCUpgradeTest is Test {
      */
     function setUp() public {
         // 1. V1 Implementation Deploy
-        AOXC implementation = new AOXC();
+        AOXCMainEngine implementation = new AOXCMainEngine();
 
         // 2. Initialization Verisi
         bytes memory initData = abi.encodeWithSelector(
-            AOXC.initialize.selector, "AOXC Token", "AOXC", admin, address(0), address(0), address(0), 1_000_000 ether
+            AOXCMainEngine.initialize.selector, "AOXCMainEngine Token", "AOXCMainEngine", admin, address(0), address(0), address(0), 1_000_000 ether
         );
 
         // 3. Proxy Deploy: V1'e yönlendirilir
-        proxyToken = AOXC(address(new ERC1967Proxy(address(implementation), initData)));
+        proxyToken = AOXCMainEngine(address(new ERC1967Proxy(address(implementation), initData)));
     }
 
     /**
@@ -41,11 +41,11 @@ contract AOXCUpgradeTest is Test {
      */
     function testUpgradeAccessControl() public {
         // Yeni bir mantık (implementation) kontratı deploy et (V2 olarak düşünelim)
-        AOXC newImplementation = new AOXC();
+        AOXCMainEngine newImplementation = new AOXCMainEngine();
 
         // SENARYO 1: Yetkisiz bir adres (Attacker) yükseltme yapmaya çalışır
         vm.prank(attacker);
-        // Not: OpenZeppelin AccessControl hata mesajı veya özel AOXC hatası beklenir
+        // Not: OpenZeppelin AccessControl hata mesajı veya özel AOXCMainEngine hatası beklenir
         vm.expectRevert();
         proxyToken.upgradeToAndCall(address(newImplementation), "");
 
@@ -73,7 +73,7 @@ contract AOXCUpgradeTest is Test {
         token().mint(user, 500 ether);
 
         // Yükseltme yap
-        AOXC v2Impl = new AOXC();
+        AOXCMainEngine v2Impl = new AOXCMainEngine();
         vm.prank(admin);
         proxyToken.upgradeToAndCall(address(v2Impl), "");
 
@@ -81,8 +81,8 @@ contract AOXCUpgradeTest is Test {
         assertEq(token().balanceOf(user), 500 ether, "State lost during upgrade");
     }
 
-    /// @dev Yardımcı fonksiyon: proxyToken'ı AOXC tipinde döndürür
-    function token() internal view returns (AOXC) {
+    /// @dev Yardımcı fonksiyon: proxyToken'ı AOXCMainEngine tipinde döndürür
+    function token() internal view returns (AOXCMainEngine) {
         return proxyToken;
     }
 }

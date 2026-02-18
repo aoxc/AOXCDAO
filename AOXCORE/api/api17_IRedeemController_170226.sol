@@ -4,7 +4,7 @@ pragma solidity 0.8.33;
 /**
  * @title  IRedeemController
  * @notice Institutional interface for regulating token redemption protocols and daily liquidity quotas.
- * @dev    AOXC Ultimate Protocol: Vertical Alignment, High Technical Eloquence, and Audit-Ready NatSpec.
+ * @dev    AOXCMainEngine Ultimate Protocol: Vertical Alignment, High Technical Eloquence, and Audit-Ready NatSpec.
  */
 interface IRedeemController {
     // --- SECTION: EVENTS ---

@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Proprietary
-// Academic Grade - AOXC Operational Command Interface
+// Academic Grade - AOXCMainEngine Operational Command Interface
 pragma solidity 0.8.33;
 
 import {IAOXCAccessCoordinator} from "@interfaces/api03_IAoxcAccessCoordinator_170226.sol";

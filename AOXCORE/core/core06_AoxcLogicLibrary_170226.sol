@@ -3,7 +3,7 @@ pragma solidity 0.8.33;
 
 /**
  * @title AOXCLogicLib
- * @author AOXC Core Engineering
+ * @author AOXCMainEngine Core Engineering
  * @notice Centralized library for advanced DeFi calculations and reputation scaling.
  * @dev All calculations use 10000 as basis points (100%).
  */

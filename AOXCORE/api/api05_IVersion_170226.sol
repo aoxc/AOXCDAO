@@ -3,7 +3,7 @@ pragma solidity 0.8.33;
 
 /**
  * @title IVersion
- * @dev Tüm AOXC kontratları için standart versiyon arayüzü.
+ * @dev Tüm AOXCMainEngine kontratları için standart versiyon arayüzü.
  */
 interface IVersion {
     function getVersion() external view returns (string memory);

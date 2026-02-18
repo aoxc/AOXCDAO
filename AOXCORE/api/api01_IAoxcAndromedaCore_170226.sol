@@ -5,7 +5,7 @@ pragma solidity 0.8.33;
 /**
  * @title IAOXCAndromedaCore
  * @author AOXCDAO Institutional Engineering
- * @notice Central coordination interface for the AOXC v2 Prime "Andromeda" Ecosystem.
+ * @notice Central coordination interface for the AOXCMainEngine v2 Prime "Andromeda" Ecosystem.
  * @dev Defines the communication protocols between the 11 functional hangars.
  * This interface serves as the "Single Source of Truth" for module authorization
  * and protocol state management, ensuring MiCA and FinCEN compliance through
@@ -33,7 +33,7 @@ interface IAOXCAndromedaCore {
     // --- 📊 State Enums ---
 
     /**
-     * @notice Operational states of the AOXC ecosystem.
+     * @notice Operational states of the AOXCMainEngine ecosystem.
      * @custom:state-definition ACTIVE Normal protocol operations.
      * @custom:state-definition EMERGENCY_PAUSE Global circuit breaker triggered.
      * @custom:state-definition UPGRADE_MODE Controlled migration for smart contract upgrades.

@@ -4,7 +4,7 @@ pragma solidity 0.8.33;
 /**
  * @title  IMintController
  * @notice Institutional interface for regulating token issuance protocols and fiscal yearly quotas.
- * @dev    AOXC Ultimate Protocol: Vertical Alignment, High Technical Eloquence, and Audit-Ready NatSpec.
+ * @dev    AOXCMainEngine Ultimate Protocol: Vertical Alignment, High Technical Eloquence, and Audit-Ready NatSpec.
  */
 interface IMintController {
     // --- SECTION: EVENTS ---

@@ -3,7 +3,7 @@ pragma solidity 0.8.33;
 
 /**
  * @title AOXCBridgeAdapter
- * @author AOXC Core Engineering
+ * @author AOXCMainEngine Core Engineering
  * @notice Enterprise-grade cross-chain liquidity gateway with 26-channel forensic telemetry.
  * @dev Optimized for Akdeniz V2. Features: Yul-based hashing, wrapped modifiers, and zero-lint compliance.
  */
@@ -18,7 +18,7 @@ import {SafeERC20, IERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeE
 import {IBridgeAdapter} from "@interfaces/api20_IBridgeAdapter_170226.sol";
 import {IMonitoringHub} from "@api/api29_IMonitoringHub_170226.sol";
 import {IIdentityRegistry} from "@interfaces/api06_IIdentityRegistry_170226.sol";
-import {AOXCBaseReporter} from "data/data08_AoxcBaseReporter_170226.sol";
+import {AOXCBaseReporter} from "@data/data08_AoxcBaseReporter_170226.sol";
 
 contract AOXCBridgeAdapter is
     IBridgeAdapter,

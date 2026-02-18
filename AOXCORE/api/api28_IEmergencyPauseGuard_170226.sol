@@ -4,7 +4,7 @@ pragma solidity 0.8.33;
 /**
  * @title  IEmergencyPauseGuard
  * @notice Institutional interface for Guardian-initiated circuit breaker mechanisms and global state suspension.
- * @dev    AOXC Ultimate Protocol: Vertical Alignment, High Technical Eloquence, and Audit-Ready NatSpec.
+ * @dev    AOXCMainEngine Ultimate Protocol: Vertical Alignment, High Technical Eloquence, and Audit-Ready NatSpec.
  */
 interface IEmergencyPauseGuard {
     // --- SECTION: EVENTS ---

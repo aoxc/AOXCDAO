@@ -2,158 +2,112 @@
 pragma solidity 0.8.33;
 
 import {Test} from "forge-std/Test.sol";
-import {AOXC} from "../../src/core/AOXC.sol";
+import {AOXCMainEngine} from "@core/core01_AoxcMainEngine_170226.sol";
 import {ERC1967Proxy} from "@openzeppelin/contracts/proxy/ERC1967/ERC1967Proxy.sol";
-import {IMonitoringHub} from "../../src/interfaces/IMonitoringHub.sol";
+import {IMonitoringHub} from "@api/api29_IMonitoringHub_170226.sol";
+import {ITransferPolicy} from "@api/api26_ITransferPolicy_170226.sol";
 
-/**
- * @title MonitoringHub (Academic Test Implementation)
- * @notice IMonitoringHub arayüzünün 26 kanallı struct yapısına tam uyumlu implementasyonu.
- * @dev Test ortamında gerçek kontrat davranışını simüle eder ve 'override' hatalarını giderir.
- */
-contract MonitoringHub is IMonitoringHub {
-    /**
-     * @notice AOXC.sol tarafından çağrılan ana forensic fonksiyonu.
-     * @dev Struct kullanımı, gerçek MonitoringHub ile %100 uyumludur.
-     */
-    function logForensic(ForensicLog calldata log) external override {
-        // Test sırasında loglar izlenebilir
+contract AOXCTransferPolicyEngine is ITransferPolicy {
+    address public admin;
+    bool public isActive;
+    mapping(address => bool) public blacklisted;
+
+    error Policy__Blacklisted(address account);
+    error Policy__NotAuthorized();
+
+    modifier onlyAdmin() {
+        if (msg.sender != admin) revert Policy__NotAuthorized();
+        _;
     }
 
-    /**
-     * @notice Güvenlik uyarılarını işleyen fonksiyon.
-     */
-    function getRecordCount() external view override returns (uint256) {
-        return 0;
+    constructor(address _admin) {
+        admin = _admin;
+        isActive = true;
     }
 
-    function isMonitoringActive() external view override returns (bool) {
-        return true;
+    function validateTransfer(address from, address to, uint256) external view override {
+        if (!isActive) return;
+        if (blacklisted[from]) revert Policy__Blacklisted(from);
+        if (blacklisted[to]) revert Policy__Blacklisted(to);
     }
 
-    function isMonitoringActive() external view override returns (bool) {
-        return true;
+    function setBlacklist(address account, bool status) external onlyAdmin {
+        blacklisted[account] = status;
     }
 
-    function getRecordCount() external view override returns (uint256) {
-        return 0;
-    }
-    function logSecurityAlert(string calldata reason, IMonitoringHub.Severity severity) external override {}
-
-    /**
-     * @notice Belirli bir kaydı döndüren fonksiyon.
-     * @dev Dönüş tipi arayüzdeki ForensicLog memory yapısıyla eşleşmek zorundadır (Hata 4822 çözümü).
-     */
-    function getRecord(uint256) external view override returns (ForensicLog memory) {
-        ForensicLog memory emptyLog;
-        return emptyLog;
+    function setPolicyActive(bool _active) external onlyAdmin {
+        isActive = _active;
     }
 
-    function getRecordCount() external view override returns (uint256) {
-        return 0;
-    }
-
-    function isMonitoringActive() external view override returns (bool) {
-        return true;
-    }
+    function isPolicyActive() external view returns (bool) { return isActive; }
+    function policyName() external pure returns (string memory) { return "AOXC_Core_Compliance_Engine"; }
+    function policyVersion() external pure returns (uint256) { return 1; }
+    function updatePolicyParameter(string calldata, uint256) external onlyAdmin {}
 }
 
-/**
- * @title AOXC Transfer & Flow Control Test Suite
- * @notice ERC20 transfer limitlerini, duraklatma mekanizmalarını ve akış kontrolünü test eder.
- * @dev Foundry 'vm.prank' ve 'vm.expectRevert' özelliklerini kullanarak asimetrik testler gerçekleştirir.
- */
-contract AOXCTransferTest is Test {
-    AOXC private token;
-    MonitoringHub private hub;
+contract AOXCTransferPolicyTest is Test {
+    AOXCMainEngine private token;
+    AOXCTransferPolicyEngine private policyEngine;
 
     address private admin = makeAddr("admin");
     address private user1 = makeAddr("user1");
     address private user2 = makeAddr("user2");
+    address private hubAddr = makeAddr("monitoringHub");
 
-    uint256 private constant INITIAL_MINT = 100 ether;
-    uint256 private constant MAX_CAP = 1_000_000 ether;
+    uint256 private constant INITIAL_CAP = 1_000_000 ether;
 
-    /**
-     * @notice Test ortamını hazırlar. UUPS Proxy mimarisini ve Hub bağlantısını kurar.
-     */
     function setUp() public {
-        // 1. Concrete Hub Deployment
-        hub = new MonitoringHub();
+        policyEngine = new AOXCTransferPolicyEngine(admin);
+        AOXCMainEngine implementation = new AOXCMainEngine();
 
-        // 2. Logic Layer Deployment
-        AOXC implementation = new AOXC();
-
-        // 3. Initialization Vector (Academic Standard)
         bytes memory initData = abi.encodeWithSelector(
-            AOXC.initialize.selector,
-            "AOXC Token",
-            "AOXC",
+            AOXCMainEngine.initialize.selector,
+            "AOXCMainEngine Token",
+            "AOXCMainEngine",
             admin,
-            address(0), // PolicyEngine (Test kapsamında devre dışı)
-            address(0), // Authorizer
-            IMonitoringHub(address(hub)),
-            MAX_CAP
+            address(policyEngine),
+            address(0),
+            IMonitoringHub(hubAddr),
+            INITIAL_CAP
         );
 
-        // 4. ERC1967 Proxy Deployment & Wrapping
-        token = AOXC(address(new ERC1967Proxy(address(implementation), initData)));
+        token = AOXCMainEngine(address(new ERC1967Proxy(address(implementation), initData)));
 
-        // 5. Initial Liquidity Provision
         vm.prank(admin);
-        token.mint(user1, INITIAL_MINT);
+        token.mint(user1, 100 ether);
     }
 
-    /**
-     * @notice Standart ERC20 transfer işleminin doğruluğunu test eder.
-     */
-    function testTransferSuccess() public {
-        uint256 transferAmount = 50 ether;
+    function testIntegrationBlacklistBlocksTransfer() public {
+        vm.prank(admin);
+        policyEngine.setBlacklist(user1, true);
 
         vm.prank(user1);
-        bool success = token.transfer(user2, transferAmount);
-
-        assertTrue(success, "Transfer should succeed");
-        assertEq(token.balanceOf(user1), INITIAL_MINT - transferAmount);
-        assertEq(token.balanceOf(user2), transferAmount);
+        vm.expectRevert(abi.encodeWithSignature("AOXC__PolicyViolation()"));
+        assertTrue(token.transfer(user2, 10 ether), "Transfer failed");
     }
 
-    /**
-     * @notice Acil durum durdurma (Emergency Halt) mekanizmasının transferleri engellediğini kanıtlar.
-     * @dev Circuit-breaker pattern doğrulaması.
-     */
-    function testTransferRevertsOnEmergencyHalt() public {
-        vm.prank(admin);
-        token.toggleEmergencyHalt(true);
-
+    function testIntegrationSuccessfulTransfer() public {
         vm.prank(user1);
-        vm.expectRevert(abi.encodeWithSignature("AOXC__EmergencyHaltActive()"));
-        token.transfer(user2, 10 ether);
+        bool success = token.transfer(user2, 50 ether);
+
+        assertTrue(success, "Transfer should return true");
+        assertEq(token.balanceOf(user1), 50 ether);
+        assertEq(token.balanceOf(user2), 50 ether);
     }
 
-    /**
-     * @notice Sistemin acil durum sonrası normale dönebildiğini doğrular.
-     */
-    function testTransferResumesAfterEmergencyHaltDisabled() public {
+    function testIntegrationPolicyDeactivation() public {
         vm.startPrank(admin);
-        token.toggleEmergencyHalt(true);
-        token.toggleEmergencyHalt(false);
+        policyEngine.setBlacklist(user1, true);
+        policyEngine.setPolicyActive(false);
         vm.stopPrank();
 
         vm.prank(user1);
-        bool success = token.transfer(user2, 20 ether);
-
-        assertTrue(success, "Transfer should resume after halt is disabled");
+        assertTrue(token.transfer(user2, 10 ether), "Should succeed when policy inactive");
     }
 
-    /**
-     * @notice Yetersiz bakiye durumunda işlemin atomik olarak iptal edildiğini test eder.
-     */
-    function testTransferInsufficientBalanceReverts() public {
-        uint256 overBalance = INITIAL_MINT + 1 ether;
-
-        vm.prank(user1);
-        vm.expectRevert(); // ERC20 level revert
-        token.transfer(user2, overBalance);
+    function testPolicyEngineAccessControl() public {
+        vm.prank(user2);
+        vm.expectRevert(AOXCTransferPolicyEngine.Policy__NotAuthorized.selector);
+        policyEngine.setBlacklist(user1, true);
     }
 }

@@ -7,14 +7,14 @@ import {PausableUpgradeable} from "@openzeppelin-upgradeable/utils/PausableUpgra
 import {UUPSUpgradeable} from "@openzeppelin-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
-import {AOXCMainEngine} from "core/core01_AoxcMainEngine_170226.sol";
+import {AOXCMainEngine} from "@core/core01_AoxcMainEngine_170226.sol";
 import {AssetBackingLedger} from "./bank03_AssetBackingLedger_170226.sol";
 import {IMonitoringHub} from "@api/api29_IMonitoringHub_170226.sol";
 import {IReputationManager} from "@interfaces/api08_IReputationManager_170226.sol";
 
 /**
  * @title AOXCRedeemController
- * @author AOXC Protocol Team
+ * @author AOXCMainEngine Protocol Team
  * @notice Token imhası ve varlık tahliye yönetimi.
  */
 contract AOXCRedeemController is
@@ -27,7 +27,7 @@ contract AOXCRedeemController is
     bytes32 public constant ADMIN_ROLE = keccak256("AOXC_ADMIN_ROLE");
     bytes32 public constant REDEEMER_ROLE = keccak256("AOXC_REDEEMER_ROLE");
 
-    AOXC public token;
+    AOXCMainEngine public token;
     AssetBackingLedger public ledger;
     IMonitoringHub public monitoringHub;
     IReputationManager public reputationManager;
@@ -62,7 +62,7 @@ contract AOXCRedeemController is
         _grantRole(ADMIN_ROLE, admin);
         _grantRole(REDEEMER_ROLE, admin);
 
-        token = AOXC(_token);
+        token = AOXCMainEngine(_token);
         ledger = AssetBackingLedger(_ledger);
         monitoringHub = IMonitoringHub(_monitoringHub);
         reputationManager = IReputationManager(_reputationManager);

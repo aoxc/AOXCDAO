@@ -13,7 +13,7 @@ import {AOXCErrors} from "@libraries/core08_AoxcErrorDefinitions_170226.sol";
 
 /**
  * @title ReputationManager
- * @author AOXC Core Engineering
+ * @author AOXCMainEngine Core Engineering
  * @notice Akdeniz V2 Reputation Engine - Full 26-Channel Forensic Integration.
  */
 contract ReputationManager is

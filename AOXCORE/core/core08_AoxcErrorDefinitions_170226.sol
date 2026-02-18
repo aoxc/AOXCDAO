@@ -3,8 +3,8 @@ pragma solidity 0.8.33;
 
 /**
  * @title AOXCErrors
- * @author AOXC Core Engineering
- * @notice Centralized library for all AOXC Protocol custom errors.
+ * @author AOXCMainEngine Core Engineering
+ * @notice Centralized library for all AOXCMainEngine Protocol custom errors.
  * @dev Optimized for gas efficiency and Akdeniz V2 26-channel forensic logging.
  * Categories: 1xxx (Access), 2xxx (Finance), 3xxx (Forensic), 4xxx (Assets), 5xxx (Gov), 6xxx (Infra).
  */

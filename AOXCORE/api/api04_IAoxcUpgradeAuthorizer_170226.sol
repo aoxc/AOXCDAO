@@ -3,8 +3,8 @@ pragma solidity 0.8.33;
 
 /**
  * @title  IAOXCUpgradeAuthorizer
- * @notice Institutional interface for the AOXC upgrade authorization logic and logic mutations.
- * @dev    AOXC Ultimate Protocol: Vertical Alignment, High Technical Eloquence, and Audit-Ready NatSpec.
+ * @notice Institutional interface for the AOXCMainEngine upgrade authorization logic and logic mutations.
+ * @dev    AOXCMainEngine Ultimate Protocol: Vertical Alignment, High Technical Eloquence, and Audit-Ready NatSpec.
  */
 interface IAOXCUpgradeAuthorizer {
     // --- SECTION: EVENTS ---

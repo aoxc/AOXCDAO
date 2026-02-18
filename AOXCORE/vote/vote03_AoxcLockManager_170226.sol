@@ -13,7 +13,7 @@ import {IMonitoringHub} from "@api/api29_IMonitoringHub_170226.sol";
 
 /**
  * @title AOXCLockManager
- * @author AOXC Core Engineering
+ * @author AOXC_MAIN_ENGINE Core Engineering
  * @notice Multi-batch asset locking engine for reputation mining and ecosystem power.
  * @dev Integrated with 26-channel MonitoringHub and academic multiplier scaling.
  */
@@ -26,7 +26,7 @@ contract AOXCLockManager is ReentrancyGuard, AccessControl, Pausable {
 
     // --- Structures ---
     struct LockBatch {
-        uint256 amount; // Locked AOXC amount
+        uint256 amount; // Locked AOXC_MAIN_ENGINE amount
         uint256 startTime; // When the lock started
         uint256 unlockTime; // Maturity date
         uint256 weight; // Calculated multiplier weight (10000 = 1.0x)
@@ -34,7 +34,7 @@ contract AOXCLockManager is ReentrancyGuard, AccessControl, Pausable {
     }
 
     // --- Immutables (SCREAMING_SNAKE_CASE) ---
-    IERC20 public immutable AOXC;
+    IERC20 public immutable AOXC_MAIN_ENGINE;
     IReputationManager public immutable REPUTATION_MANAGER;
     IMonitoringHub public immutable MONITORING_HUB;
 
@@ -60,7 +60,7 @@ contract AOXCLockManager is ReentrancyGuard, AccessControl, Pausable {
             revert AOXCErrors.ZeroAddressDetected();
         }
 
-        AOXC = IERC20(_aoxc);
+        AOXC_MAIN_ENGINE = IERC20(_aoxc);
         REPUTATION_MANAGER = IReputationManager(_rep);
         MONITORING_HUB = IMonitoringHub(_hub);
 
@@ -72,7 +72,7 @@ contract AOXCLockManager is ReentrancyGuard, AccessControl, Pausable {
     // --- Core Functions ---
 
     /**
-     * @notice Locks AOXC in specific batches to earn reputation and ecosystem power.
+     * @notice Locks AOXC_MAIN_ENGINE in specific batches to earn reputation and ecosystem power.
      * @param _amount Amount to lock.
      * @param _duration Duration in seconds.
      */
@@ -86,7 +86,7 @@ contract AOXCLockManager is ReentrancyGuard, AccessControl, Pausable {
         uint256 weight = _calculateWeight(_amount, _duration);
 
         // 2. Transfer Assets
-        AOXC.safeTransferFrom(msg.sender, address(this), _amount);
+        AOXC_MAIN_ENGINE.safeTransferFrom(msg.sender, address(this), _amount);
 
         // 3. Register Batch
         userLocks[msg.sender].push(
@@ -141,7 +141,7 @@ contract AOXCLockManager is ReentrancyGuard, AccessControl, Pausable {
         }
 
         // Interaction
-        AOXC.safeTransfer(msg.sender, batch.amount);
+        AOXC_MAIN_ENGINE.safeTransfer(msg.sender, batch.amount);
 
         // Notify Reputation Manager
         try REPUTATION_MANAGER.processAction(msg.sender, keccak256("TOKEN_UNLOCK")) {
@@ -181,7 +181,7 @@ contract AOXCLockManager is ReentrancyGuard, AccessControl, Pausable {
             source: address(this),
             actor: msg.sender,
             origin: tx.origin,
-            related: address(AOXC),
+            related: address(AOXC_MAIN_ENGINE),
             severity: sev,
             category: cat,
             details: det,

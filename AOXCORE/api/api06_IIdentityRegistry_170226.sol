@@ -4,7 +4,7 @@ pragma solidity 0.8.33;
 /**
  * @title  IIdentityRegistry
  * @notice Institutional interface for identity verification, KYC telemetry, and account registry.
- * @dev    AOXC Ultimate Protocol: Vertical Alignment, High Technical Eloquence, and Audit-Ready NatSpec.
+ * @dev    AOXCMainEngine Ultimate Protocol: Vertical Alignment, High Technical Eloquence, and Audit-Ready NatSpec.
  */
 interface IIdentityRegistry {
     // --- SECTION: EVENTS ---

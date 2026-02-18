@@ -3,7 +3,7 @@ pragma solidity 0.8.33;
 
 /**
  * @title IAOXCStorage
- * @author AOXC Core Engineering
+ * @author AOXCMainEngine Core Engineering
  * @notice Akdeniz V2 Forensic Storage Interface.
  * @dev Defnes the data structure for namespaced storage.
  */

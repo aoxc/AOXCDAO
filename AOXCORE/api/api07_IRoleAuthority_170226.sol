@@ -3,7 +3,7 @@ pragma solidity 0.8.33;
 
 /**
  * @title IRoleAuthority
- * @author AOXC Core Engineering
+ * @author AOXCMainEngine Core Engineering
  * @notice Interface for the central access control and authority management.
  */
 interface IRoleAuthority {

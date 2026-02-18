@@ -7,13 +7,13 @@ import {PausableUpgradeable} from "@openzeppelin-upgradeable/utils/PausableUpgra
 import {UUPSUpgradeable} from "@openzeppelin-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 
 import {IMonitoringHub} from "@api/api29_IMonitoringHub_170226.sol";
-import {AOXCBaseReporter} from "data/data08_AoxcBaseReporter_170226.sol";
+import {AOXCBaseReporter} from "@data/data08_AoxcBaseReporter_170226.sol";
 import {AOXCErrors} from "@libraries/core08_AoxcErrorDefinitions_170226.sol";
 
 /**
  * @title AOXCGuardianRegistry
- * @author AOXC Core Engineering
- * @notice Dynamic management of Guardians (Sentinels) within the AOXC ecosystem.
+ * @author AOXCMainEngine Core Engineering
+ * @notice Dynamic management of Guardians (Sentinels) within the AOXCMainEngine ecosystem.
  * @dev Re-engineered for Akdeniz V2 Forensic Logging with wrapped modifiers for lint compliance.
  */
 contract AOXCGuardianRegistry is

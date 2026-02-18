@@ -3,8 +3,8 @@ pragma solidity 0.8.33;
 
 /**
  * @title  ITreasury
- * @notice Interface defining the full institutional liquidity operations for the AOXC ecosystem.
- * @dev    AOXC Ultimate Protocol: Multi-Asset Vertical Alignment and Secure Liquidity Management.
+ * @notice Interface defining the full institutional liquidity operations for the AOXCMainEngine ecosystem.
+ * @dev    AOXCMainEngine Ultimate Protocol: Multi-Asset Vertical Alignment and Secure Liquidity Management.
  */
 interface ITreasury {
     // --- SECTION: EVENTS ---

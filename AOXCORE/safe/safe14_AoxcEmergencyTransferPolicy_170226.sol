@@ -7,12 +7,12 @@ import {UUPSUpgradeable} from "@openzeppelin-upgradeable/proxy/utils/UUPSUpgrade
 
 import {ITransferPolicy} from "@api/api26_ITransferPolicy_170226.sol";
 import {IMonitoringHub} from "@api/api29_IMonitoringHub_170226.sol";
-import {AOXCBaseReporter} from "data/data08_AoxcBaseReporter_170226.sol";
+import {AOXCBaseReporter} from "@data/data08_AoxcBaseReporter_170226.sol";
 import {AOXCErrors} from "@libraries/core08_AoxcErrorDefinitions_170226.sol";
 
 /**
  * @title AOXCEmergencyTransferPolicy
- * @author AOXC Core Engineering
+ * @author AOXCMainEngine Core Engineering
  * @notice High-security transfer policy engine for emergency freezes and global limits.
  * @dev Re-engineered for Akdeniz V2 with wrapped modifiers for lint compliance and gas optimization.
  */

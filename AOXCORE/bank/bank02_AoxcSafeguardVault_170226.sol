@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Proprietary
-// Academic Grade - AOXC Independent Safeguard & Compensation Vault
+// Academic Grade - AOXCMainEngine Independent Safeguard & Compensation Vault
 pragma solidity 0.8.33;
 
 import {SafeERC20, IERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
@@ -10,7 +10,7 @@ import {AOXCErrors} from "@libraries/core08_AoxcErrorDefinitions_170226.sol";
 
 /**
  * @title AOXCSafeguardVault
- * @author AOXC Core Engineering
+ * @author AOXCMainEngine Core Engineering
  * @notice Segregated reserve for autonomous victim compensation and emergency relief.
  * @dev Fully integrated with the MonitoringHub for forensic accountability.
  */

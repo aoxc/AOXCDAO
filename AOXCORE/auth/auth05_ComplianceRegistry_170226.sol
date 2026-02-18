@@ -13,8 +13,8 @@ import {AOXCErrors} from "@libraries/core08_AoxcErrorDefinitions_170226.sol";
 
 /**
  * @title AOXCComplianceRegistry
- * @author AOXC Core Engineering
- * @notice Centralized compliance and blacklist management for the AOXC ecosystem.
+ * @author AOXCMainEngine Core Engineering
+ * @notice Centralized compliance and blacklist management for the AOXCMainEngine ecosystem.
  * @dev Fully implements IComplianceRegistry with 26-channel forensic monitoring.
  * Provides granular control over restricted accounts with reason-based blacklisting.
  */

@@ -6,12 +6,12 @@ import {AccessControlUpgradeable} from "@openzeppelin-upgradeable/access/AccessC
 import {UUPSUpgradeable} from "@openzeppelin-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 
 import {IMonitoringHub} from "@api/api29_IMonitoringHub_170226.sol";
-import {AOXCBaseReporter} from "data/data08_AoxcBaseReporter_170226.sol";
+import {AOXCBaseReporter} from "@data/data08_AoxcBaseReporter_170226.sol";
 import {AOXCErrors} from "@libraries/core08_AoxcErrorDefinitions_170226.sol";
 
 /**
  * @title RiskSignals
- * @author AOXC Core Engineering
+ * @author AOXCMainEngine Core Engineering
  * @notice Enterprise-grade system for processing 26-channel risk telemetry.
  * @dev Re-engineered for Akdeniz V2. Eliminates all compiler warnings and lint notes.
  */

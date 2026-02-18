@@ -2,7 +2,7 @@
 /**
  * @title ANDROMEDACORE Institutional Guard
  * @author AOXCDAO Institutional Engineering
- * @notice Central Sector and Policy Layer for the AOXC v2 Prime Ecosystem.
+ * @notice Central Sector and Policy Layer for the AOXCMainEngine v2 Prime Ecosystem.
  * @dev Optimized for OpenZeppelin 5.5.x.
  * 🎓 LEVEL: Pro Ultimate Academic (Full Functional Security)
  */

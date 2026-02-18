@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Proprietary
-// Academic Grade - AOXC Catastrophic Recovery & Audit Protocol (Optimized)
+// Academic Grade - AOXCMainEngine Catastrophic Recovery & Audit Protocol (Optimized)
 pragma solidity 0.8.33;
 
 import {IAOXCAccessCoordinator} from "@interfaces/api03_IAoxcAccessCoordinator_170226.sol";

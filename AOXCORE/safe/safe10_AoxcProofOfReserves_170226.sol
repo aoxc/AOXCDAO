@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-// Academic Grade - AOXC Ultimate Pro Standard
+// Academic Grade - AOXCMainEngine Ultimate Pro Standard
 pragma solidity 0.8.33;
 
 import {AOXCConstants} from "@libraries/core07_AoxcConstants_170226.sol";
@@ -10,7 +10,7 @@ import {AccessControl} from "@openzeppelin/contracts/access/AccessControl.sol";
 
 /**
  * @title ProofOfReserves
- * @author AOXC Core Engineering
+ * @author AOXCMainEngine Core Engineering
  * @notice Real-time on-chain verification of asset backing vs total supply.
  * @dev Integrates with Ledger and Oracle to provide a definitive solvency status.
  * Optimized for Solidity 0.8.33 with strict adherence to Forge linting standards.

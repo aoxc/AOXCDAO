@@ -24,7 +24,7 @@ interface IPyth {
 
 /**
  * @title AOXCSwap
- * @author AOXC Core Engineering
+ * @author AOXCMainEngine Core Engineering
  * @notice Ultimate swap infrastructure with 26-channel DAO Risk Engine and Forensic Hub.
  * @dev Fully compliant with forge-lint standards and Akdeniz V2 security protocols.
  */
@@ -71,7 +71,7 @@ contract AOXCSwap is ReentrancyGuard, Pausable, AccessControl {
 
     /**
      * @notice Primary Swap Entrypoint.
-     * @param minAoxcOut Minimum amount of AOXC expected (Lint: mixedCase compliant).
+     * @param minAoxcOut Minimum amount of AOXCMainEngine expected (Lint: mixedCase compliant).
      */
     function swapOkBtoAoxc(uint256 minAoxcOut) external payable nonReentrant whenNotPaused {
         uint256 amountIn = msg.value;

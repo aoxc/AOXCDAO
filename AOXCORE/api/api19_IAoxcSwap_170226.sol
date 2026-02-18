@@ -3,7 +3,7 @@ pragma solidity 0.8.33;
 
 /**
  * @title IAOXCSwap
- * @author AOXC Core Engineering
+ * @author AOXCMainEngine Core Engineering
  * @notice Interface for the protocol-wide liquidity exchange engine.
  */
 interface IAOXCSwap {

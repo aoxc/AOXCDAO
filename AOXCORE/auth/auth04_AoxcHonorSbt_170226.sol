@@ -11,8 +11,8 @@ import {AOXCErrors} from "@libraries/core08_AoxcErrorDefinitions_170226.sol";
 
 /**
  * @title AOXCHonorSBT
- * @author AOXC Core Engineering
- * @notice Soulbound Reputation NFT (SBT) for the AOXC Meritocracy.
+ * @author AOXCMainEngine Core Engineering
+ * @notice Soulbound Reputation NFT (SBT) for the AOXCMainEngine Meritocracy.
  * @dev Levels: 1: Member, 2: Contributor, 3: Expert, 4: Legend.
  * High-fidelity forensic logging integrated for merit changes.
  */
@@ -46,7 +46,7 @@ contract AOXCHonorSBT is Initializable, ERC721Upgradeable, AccessControlUpgradea
             revert AOXCErrors.ZeroAddressDetected();
         }
 
-        __ERC721_init("AOXC Honor", "AHONOR");
+        __ERC721_init("AOXCMainEngine Honor", "AHONOR");
         __AccessControl_init();
 
         _grantRole(DEFAULT_ADMIN_ROLE, admin);

@@ -15,8 +15,8 @@ import {AOXCErrors} from "@libraries/core08_AoxcErrorDefinitions_170226.sol";
 
 /**
  * @title AOXCMonitoringHub
- * @author AOXC Core Engineering
- * @notice Centralized hyper-forensic hub for the AOXC ecosystem.
+ * @author AOXCMainEngine Core Engineering
+ * @notice Centralized hyper-forensic hub for the AOXCMainEngine ecosystem.
  * @dev Implements the 26-channel data schema and integrated risk filtering.
  */
 contract AOXCMonitoringHub is

@@ -3,8 +3,8 @@ pragma solidity 0.8.33;
 
 /**
  * @title  IGovernance
- * @notice Institutional interface for AOXC decentralized governance and protocol orchestration.
- * @dev    AOXC Ultimate Protocol: Vertical Alignment, High Technical Eloquence, and Audit-Ready NatSpec.
+ * @notice Institutional interface for AOXCMainEngine decentralized governance and protocol orchestration.
+ * @dev    AOXCMainEngine Ultimate Protocol: Vertical Alignment, High Technical Eloquence, and Audit-Ready NatSpec.
  */
 interface IGovernance {
     // --- SECTION: EVENTS ---

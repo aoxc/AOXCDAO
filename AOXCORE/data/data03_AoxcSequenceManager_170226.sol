@@ -6,7 +6,7 @@ import {AOXCConstants} from "@libraries/core07_AoxcConstants_170226.sol";
 
 /**
  * @title SequenceManager
- * @notice Maintains a global, immutable sequence of forensic event IDs for the AOXC ecosystem.
+ * @notice Maintains a global, immutable sequence of forensic event IDs for the AOXCMainEngine ecosystem.
  * @dev Ensuring that no two forensic logs can share the same global index.
  */
 contract SequenceManager is AccessControl {
@@ -27,7 +27,7 @@ contract SequenceManager is AccessControl {
      * @return sequenceId The globally unique ID for the forensic log.
      */
     function nextSequenceId(address reporter) external returns (uint256 sequenceId) {
-        // Only authorized AOXC contracts can increment the global sequence
+        // Only authorized AOXCMainEngine contracts can increment the global sequence
         // For Pro Ultimate, we could add a specific REPORTER_ROLE here.
 
         unchecked {

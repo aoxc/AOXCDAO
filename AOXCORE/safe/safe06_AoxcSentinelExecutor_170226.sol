@@ -9,7 +9,7 @@ import {Initializable} from "@openzeppelin-upgradeable/proxy/utils/Initializable
 
 /**
  * @title AOXCSentinelExecutor
- * @author AOXC Core Engineering
+ * @author AOXCMainEngine Core Engineering
  * @notice Automated sentinel that monitors forensic data and triggers circuit breakers.
  * @dev Updated to match interface (0-arg pause) and fixed lint warnings.
  */

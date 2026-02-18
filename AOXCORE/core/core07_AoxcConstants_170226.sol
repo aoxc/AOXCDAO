@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: MIT
-// Academic Grade - AOXC Ultimate Pro Standard
+// Academic Grade - AOXCMainEngine Ultimate Pro Standard
 pragma solidity 0.8.33;
 
 /**
  * @title AOXCConstants
- * @author AOXC Core Engineering
+ * @author AOXCMainEngine Core Engineering
  * @notice Centralized library for system-wide constants, roles, and financial parameters.
  * @dev Optimized for Solidity 0.8.33. All constants are evaluated at compile-time to save gas.
  */

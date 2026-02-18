@@ -6,13 +6,13 @@ import {AccessControlUpgradeable} from "@openzeppelin-upgradeable/access/AccessC
 import {UUPSUpgradeable} from "@openzeppelin-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 
 import {IMonitoringHub} from "@api/api29_IMonitoringHub_170226.sol";
-import {AOXCBaseReporter} from "data/data08_AoxcBaseReporter_170226.sol";
+import {AOXCBaseReporter} from "@data/data08_AoxcBaseReporter_170226.sol";
 import {AOXCErrors} from "@libraries/core08_AoxcErrorDefinitions_170226.sol";
 
 /**
  * @title AOXCEmergencyPauseGuard
- * @author AOXC Core Engineering
- * @notice "Iron Fist" Circuit Breaker for the AOXC Ecosystem.
+ * @author AOXCMainEngine Core Engineering
+ * @notice "Iron Fist" Circuit Breaker for the AOXCMainEngine Ecosystem.
  * @dev Re-engineered for Akdeniz V2 with wrapped modifiers for lint compliance and gas optimization.
  * Performance: Optimized bytecode via internal calls in modifiers.
  */

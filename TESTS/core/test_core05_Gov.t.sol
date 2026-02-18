@@ -2,17 +2,17 @@
 pragma solidity 0.8.33;
 
 import {Test} from "forge-std/Test.sol";
-import {AOXC} from "../../src/core/AOXC.sol";
+import {AOXCMainEngine} from "@core/core01_AoxcMainEngine_170226.sol";
 import {ERC1967Proxy} from "@openzeppelin/contracts/proxy/ERC1967/ERC1967Proxy.sol";
 
 /**
- * @title AOXC Governance & Voting Power Test Suite
+ * @title AOXCMainEngine Governance & Voting Power Test Suite
  * @notice Delegasyon, checkpoint yönetimi ve oy gücü dinamiklerini doğrular.
  * @dev OpenZeppelin 5.5.x ERC20Votes standartlarına ve Foundry en iyi pratiklerine uygundur.
  */
 contract AOXCGovernanceTest is Test {
-    /// @notice Proxy üzerinden erişilen AOXC token örneği
-    AOXC private token;
+    /// @notice Proxy üzerinden erişilen AOXCMainEngine token örneği
+    AOXCMainEngine private token;
 
     /// @dev Test kimlikleri
     address private admin = makeAddr("admin");
@@ -28,13 +28,13 @@ contract AOXCGovernanceTest is Test {
      */
     function setUp() public {
         // 1. Implementation Katmanı
-        AOXC implementation = new AOXC();
+        AOXCMainEngine implementation = new AOXCMainEngine();
 
         // 2. Initialization Verisi (OpenZeppelin 5.5.x standartları)
         bytes memory initData = abi.encodeWithSelector(
-            AOXC.initialize.selector,
-            "AOXC Token",
-            "AOXC",
+            AOXCMainEngine.initialize.selector,
+            "AOXCMainEngine Token",
+            "AOXCMainEngine",
             admin,
             address(0), // Policy Engine pasif
             address(0), // Authorizer pasif
@@ -43,7 +43,7 @@ contract AOXCGovernanceTest is Test {
         );
 
         // 3. Proxy Deploy ve Interface Sarmalama
-        token = AOXC(address(new ERC1967Proxy(address(implementation), initData)));
+        token = AOXCMainEngine(address(new ERC1967Proxy(address(implementation), initData)));
 
         // 4. İlk Likidite Sağlama
         vm.prank(admin);

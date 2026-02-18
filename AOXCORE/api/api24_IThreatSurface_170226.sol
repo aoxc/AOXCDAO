@@ -4,7 +4,7 @@ pragma solidity 0.8.33;
 /**
  * @title  IThreatSurface
  * @notice Interface for formalizing attack vectors and proactive defense telemetry.
- * @dev    AOXC Ultimate Protocol Standard.
+ * @dev    AOXCMainEngine Ultimate Protocol Standard.
  */
 interface IThreatSurface {
     // --- SECTION: ENUMS ---

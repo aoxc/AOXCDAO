@@ -2,7 +2,7 @@
 pragma solidity 0.8.33;
 
 import {Test, console} from "forge-std/Test.sol";
-import {ANDROMEDACORE} from "@core/ANDROMEDACORE.sol";
+import {ANDROMEDACORE} from "@core/core04_AndromedaCore_170226.sol";
 
 contract BlackHoleStressTest is Test {
     ANDROMEDACORE public amiralGemisi;

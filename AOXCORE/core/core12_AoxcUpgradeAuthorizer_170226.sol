@@ -14,8 +14,8 @@ import {IMonitoringHub} from "@api/api29_IMonitoringHub_170226.sol";
 
 /**
  * @title AOXCUpgradeAuthorizer
- * @author AOXC Core Engineering
- * @notice Enterprise-grade multi-sig approval and rate-limiting mechanism for AOXC upgrades.
+ * @author AOXCMainEngine Core Engineering
+ * @notice Enterprise-grade multi-sig approval and rate-limiting mechanism for AOXCMainEngine upgrades.
  * @dev Fully compliant with 26-channel MonitoringHub forensic standards.
  */
 contract AOXCUpgradeAuthorizer is

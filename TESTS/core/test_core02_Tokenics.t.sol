@@ -2,18 +2,18 @@
 pragma solidity 0.8.33;
 
 import {Test} from "forge-std/Test.sol";
-import {AOXC} from "../../src/core/AOXC.sol";
-import {AOXCMonitoringHub} from "../../src/monitoring/MonitoringHub.sol";
+import {AOXCMainEngine} from "@core/core01_AoxcMainEngine_170226.sol";
+import {AOXCMonitoringHub} from "@data/data01_AoxcMonitoringHub_170226.sol";
 import {ERC1967Proxy} from "@openzeppelin/contracts/proxy/ERC1967/ERC1967Proxy.sol";
-import {IMonitoringHub} from "../../src/interfaces/IMonitoringHub.sol";
+import {IMonitoringHub} from "@api/api29_IMonitoringHub_170226.sol";
 
 /**
- * @title AOXC Ecosystem Integrated Security Test
- * @notice Validates the forensic handshake between AOXC Token and Monitoring Hub.
+ * @title AOXCMainEngine Ecosystem Integrated Security Test
+ * @notice Validates the forensic handshake between AOXCMainEngine Token and Monitoring Hub.
  * @dev Focuses on Role-Based Access Control (RBAC) and 26-channel logging integrity.
  */
 contract AOXCHubIntegrationTest is Test {
-    AOXC private token;
+    AOXCMainEngine private token;
     AOXCMonitoringHub private hub;
 
     // Identities
@@ -24,7 +24,7 @@ contract AOXCHubIntegrationTest is Test {
 
     /**
      * @notice System Orchestration: Deploys Hub and Token through UUPS Proxies.
-     * @dev Ensures that AOXC Token is granted the REPORTER_ROLE within the Hub.
+     * @dev Ensures that AOXCMainEngine Token is granted the REPORTER_ROLE within the Hub.
      */
     function setUp() public {
         vm.startPrank(admin);
@@ -35,12 +35,12 @@ contract AOXCHubIntegrationTest is Test {
         ERC1967Proxy hubProxy = new ERC1967Proxy(address(hubImpl), hubInit);
         hub = AOXCMonitoringHub(address(hubProxy));
 
-        // 2. Deploy AOXC Token via Proxy
-        AOXC tokenImpl = new AOXC();
+        // 2. Deploy AOXCMainEngine Token via Proxy
+        AOXCMainEngine tokenImpl = new AOXCMainEngine();
         bytes memory tokenInit = abi.encodeWithSelector(
-            AOXC.initialize.selector,
-            "AOXC Token",
-            "AOXC",
+            AOXCMainEngine.initialize.selector,
+            "AOXCMainEngine Token",
+            "AOXCMainEngine",
             admin,
             address(0), // Policy
             address(0), // Authorizer
@@ -48,11 +48,11 @@ contract AOXCHubIntegrationTest is Test {
             SUPPLY_CAP
         );
         ERC1967Proxy tokenProxy = new ERC1967Proxy(address(tokenImpl), tokenInit);
-        token = AOXC(address(tokenProxy));
+        token = AOXCMainEngine(address(tokenProxy));
 
         /**
          * @dev CRITICAL STEP: The Hub's logForensic is protected by REPORTER_ROLE.
-         * The AOXC token contract must be authorized to report its own forensic data.
+         * The AOXCMainEngine token contract must be authorized to report its own forensic data.
          */
         hub.grantRole(hub.REPORTER_ROLE(), address(token));
 
@@ -94,12 +94,12 @@ contract AOXCHubIntegrationTest is Test {
         token.mint(user, 1 ether);
 
         // Failure: Immediate second mint (Cooldown is 1s, severity is INFO < CRITICAL)
-        // Note: AOXC uses try-catch for logging, so the tx won't revert, but the log won't be saved.
+        // Note: AOXCMainEngine uses try-catch for logging, so the tx won't revert, but the log won't be saved.
         token.mint(user, 1 ether);
 
         uint256 countAfterSpam = hub.getRecordCount();
         // Record count shouldn't increase if the Hub's logForensic reverts due to cooldown
-        // (Assuming the try-catch in AOXC.sol is working as intended)
+        // (Assuming the try-catch in AOXCMainEngine.sol is working as intended)
         assertEq(countAfterSpam, 2, "Spam log should have been ignored by rate limiter");
 
         vm.stopPrank();

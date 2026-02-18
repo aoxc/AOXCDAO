@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-// Academic Grade - AOXC Ultimate Pro Standard
+// Academic Grade - AOXCMainEngine Ultimate Pro Standard
 pragma solidity 0.8.33;
 
 import {IAOXP} from "@interfaces/api18_IAoxp_170226.sol";
@@ -9,7 +9,7 @@ import {AOXCAccessCoordinator} from "../core/core10_AoxcAccessCoordinator_170226
 
 /**
  * @title AOXCInvariantChecker
- * @author AOXC Core Engineering
+ * @author AOXCMainEngine Core Engineering
  * @notice Enforces the mathematical "Red Lines" of the protocol.
  * @dev If an invariant is violated, it triggers the AccessCoordinator to pause the system.
  * Compliant with strict Forge linting rules and 2026 enterprise security standards.

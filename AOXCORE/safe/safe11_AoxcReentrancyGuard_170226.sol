@@ -6,9 +6,9 @@ import {AccessControl} from "@openzeppelin/contracts/access/AccessControl.sol";
 
 /**
  * @title AOXCReentrancyGuard
- * @author AOXC Core Engineering
+ * @author AOXCMainEngine Core Engineering
  * @notice Global singleton guard to prevent cross-contract reentrancy attacks.
- * @dev This contract acts as a central lock for the entire AOXC ecosystem.
+ * @dev This contract acts as a central lock for the entire AOXCMainEngine ecosystem.
  */
 contract AOXCReentrancyGuard is AccessControl {
     // Standard reentrancy constants
@@ -32,7 +32,7 @@ contract AOXCReentrancyGuard is AccessControl {
 
     /**
      * @notice Enters the global lock.
-     * @dev Should be called by AOXC contracts via a dedicated modifier.
+     * @dev Should be called by AOXCMainEngine contracts via a dedicated modifier.
      */
     function enter() external {
         // Optimization: Checking status before any state change

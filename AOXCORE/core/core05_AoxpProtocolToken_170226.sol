@@ -10,8 +10,8 @@ import {IMonitoringHub} from "@api/api29_IMonitoringHub_170226.sol";
 import {AOXCErrors} from "@libraries/core08_AoxcErrorDefinitions_170226.sol";
 
 /**
- * @title AOXP (AOXC Experience & Power)
- * @author AOXC Core Engineering
+ * @title AOXP (AOXCMainEngine Experience & Power)
+ * @author AOXCMainEngine Core Engineering
  * @notice Soulbound (SBT) reputation token for the Akdeniz V2 Ecosystem.
  * @dev High-security ERC1155 implementation for non-transferable governance power.
  * Fully compliant with OpenZeppelin 5.x UUPS patterns.
@@ -24,7 +24,7 @@ contract AOXP is Initializable, ERC1155Upgradeable, AccessControlUpgradeable, UU
 
     // --- Constants ---
     uint256 public constant AOXP_ID = 0;
-    string public constant NAME = "AOXC Experience Points";
+    string public constant NAME = "AOXCMainEngine Experience Points";
     string public constant SYMBOL = "AOXP";
 
     // --- Infrastructure ---

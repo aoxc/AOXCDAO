@@ -9,7 +9,7 @@ import {IMonitoringHub} from "@api/api29_IMonitoringHub_170226.sol";
 
 /**
  * @title AOXCComplianceEvents
- * @author AOXC Core Engineering
+ * @author AOXCMainEngine Core Engineering
  * @notice Event emitter and logging relay for compliance-related actions.
  * @dev Re-engineered for Akdeniz V2 Forensic Logging (26-channel) standard.
  */

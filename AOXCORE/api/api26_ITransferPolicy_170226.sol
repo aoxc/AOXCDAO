@@ -4,7 +4,7 @@ pragma solidity 0.8.33;
 /**
  * @title  ITransferPolicy
  * @notice Institutional-grade interface for ecosystem-wide transfer validation and compliance enforcement.
- * @dev    AOXC Ultimate Protocol: Vertical Alignment, High Technical Eloquence, and Audit-Ready NatSpec.
+ * @dev    AOXCMainEngine Ultimate Protocol: Vertical Alignment, High Technical Eloquence, and Audit-Ready NatSpec.
  */
 interface ITransferPolicy {
     // --- SECTION: EVENTS ---

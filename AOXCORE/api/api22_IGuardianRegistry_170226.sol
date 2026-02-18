@@ -4,7 +4,7 @@ pragma solidity 0.8.33;
 /**
  * @title  IGuardianRegistry
  * @notice Institutional interface for managing emergency responder authorizations.
- * @dev    AOXC Ultimate Protocol: Vertical Alignment & Technical Eloquence.
+ * @dev    AOXCMainEngine Ultimate Protocol: Vertical Alignment & Technical Eloquence.
  */
 interface IGuardianRegistry {
     // --- SECTION: EVENTS ---

@@ -2,7 +2,7 @@
 pragma solidity 0.8.33;
 
 import {Test, console} from "forge-std/Test.sol";
-import {ANDROMEDACORE} from "@core/ANDROMEDACORE.sol";
+import {ANDROMEDACORE} from "@core/core04_AndromedaCore_170226.sol";
 
 contract FleetIgnitionFullForensic is Test {
     ANDROMEDACORE public amiralGemisi;
@@ -26,7 +26,7 @@ contract FleetIgnitionFullForensic is Test {
 
     function test_FLEET_STRATEGIC_IGNITION() public {
         console.log("============================================================================");
-        console.log("              AOXC FLEET: 7-SHIP STRATEGIC IGNITION REPORT");
+        console.log("              AOXCMainEngine FLEET: 7-SHIP STRATEGIC IGNITION REPORT");
         console.log("============================================================================");
 
         // Eğer hasRole mock'u yetmezse, registerSector'u 'başarılı' simüle et:

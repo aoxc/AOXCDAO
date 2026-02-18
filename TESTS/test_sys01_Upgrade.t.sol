@@ -2,15 +2,15 @@
 pragma solidity 0.8.33;
 
 import {Test, console} from "forge-std/Test.sol";
-import {AOXC} from "../src/core/AOXC.sol";
-import {AOXCStorage} from "../src/core/core02_AoxcStorageLayout_170226.sol";
+import {AOXCMainEngine} from "@core/core01_AoxcMainEngine_170226.sol";
+import {AOXCStorage} from "@core/core02_AoxcStorageLayout_170226.sol";
 
 /**
  * @title AOXC_V2
- * @notice Logic implementation for Version 2 of the AOXC token.
+ * @notice Logic implementation for Version 2 of the AOXCMainEngine token.
  * @dev Stripped of non-essential modifiers for high-fidelity storage testing.
  */
-contract AOXC_V2 is AOXC {
+contract AOXC_V2 is AOXCMainEngine {
     uint256 public constant REVISION_NUMBER = 2;
 
     function updateSupplyCap(uint256 newCap) external {
@@ -28,7 +28,7 @@ contract UpgradeSystemIntegrationTest is Test {
     bytes32 internal constant IMPL_SLOT = 0x360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc;
 
     function setUp() public {
-        AOXC v1Impl = new AOXC();
+        AOXCMainEngine v1Impl = new AOXCMainEngine();
         vm.etch(PROXY_TOKEN, address(v1Impl).code);
         vm.label(PROXY_TOKEN, "AOXC_PROXY");
     }
@@ -62,7 +62,7 @@ contract UpgradeSystemIntegrationTest is Test {
 
         // PHASE 5: Audit Logs
         console.log("\n====================================================");
-        console.log(" AOXC V2 UPGRADE STATUS: VERIFIED");
+        console.log(" AOXCMainEngine V2 UPGRADE STATUS: VERIFIED");
         console.log(" Logic Revision:", rev);
         console.log("====================================================\n");
 

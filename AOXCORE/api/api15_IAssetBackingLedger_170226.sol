@@ -1,12 +1,12 @@
 // SPDX-License-Identifier: MIT
-// Academic Grade - AOXC Ultimate Pro Standard v2.0
+// Academic Grade - AOXCMainEngine Ultimate Pro Standard v2.0
 pragma solidity 0.8.33;
 
 import {IERC165} from "@openzeppelin/contracts/utils/introspection/IERC165.sol";
 
 /**
  * @title IAssetBackingLedger
- * @author AOXC Core Engineering
+ * @author AOXCMainEngine Core Engineering
  * @notice Interface for the protocol's collateral tracking and valuation system.
  * @dev High-precision accounting for multi-asset backing.
  */

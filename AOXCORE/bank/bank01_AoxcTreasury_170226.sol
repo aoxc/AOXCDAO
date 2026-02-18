@@ -17,7 +17,7 @@ import {AOXCErrors} from "@libraries/core08_AoxcErrorDefinitions_170226.sol";
 
 /**
  * @title Treasury
- * @author AOXC Core Engineering
+ * @author AOXCMainEngine Core Engineering
  * @notice Central ecosystem vault with Akdeniz V2 Forensic standard and cross-chain bridging.
  * @dev Fully compliant with OZ 5.x (No __UUPSUpgradeable_init) and standard ReentrancyGuard.
  */

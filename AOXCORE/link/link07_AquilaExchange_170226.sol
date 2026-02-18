@@ -135,7 +135,7 @@ contract AquilaExchange is AccessControl, ReentrancyGuard {
         // SafeTransferFrom balance kontrolünü otomatik yapar
         AQUILA_TOKEN.safeTransferFrom(msg.sender, address(this), _aquilaAmount);
 
-        // AOXC transferi
+        // AOXCMainEngine transferi
         AOXC_TOKEN.safeTransfer(msg.sender, _aquilaAmount);
 
         emit SwapToAoxc(msg.sender, _aquilaAmount, _aquilaAmount);

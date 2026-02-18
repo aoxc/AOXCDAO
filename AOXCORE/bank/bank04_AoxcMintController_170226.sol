@@ -8,14 +8,14 @@ import {UUPSUpgradeable} from "@openzeppelin-upgradeable/proxy/utils/UUPSUpgrade
 import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
-import {AOXCMainEngine} from "core/core01_AoxcMainEngine_170226.sol";
+import {AOXCMainEngine} from "@core/core01_AoxcMainEngine_170226.sol";
 import {AssetBackingLedger} from "./bank03_AssetBackingLedger_170226.sol";
 import {IMonitoringHub} from "@api/api29_IMonitoringHub_170226.sol";
 import {IReputationManager} from "@interfaces/api08_IReputationManager_170226.sol";
 
 /**
  * @title AOXCMintController
- * @author AOXC Protocol Team
+ * @author AOXCMainEngine Protocol Team
  * @notice Varlık dayanaklı token basımı ve itfası için merkezi hub.
  */
 contract AOXCMintController is
@@ -90,7 +90,7 @@ contract AOXCMintController is
         address tokenAddr = address(assetIdToToken[assetId]);
         if (tokenAddr == address(0)) revert AOXC__InvalidToken();
 
-        AOXC(tokenAddr).mint(to, amount);
+        AOXCMainEngine(tokenAddr).mint(to, amount);
 
         if (address(reputationManager) != address(0)) {
             try reputationManager.processAction(to, keccak256("MINT_ASSET")) {} catch {}
@@ -106,7 +106,7 @@ contract AOXCMintController is
         address tokenAddr = address(assetIdToToken[assetId]);
         if (tokenAddr == address(0)) revert AOXC__InvalidToken();
 
-        AOXC(tokenAddr).burn(msg.sender, amount);
+        AOXCMainEngine(tokenAddr).burn(msg.sender, amount);
         ledger.depositAsset(assetId, amount);
 
         emit TokensRedeemed(msg.sender, msg.sender, amount, assetId);

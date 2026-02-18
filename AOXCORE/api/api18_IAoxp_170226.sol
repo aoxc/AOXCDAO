@@ -1,12 +1,12 @@
 // SPDX-License-Identifier: MIT
-// Academic Grade - AOXC Ultimate Pro Standard v2.0
+// Academic Grade - AOXCMainEngine Ultimate Pro Standard v2.0
 pragma solidity 0.8.33;
 
 import {IERC165} from "@openzeppelin/contracts/utils/introspection/IERC165.sol";
 
 /**
  * @title IAOXP
- * @author AOXC Core Engineering
+ * @author AOXCMainEngine Core Engineering
  * @notice Interface for Soulbound Experience Points (XP) and Reputation Badges.
  * @dev Compliant with 2026 standards: Includes ERC-165 for interface detection
  * and explicit supply tracking for Invariant Checkers.

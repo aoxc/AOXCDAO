@@ -12,7 +12,7 @@ import {IReputationManager} from "@interfaces/api08_IReputationManager_170226.so
 
 /**
  * @title AOXCRelayerGateway
- * @author AOXC Core Engineering
+ * @author AOXCMainEngine Core Engineering
  * @notice Multi-signature gateway for relayers with Akdeniz V2 Forensic standard.
  * @dev Optimized with inline assembly hashing and wrapped modifier logic for lint compliance.
  */

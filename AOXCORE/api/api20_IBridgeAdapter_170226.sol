@@ -4,7 +4,7 @@ pragma solidity 0.8.33;
 /**
  * @title  IBridgeAdapter
  * @notice Institutional-grade interface for cross-chain liquidity synchronization and bridge orchestration.
- * @dev    AOXC Ultimate Protocol: Vertical Alignment, High Technical Eloquence, and Audit-Ready NatSpec.
+ * @dev    AOXCMainEngine Ultimate Protocol: Vertical Alignment, High Technical Eloquence, and Audit-Ready NatSpec.
  */
 interface IBridgeAdapter {
     // --- SECTION: EVENTS ---

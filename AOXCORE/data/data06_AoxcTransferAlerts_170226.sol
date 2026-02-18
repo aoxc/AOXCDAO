@@ -6,12 +6,12 @@ import {AccessControlUpgradeable} from "@openzeppelin-upgradeable/access/AccessC
 import {UUPSUpgradeable} from "@openzeppelin-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 
 import {IMonitoringHub} from "@api/api29_IMonitoringHub_170226.sol";
-import {AOXCBaseReporter} from "data/data08_AoxcBaseReporter_170226.sol";
+import {AOXCBaseReporter} from "@data/data08_AoxcBaseReporter_170226.sol";
 import {AOXCErrors} from "@libraries/core08_AoxcErrorDefinitions_170226.sol";
 
 /**
  * @title AOXCTransferAlerts
- * @author AOXC Core Engineering
+ * @author AOXCMainEngine Core Engineering
  * @notice Suspicious transfer activity monitor with 26-channel forensic telemetry.
  * @dev Optimized for UUPS Proxy pattern with internal reentrancy control and lint-compliant naming.
  */
@@ -62,7 +62,7 @@ contract AOXCTransferAlerts is Initializable, AccessControlUpgradeable, UUPSUpgr
     /**
      * @notice Initializes the Transfer Alerts module.
      * @param admin Initial administrator and monitor.
-     * @param _monitoringHub Address of the AOXC Monitoring Hub.
+     * @param _monitoringHub Address of the AOXCMainEngine Monitoring Hub.
      */
     function initialize(address admin, address _monitoringHub) external initializer {
         if (admin == address(0) || _monitoringHub == address(0)) {

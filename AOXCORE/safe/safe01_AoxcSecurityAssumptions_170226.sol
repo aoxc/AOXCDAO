@@ -2,7 +2,7 @@
 pragma solidity 0.8.33;
 
 import {AOXCErrors} from "@libraries/core08_AoxcErrorDefinitions_170226.sol";
-import {AOXCBaseReporter} from "data/data08_AoxcBaseReporter_170226.sol";
+import {AOXCBaseReporter} from "@data/data08_AoxcBaseReporter_170226.sol";
 import {IMonitoringHub} from "@api/api29_IMonitoringHub_170226.sol";
 import {OwnableUpgradeable} from "@openzeppelin-upgradeable/access/OwnableUpgradeable.sol";
 import {ContextUpgradeable} from "@openzeppelin-upgradeable/utils/ContextUpgradeable.sol";

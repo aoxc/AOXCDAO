@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 // Compatible with OpenZeppelin Contracts v5.5.0
-// Academic Grade - AOXC Ultimate Pro Standard
+// Academic Grade - AOXCMainEngine Ultimate Pro Standard
 pragma solidity 0.8.33;
 
 import {AccessManaged} from "@openzeppelin/contracts/access/manager/AccessManaged.sol";
@@ -9,7 +9,7 @@ import {Pausable} from "@openzeppelin/contracts/utils/Pausable.sol";
 
 /**
  * @title IVersion
- * @dev Standard interface for versioning across the AOXC ecosystem.
+ * @dev Standard interface for versioning across the AOXCMainEngine ecosystem.
  */
 interface IVersion {
     function getVersion() external view returns (string memory);
@@ -18,8 +18,8 @@ interface IVersion {
 
 /**
  * @title AOXCHub
- * @author AOXC Academic Team
- * @notice Central monitoring and management module for the AOXC DAO system.
+ * @author AOXCMainEngine Academic Team
+ * @notice Central monitoring and management module for the AOXCMainEngine DAO system.
  * @dev All operations are governed via AccessManager for enterprise-grade authorization.
  * Compliant with strict linting rules and optimized for Solidity 0.8.33.
  */

@@ -9,12 +9,12 @@ import {ITransferPolicy} from "@api/api26_ITransferPolicy_170226.sol";
 import {IComplianceRegistry} from "@interfaces/api09_IComplianceRegistry_170226.sol";
 import {IMonitoringHub} from "@api/api29_IMonitoringHub_170226.sol";
 import {IThreatSurface} from "@interfaces/api24_IThreatSurface_170226.sol";
-import {AOXCBaseReporter} from "data/data08_AoxcBaseReporter_170226.sol";
+import {AOXCBaseReporter} from "@data/data08_AoxcBaseReporter_170226.sol";
 import {AOXCErrors} from "@libraries/core08_AoxcErrorDefinitions_170226.sol";
 
 /**
  * @title AOXCTransferPolicyEngine
- * @author AOXC Core Engineering
+ * @author AOXCMainEngine Core Engineering
  * @notice Central engine for auditing and enforcing all transfer policies.
  * @dev Optimized with inline assembly for hashing and wrapped modifiers for lint compliance.
  */

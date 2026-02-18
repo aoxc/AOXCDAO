@@ -2,7 +2,7 @@
 pragma solidity 0.8.33;
 
 /**
- * @title AOXC Main Engine
+ * @title AOXCMainEngine
  * @dev Central governance token and logic engine for AOXCDAO
  * @notice Academic-grade UUPS upgradeable implementation with forensic monitoring.
  */
@@ -11,46 +11,44 @@ import {Initializable} from "@openzeppelin-upgradeable/proxy/utils/Initializable
 import {UUPSUpgradeable} from "@openzeppelin-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 import {AccessControlUpgradeable} from "@openzeppelin-upgradeable/access/AccessControlUpgradeable.sol";
 import {ERC20Upgradeable} from "@openzeppelin-upgradeable/token/ERC20/ERC20Upgradeable.sol";
-import {
-    ERC20PermitUpgradeable
-} from "@openzeppelin-upgradeable/token/ERC20/extensions/ERC20PermitUpgradeable.sol";
-import {
-    ERC20VotesUpgradeable
-} from "@openzeppelin-upgradeable/token/ERC20/extensions/ERC20VotesUpgradeable.sol";
+import {ERC20PermitUpgradeable} from "@openzeppelin-upgradeable/token/ERC20/extensions/ERC20PermitUpgradeable.sol";
+import {ERC20VotesUpgradeable} from "@openzeppelin-upgradeable/token/ERC20/extensions/ERC20VotesUpgradeable.sol";
 import {PausableUpgradeable} from "@openzeppelin-upgradeable/utils/PausableUpgradeable.sol";
 import {NoncesUpgradeable} from "@openzeppelin-upgradeable/utils/NoncesUpgradeable.sol";
 import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
-// TOML remapping (@api/ and @core/) ile tam uyumlu yollar
 import {ITransferPolicy} from "@api/api26_ITransferPolicy_170226.sol";
-import {AOXCStorage} from "@core/core02_AoxcStorageLayout_170226.sol"; // @ eklendi
+import {AOXCStorage} from "@core/core02_AoxcStorageLayout_170226.sol";
 import {IAOXCUpgradeAuthorizer} from "@api/api04_IAoxcUpgradeAuthorizer_170226.sol";
 import {IMonitoringHub} from "@api/api29_IMonitoringHub_170226.sol";
 
-contract AOXC is
-    Initializable,
-    ERC20Upgradeable,
-    ERC20PermitUpgradeable,
-    ERC20VotesUpgradeable,
-    AccessControlUpgradeable,
-    UUPSUpgradeable,
-    PausableUpgradeable,
-    ReentrancyGuard
+contract AOXCMainEngine is 
+    Initializable, 
+    ERC20Upgradeable, 
+    ERC20PermitUpgradeable, 
+    ERC20VotesUpgradeable, 
+    AccessControlUpgradeable, 
+    PausableUpgradeable, 
+    ReentrancyGuard, 
+    UUPSUpgradeable 
 {
-    bytes32 public constant ADMIN_ROLE = keccak256("AOXC_ADMIN_ROLE");
-    bytes32 public constant UPGRADER_ROLE = keccak256("AOXC_UPGRADER_ROLE");
-    bytes32 public constant MINT_ROLE = keccak256("AOXC_MINT_ROLE");
-    bytes32 public constant BURN_ROLE = keccak256("AOXC_BURN_ROLE");
+    // Roles
+    bytes32 public constant ADMIN_ROLE = keccak256("ADMIN_ROLE");
+    bytes32 public constant UPGRADER_ROLE = keccak256("UPGRADER_ROLE");
+    bytes32 public constant MINT_ROLE = keccak256("MINT_ROLE");
+    bytes32 public constant BURN_ROLE = keccak256("BURN_ROLE");
 
+    // State Variables (Mapping to Diamond Storage or Direct)
     IMonitoringHub public monitoringHub;
     uint256 public supplyCap;
 
-    error AOXC__PolicyViolation();
-    error AOXC__UpgradeNotAuthorized();
-    error AOXC__EmergencyHaltActive();
+    // Errors
     error AOXC__ZeroAddress();
-    error AOXC__SupplyCapExceeded(uint256 requested, uint256 cap);
     error AOXC__InvalidSupplyCap();
+    error AOXC__SupplyCapExceeded(uint256 amount, uint256 cap);
+    error AOXC__PolicyViolation();
+    error AOXC__EmergencyHaltActive();
+    error AOXC__UpgradeNotAuthorized();
 
     /// @custom:oz-upgrades-unsafe-allow constructor
     constructor() {
@@ -76,7 +74,7 @@ contract AOXC is
         __ERC20Votes_init();
         __AccessControl_init();
         __Pausable_init();
-        __UUPSUpgradeable_init(); // UUPS standardı için eklendi
+        // __UUPSUpgradeable_init(); // v5+ uyumluluğu için devre dışı
 
         _grantRole(DEFAULT_ADMIN_ROLE, admin);
         _grantRole(ADMIN_ROLE, admin);
@@ -149,7 +147,7 @@ contract AOXC is
         return uint48(block.number);
     }
 
-    function clockMode() public pure override returns (string memory) {
+    function clockMode() public pure returns (string memory) {
         return "mode=blocknumber&from=default";
     }
 

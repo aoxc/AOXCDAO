@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 // Compatible with OpenZeppelin Contracts v5.5.0
-// Academic Grade - AOXC Ultimate Pro Standard
+// Academic Grade - AOXCMainEngine Ultimate Pro Standard
 pragma solidity 0.8.33;
 
 import {AccessControlEnumerable} from "@openzeppelin/contracts/access/extensions/AccessControlEnumerable.sol";
@@ -11,8 +11,8 @@ import {IMonitoringHub} from "@api/api29_IMonitoringHub_170226.sol";
 
 /**
  * @title AOXCAccessCoordinator
- * @author AOXC Core Engineering
- * @notice The central nervous system of AOXC V2. Coordinates roles, forensic monitoring, and emergency states.
+ * @author AOXCMainEngine Core Engineering
+ * @notice The central nervous system of AOXCMainEngine V2. Coordinates roles, forensic monitoring, and emergency states.
  * @dev Acts as the definitive source of truth for permissions and protocol-wide circuit breaking.
  */
 contract AOXCAccessCoordinator is IAOXCAccessCoordinator, AccessControlEnumerable, Pausable {

@@ -7,7 +7,7 @@ import {AOXCErrors} from "@libraries/core08_AoxcErrorDefinitions_170226.sol";
 
 /**
  * @title AOXCBaseReporter
- * @author AOXC Core Engineering
+ * @author AOXCMainEngine Core Engineering
  * @notice Ultimate engine automating 26-channel forensic data collection.
  * @dev Optimized for Akdeniz V2 with assembly-level hashing to eliminate forge-lint [asm-keccak256].
  */

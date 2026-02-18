@@ -4,7 +4,7 @@ pragma solidity 0.8.33;
 /**
  * @title  IJurisdictionRegistry
  * @notice Institutional interface for regional legal compliance and cross-border regulatory telemetry.
- * @dev    AOXC Ultimate Protocol: Vertical Alignment, High Technical Eloquence, and Audit-Ready NatSpec.
+ * @dev    AOXCMainEngine Ultimate Protocol: Vertical Alignment, High Technical Eloquence, and Audit-Ready NatSpec.
  */
 interface IJurisdictionRegistry {
     // --- SECTION: EVENTS ---

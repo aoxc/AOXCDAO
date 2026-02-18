@@ -3,8 +3,8 @@ pragma solidity 0.8.33;
 
 /**
  * @title IMonitoringHub
- * @author AOXC Core Engineering
- * @notice Enterprise-grade hyper-forensic monitoring interface for AOXC Protocol.
+ * @author AOXCMainEngine Core Engineering
+ * @notice Enterprise-grade hyper-forensic monitoring interface for AOXCMainEngine Protocol.
  * @dev NatSpec standards strictly followed. Designed for UUPS/Proxy compatibility
  * and high-fidelity data throughput on X Layer.
  */
@@ -74,7 +74,7 @@ interface IMonitoringHub {
     );
 
     /**
-     * @notice Primary portal for all AOXC forensic entries.
+     * @notice Primary portal for all AOXCMainEngine forensic entries.
      * @param log The full 26-channel forensic data struct.
      */
     function logForensic(ForensicLog calldata log) external;

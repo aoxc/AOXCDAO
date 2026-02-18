@@ -31,7 +31,7 @@ import {IVotes} from "@openzeppelin/contracts/governance/utils/IVotes.sol";
 import {UUPSUpgradeable} from "@openzeppelin-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
-// --- 🔗 AOXC DAO Technical Interfaces ---
+// --- 🔗 AOXCMainEngine DAO Technical Interfaces ---
 import {IAOXCAndromedaCore} from "@interfaces/api01_IAoxcAndromedaCore_170226.sol";
 import {IReputationManager} from "@interfaces/api08_IReputationManager_170226.sol";
 
