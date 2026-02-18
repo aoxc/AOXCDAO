@@ -23,9 +23,7 @@
     "noImplicitOverride": true,
 
     /* --- ESM SPECIFICATION ENFORCEMENT --- */
-    // Allows explicit .ts extensions in imports for native ESM compatibility
     "allowImportingTsExtensions": true,
-    // Mandatory when extensions are allowed (prevents incomplete build output)
     "noEmit": true, 
     "isolatedModules": true,
     "resolveJsonModule": true,
@@ -41,20 +39,19 @@
     "sourceMap": true,
     "removeComments": false,
     
-    /* --- PATH MAPPING STRATEGY --- */
+    /* --- PATH MAPPING STRATEGY (Corrected for TYPES Authority) --- */
     "baseUrl": ".",
     "paths": {
       "@aoxc/*": ["./*"],
-      "@core/*": ["./types/core/*"],
-      "@security/*": ["./types/security/*"],
-      "@economics/*": ["./types/economics/*"],
-      "@infrastructure/*": ["./types/infrastructure/*"],
-      "@system/*": ["./types/system/*"]
+      "@types/*": ["./TYPES/*"],
+      "@scripts/*": ["./SCRIPTS/*"],
+      "@ao-core/*": ["./AOXCORE/*"]
     }
   },
   "include": [
-    "types/**/*.ts",
-    "scripts/**/*.ts"
+    "TYPES/**/*.ts",
+    "SCRIPTS/**/*.ts",
+    "AOXCORE/**/*.ts"
   ],
   "exclude": [
     "node_modules",

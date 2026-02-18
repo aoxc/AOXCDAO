@@ -1,29 +1,29 @@
+# AOXC SOVEREIGN FLEET - ECHIDNA SECURITY SUITE
+# Target: Invariant & Assertion-Based Fuzzing
+
 testMode: assertion
 testLimit: 500000
 codeSize: 0
 shrinkLimit: 5000
 coverage: true
 
+# The primary target for the Registry Motor
 contract: AOXC
 
-# Enable all public/external functions
+# CRYPTIC/ECHIDNA ENVIRONMENT
 allContracts: false
-
 sender: ["0x10000", "0x20000", "0x30000", "0x40000", "0x50000"]
 
-# Fuzzing parameters
-maxCallDepth: 20
+# FUZZING PARAMETERS (Optimized for 1B-Scale Logic)
+maxCallDepth: 25 # Increased for complex registry lookups
 balanceContract: 1000000000000000000000000
 balanceAddr: 1000000000000000000000000
 
-# Excluded functions (none for now)
-filterFunctions: []
-
-# Property prefix
+# PROPERTY INTEGRITY
 prefix: echidna_
-
-# Enable corpus saving
-corpusDir: echidna-corpus
-
-# Stop on first failure
+corpusDir: REPORTS/ACTIVE/echidna-corpus
 stopOnFail: true
+
+# COMPILER ALIGNMENT (Crucial for 0.8.33)
+# Ensures Echidna finds our TYPES and AOXCORE folders
+cryticArgs: ["--solc-remaps", "@types/=/home/orcun/AOXCDAO/TYPES/ @core/=/home/orcun/AOXCDAO/AOXCORE/"]

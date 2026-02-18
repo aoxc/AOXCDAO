@@ -4,16 +4,19 @@
     ".node_modules/",
     "lib/",
     "test/",
-    "scripts/",
+    "SCRIPTS/",
     "out/",
-    "cache/"
+    "cache/",
+    "dist/"
   ],
   "exclude_dependencies": true,
   "exclude_informational": false,
   "exclude_low": false,
   "solc_remaps": [
     "@openzeppelin/=node_modules/@openzeppelin/contracts/",
-    "@openzeppelin-upgradeable/=node_modules/@openzeppelin/contracts-upgradeable/"
+    "@openzeppelin-upgradeable/=node_modules/@openzeppelin/contracts-upgradeable/",
+    "@types/=/home/orcun/AOXCDAO/TYPES/",
+    "@core/=/home/orcun/AOXCDAO/AOXCORE/"
   ],
   "detectors_to_exclude": [
     "naming-convention",
@@ -21,10 +24,10 @@
     "solc-version",
     "low-level-calls"
   ],
-  "json": "reports/slither-report.json",
+  "json": "REPORTS/ACTIVE/slither-security-audit.json",
   "checklist": true,
   "triage_mode": true,
   "show_ignored": false,
   "fail_on_high": true,
-  "fail_on_medium": false
+  "fail_on_medium": true
 }

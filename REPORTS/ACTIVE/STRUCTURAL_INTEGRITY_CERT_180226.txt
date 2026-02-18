@@ -1,0 +1,1 @@
+error TS18003: No inputs were found in config file '/home/orcun/AOXCDAO/tsconfig.json'. Specified 'include' paths were '["types/**/*.ts","scripts/**/*.ts"]' and 'exclude' paths were '["node_modules","dist","out","**/*.test.ts"]'.

@@ -4,15 +4,15 @@ import tseslint from 'typescript-eslint';
 /**
  * @file eslint.config.mjs
  * @description Apex-Grade Static Analysis Configuration for the AOXC Type System.
- * This configuration enforces strict architectural discipline and type safety
- * across the 55-file Sovereign Fleet DNA layer.
+ * Aligned with the uppercase TYPES authority and strict academic standards.
  */
 
 export default tseslint.config(
   eslint.configs.recommended,
   ...tseslint.configs.recommended,
   {
-    files: ['types/**/*.ts'],
+    // ALIGNMENT: Pointing to the uppercase sovereign directory
+    files: ['TYPES/**/*.ts', 'AOXCORE/**/*.ts', 'SCRIPTS/**/*.ts'],
     languageOptions: {
       parserOptions: {
         project: './tsconfig.json',
@@ -20,13 +20,17 @@ export default tseslint.config(
       },
     },
     rules: {
-      // PROHIBITION OF AMBIGUITY: Ensures zero-tolerance for untyped variables
+      // PROHIBITION OF AMBIGUITY: Zero-tolerance for untyped variables
       "@typescript-eslint/no-explicit-any": "error",
       
-      // RESOURCE OPTIMIZATION: Identifies dormant variables while allowing underscore-prefixed parameters
-      "@typescript-eslint/no-unused-vars": ["warn", { "argsIgnorePattern": "^_" }],
+      // RESOURCE OPTIMIZATION: In our fleet, unused variables are considered logic leaks.
+      // Upgraded to "error" for CertiK-level cleanliness.
+      "@typescript-eslint/no-unused-vars": ["error", { 
+        "argsIgnorePattern": "^_",
+        "varsIgnorePattern": "^_" 
+      }],
       
-      // IMMUTABILITY ENFORCEMENT: Enforces persistent state logic across fleet directives
+      // IMMUTABILITY ENFORCEMENT: Enforces persistent state logic
       "prefer-const": "error",
       
       // HIERARCHICAL STANDARDIZATION: Mandatory 'I' prefix for Interface definitions
@@ -37,11 +41,22 @@ export default tseslint.config(
           "format": ["PascalCase"], 
           "prefix": ["I"] 
         }
-      ]
+      ],
+
+      // ACADEMIC DISCIPLINE: Enforce semicolons and single quotes for consistency
+      "semi": ["error", "always"],
+      "quotes": ["error", "single"]
     },
   },
   {
-    // ISOLATION BARRIERS: Prevents the analyzer from breaching build artifacts and external dependencies
-    ignores: ["node_modules/", "out/", "cache/"]
+    // ISOLATION BARRIERS: Enhanced to exclude all build and cache artifacts
+    ignores: [
+      "node_modules/", 
+      "out/", 
+      "cache/", 
+      "dist/", 
+      ".tsbuildinfo",
+      "REPORTS/"
+    ]
   }
 );
