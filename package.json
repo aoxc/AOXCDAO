@@ -37,8 +37,8 @@
     "release:patch": "yarn version patch"
   },
   "dependencies": {
-    "@openzeppelin/contracts": "5.2.0",
-    "@openzeppelin/contracts-upgradeable": "5.2.0",
+    "@openzeppelin/contracts": "5.4.0",
+    "@openzeppelin/contracts-upgradeable": "5.4.0",
     "@prisma/client": "^7.4.0",
     "dotenv": "^16.4.5"
   },
