@@ -87,3 +87,5 @@ Thumbs.db
 # 📜 AOXCDAO QUALITY GATE - COMMIT READY
 # STATUS: Strictly excluding PROTOCOL & .yarn source codes from origin.
 # ==============================================================================
+
+/generated/prisma

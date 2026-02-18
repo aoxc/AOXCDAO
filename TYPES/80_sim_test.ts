@@ -14,7 +14,7 @@ export class AoxcStressTest {
     private gov = AoxcGovernanceEngine.getInstance();
 
     public async execute(): Promise<boolean> {
-        console.log("!!! [STRESS] INITIATING DATA INJECTION !!!");
+        console.log('!!! [STRESS] INITIATING DATA INJECTION !!!');
 
         // 1. MASS CITIZEN GENERATION & REGISTRATION
         for (let i = 0; i < 100; i++) {
@@ -39,14 +39,14 @@ export class AoxcStressTest {
 
         // 2. GOVERNANCE STRESS
         const leader: ICivilianIdentity = {
-            uid: "LEADER-01",
-            dnaHash: "ALPHA-DNA",
+            uid: 'LEADER-01',
+            dnaHash: 'ALPHA-DNA',
             genClass: GeneticClass.ALPHA,
             reputation: 9999,
             lastSync: 0n
         };
 
-        const propId = this.gov.createProposal(leader, "EMERGENCY_FUNDS");
+        const propId = this.gov.createProposal(leader, 'EMERGENCY_FUNDS');
         this.gov.castVote(propId, leader, true);
         
         console.log(`[STRESS] Final Registry Status: ${this.registry.getRegistryStatus()}`);

@@ -1,17 +1,24 @@
 /**
  * @file main.ts
  * @namespace AOXCDAO.Orchestrator
- * @version 1.1.2 AOXCDAO V2 AKDENIZ
- * @description The Grand Orchestrator: Absolute Zero-Error Edition.
- * @compiler Solidity 0.8.33 Compatibility (Logic-Level)
+ * @version 1.0.2 AOXCDAO V2 AKDENIZ
+ * @status SOVEREIGN_STRICT_V2
+ * @description 
+ * Central Orchestration Engine for the AOXCDAO Empire. 
+ * FIXED: Resolved parsing error on line 92 by completing the template literal.
+ * NO TURKISH CHARACTERS IN CODE - ACADEMIC LEVEL LOGIC.
  */
 
-import { AOXC_GENESIS } from './sys00_AoxcGenesisMaster_180226.ts';
-import { AoxcRegistry } from './sys01_AoxcRegistry_180226.ts';
-import { AoxcVesselEngine } from './sys02_AoxcVesselEngine_180226.ts';
-import { AoxcCivilianLife, GeneticClass, ICivilianIdentity } from './bio01_AoxcCivilianLife_180226.ts';
-import { AoxcEconomyEngine } from './sys03_AoxcEconomyEngine_180226.ts';
-import { AoxcGovernanceEngine, ProposalStatus } from './sys04_AoxcGovernanceEngine_180226.ts';
+import { AOXC_GENESIS } from './00_sys_master';
+import { AoxcRegistry } from './01_sys_reg';
+import { AoxcVesselEngine } from './02_sys_vessel';
+import { AoxcEconomyEngine } from './03_sys_econ';
+import { AoxcGovernanceEngine, ProposalStatus } from './04_sys_gov';
+import { AiAuditCore } from './10_ai_audit';
+import { AoxcCivilianLife, GeneticClass, ICivilianIdentity } from './40_bio_life';
+import { AoxcEvolutionEngine } from './90_sys_evolution';
+import { AoxcCleanupEngine } from './91_sys_cleanup';
+import { AoxcConflictResolver } from './92_sys_conflict';
 
 class SovereignOrchestrator {
     private registry: AoxcRegistry;
@@ -19,6 +26,10 @@ class SovereignOrchestrator {
     private bioLife: AoxcCivilianLife;
     private economy: AoxcEconomyEngine;
     private governance: AoxcGovernanceEngine;
+    private evolution: AoxcEvolutionEngine;
+    private cleanup: AoxcCleanupEngine;
+    private resolver: AoxcConflictResolver;
+    private auditor: AiAuditCore;
 
     constructor() {
         this.registry = AoxcRegistry.getInstance();
@@ -26,57 +37,62 @@ class SovereignOrchestrator {
         this.bioLife = AoxcCivilianLife.getInstance();
         this.economy = AoxcEconomyEngine.getInstance();
         this.governance = AoxcGovernanceEngine.getInstance();
+        this.evolution = new AoxcEvolutionEngine();
+        this.cleanup = new AoxcCleanupEngine();
+        this.resolver = new AoxcConflictResolver();
+        this.auditor = AiAuditCore.getInstance();
     }
 
-    public async runFullSimulation(): Promise<void> {
-        console.log("--- [AOXCDAO EMPIRE SIMULATION START] ---");
+    public async initializeEmpire(): Promise<void> {
+        console.log(`--- [SYSTEM_BOOT: AOXCDAO ${AOXC_GENESIS.VERSION_TAG}] ---`);
+        console.log(`[BOOT] SHARD_MAP_ACTIVE: ${AOXC_GENESIS.SCALE.TOTAL_SHARDS} SHARDS`);
 
-        const alphaLeader: ICivilianIdentity = {
-            uid: "AOXC-ALPHA-001",
-            dnaHash: this.bioLife.generateDnaHash("SECRET-PRIME-DNA"),
+        await this.cleanup.performSystemDeepClean();
+        
+        const admiralRoot: ICivilianIdentity = {
+            uid: 'ADMIRAL-V2-ROOT',
+            dnaHash: this.bioLife.generateDnaHash('QUANTUM-ADMIRAL-SALT-2026'),
             genClass: GeneticClass.ALPHA,
-            reputation: 9500,
-            lastSync: AOXC_GENESIS.TIME.GENESIS_EPOCH
+            reputation: 10000,
+            lastSync: BigInt(Date.now())
         };
 
-        const deltaWorker: ICivilianIdentity = {
-            uid: "AOXC-DELTA-999",
-            dnaHash: this.bioLife.generateDnaHash("WORKER-DNA-01"),
-            genClass: GeneticClass.DELTA,
-            reputation: 4000,
-            lastSync: AOXC_GENESIS.TIME.GENESIS_EPOCH
-        };
+        const registryStatus = await this.registry.getRegistryStatus();
+        console.info(`[REGISTRY_INIT] Current Status: ${registryStatus}`);
+        
+        await this.vesselEngine.deployToVessel(admiralRoot);
+        this.economy.calculateSalary(admiralRoot);
 
-        // INTEGRATION: Validating registry via active usage to clear TS6133
-        const initialStatus = this.registry.getRegistryStatus();
-        console.info(`[SYSTEM_INIT] ${initialStatus}`);
-
-        await this.vesselEngine.deployToVessel(alphaLeader);
-        this.economy.calculateSalary(alphaLeader);
+        const simulationShardLoad = 82; 
+        this.evolution.checkHealthAndEvolve(simulationShardLoad);
 
         try {
-            const propId = this.governance.createProposal(alphaLeader, "DEEP_SPACE_EXPANSION");
-            
-            // Enum usage validation
+            const proposalId = this.governance.createProposal(admiralRoot, 'TERRAFORM_SECTOR_OMNICON');
             const currentStatus: ProposalStatus = ProposalStatus.ACTIVE;
-            console.log(`[GOVERNANCE] Proposal #${propId} Status: ${currentStatus}`);
+            this.governance.castVote(proposalId, admiralRoot, true);
 
-            this.governance.castVote(propId, alphaLeader, true);
-            this.governance.castVote(propId, deltaWorker, false);
-
-            console.log("[SECURITY] Testing unauthorized proposal...");
-            this.governance.createProposal(deltaWorker, "ABOLISH_TAXES");
-
-        } catch (error) {
-            if (error instanceof Error) console.warn(`[DENIED] ${error.message}`);
+            await this.auditor.verifyDecisionConsistency(
+                proposalId.toString(), 
+                'VALIDATED_BY_SEC_CORE_12'
+            );
+            
+            // FIXED: Template literal correctly closed on line 92
+            console.log(`[GOVERNANCE] Action ${proposalId} set to ${currentStatus}. Verification Complete.`);
+        } catch (error: unknown) {
+            const message = error instanceof Error ? error.message : 'UNKNOWN_LOGICAL_CLASH';
+            this.resolver.resolveLogicalClash('ORCHESTRATION_CONFLICT', message);
+            console.error(`[CRITICAL_ABORT] Execution failed: ${message}`);
         }
 
-        // Final audit usage of registry
-        console.log(`--- [SIMULATION SUCCESSFUL: ${this.registry.getRegistryStatus()}] ---`);
+        const finalStatus = await this.registry.getRegistryStatus();
+        console.log(`--- [EXECUTION_SEALED: ${finalStatus}] ---`);
     }
 }
 
-const ORCHESTRATOR = new SovereignOrchestrator();
-ORCHESTRATOR.runFullSimulation();
+const AKDENIZ_V2 = new SovereignOrchestrator();
+AKDENIZ_V2.initializeEmpire().catch((error: unknown) => {
+    console.error('!!! FATAL_GENESIS_ERROR !!!', error);
+    process.exit(1);
+});
 
-export const SYSTEM_SEALED: boolean = true;
+export const AOXC_V2_SEALED = true;

@@ -1,0 +1,79 @@
+// @file schema.prisma
+// @version 1.1.0 AOXCDAO V2 AKDENIZ
+// @description Database schema for 1B+ Population, fully compatible with 31-file architecture.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql" 
+  url      = env("DATABASE_URL")
+}
+
+// I. THE FLEET REGISTRY
+model Vessel {
+  id              Int      @id
+  name            String   @unique
+  contractAddress String   @unique
+  straitStatus    Int      @default(225) 
+  gates           Gate[]
+  // ADDED: Track energy/resource for 90_sys_evolution
+  currentLoad     Float    @default(0.0)
+  updatedAt       DateTime @updatedAt
+
+  @@map("fleet_vessels")
+}
+
+// II. THE 77-CHANNEL MATRIX
+model Gate {
+  id              String   @id 
+  vesselId        Int
+  gateType        Int      
+  integrityScore  Int      @default(100)
+  isSevered       Boolean  @default(false)
+  vessel          Vessel   @relation(fields: [vesselId], references: [id])
+  auditLogs       AuditLog[]
+
+  @@map("vessel_gates")
+}
+
+// III. 1B+ CITIZEN SHARDS
+model Citizen {
+  uid             BigInt   @id
+  shardId         Int      
+  rank            Int      @default(1)
+  reputation      BigInt   @default(0)
+  currentVesselId Int
+  currentGateId   String   // FIXED: Changed to String to match Gate.id format "VesselID:GateID"
+  isActive        Boolean  @default(true)
+  lastSeen        DateTime @default(now())
+
+  @@index([shardId, uid])
+  @@index([currentVesselId])
+  @@map("citizen_shards")
+}
+
+// IV. FORENSIC AUDIT LOGS
+model AuditLog {
+  id              BigInt   @id @default(autoincrement())
+  subjectUid      BigInt
+  targetGateId    String
+  actionStatus    Int      
+  timestamp       DateTime @default(now())
+  gate            Gate     @relation(fields: [targetGateId], references: [id])
+
+  @@map("forensic_audit_logs")
+}
+
+// V. ADDED: EVOLUTION & SYSTEM MAINTENANCE (For 90, 91, 92)
+// This table allows the EvolutionEngine to track shard health over time.
+model SystemHealth {
+  id              Int      @id @default(autoincrement())
+  shardId         Int      @unique
+  citizenCount    BigInt
+  loadFactor      Float
+  lastOptimized   DateTime @default(now()) // Used by 91_sys_cleanup
+
+  @@map("system_health_matrix")
+}

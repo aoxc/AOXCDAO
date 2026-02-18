@@ -3,46 +3,51 @@ pragma solidity 0.8.33;
 
 /**
  * @title IAOXCStorage
- * @author AOXCMainEngine Core Engineering
+ * @author AOXCDAO Institutional Engineering
  * @notice Akdeniz V2 Forensic Storage Interface.
- * @dev Defnes the data structure for namespaced storage.
+ * @dev Namespaced Storage (ERC-7201) structure for institutional data.
  */
 interface IAOXCStorage {
     /**
-     * @dev Akdeniz V2 Ana Depolama Yapısı.
-     * Upgradeable sistemlerde veri çakışmasını önlemek için bu struct kullanılır.
+     * @notice Structural layout for the main protocol storage.
+     * @param protocolFee Protocol transaction fee in BPS.
+     * @param lastForensicBlock Last security scan block number.
+     * @param reserveThreshold Minimum required reserve threshold.
+     * @param feeCollector Institutional address for fee collection.
+     * @param isEmergencyActive Global circuit breaker status.
      */
     struct MainStorage {
-        uint256 protocolFee; // Protokol komisyon oranı (BPS)
-        address feeCollector; // Komisyonların aktarıldığı adres
-        uint256 lastForensicBlock; // Son güvenlik taraması bloğu
-        bool isEmergencyActive; // Acil durum kilidi durumu
-        uint256 reserveThreshold; // Minimum rezerv eşiği
+        uint256 protocolFee;
+        uint256 lastForensicBlock;
+        uint256 reserveThreshold;
+        address feeCollector;
+        bool isEmergencyActive;
     }
 }
 
 /**
  * @title AOXCStorageLib
- * @notice "aoxc.v2.storage.main" üzerinden üretilen güvenli slot erişimcisi.
+ * @author AOXCDAO Institutional Engineering
+ * @notice Library for accessing Akdeniz V2 namespaced storage.
  */
 library AOXCStorageLib {
     /**
-     * @notice Akdeniz V2 Ana Depolama Yuvası (Slot)
-     * @dev cast keccak "aoxc.v2.storage.main" komutu ile doğrulanmıştır.
-     * Değer: 0xedbb9b1d1af287a7eef677d0c66220cce633d61fbed8f49ada54d6f8461e74bf
+     * @notice Storage slot seed for "aoxc.v2.storage.main".
+     * @dev Value: keccak256("aoxc.v2.storage.main")
      */
     bytes32 internal constant AKDENIZ_MAIN_STORAGE_SLOT =
         0xedbb9b1d1af287a7eef677d0c66220cce633d61fbed8f49ada54d6f8461e74bf;
 
     /**
-     * @notice Akdeniz V2 isimli depolama alanına pointer döner.
-     * @return $ Ana depolama referansı (MainStorage).
-     * @dev Bu fonksiyon assembly kullanarak veriyi 'AKDENIZ_MAIN_STORAGE_SLOT' adresinden okur.
+     * @notice Returns the storage pointer for the main protocol state.
+     * @dev Solhint 'no-inline-assembly' is disabled due to ERC-7201 requirements.
+     * @return store Reference to the MainStorage struct in storage.
      */
-    function akdenizStorage() internal pure returns (IAOXCStorage.MainStorage storage $) {
+    function akdenizStorage() internal pure returns (IAOXCStorage.MainStorage storage store) {
         bytes32 slot = AKDENIZ_MAIN_STORAGE_SLOT;
+        // solhint-disable-next-line no-inline-assembly
         assembly {
-            $.slot := slot
+            store.slot := slot
         }
     }
 }

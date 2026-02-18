@@ -48,6 +48,8 @@ interface IAOXCAndromedaCore {
 
     /**
      * @notice Structural manifest for an anchored hangar module.
+     * @dev ACADEMIC NOTE: Struct packing applied to minimize SSTORE costs.
+     * Variables are arranged by size to occupy minimal 32-byte slots.
      * @param moduleId Keccak256 hash identifier (e.g., keccak256("GOVERNANCE")).
      * @param hangarAddress Contract address of the functional module.
      * @param version Internal semantic versioning (Major.Minor.Patch).
@@ -55,11 +57,11 @@ interface IAOXCAndromedaCore {
      * @param isActive Operational availability status.
      */
     struct HangarManifest {
-        bytes32 moduleId;
-        address hangarAddress;
-        uint256 version;
-        bool isCompliant;
-        bool isActive;
+        bytes32 moduleId;      // Slot 1 (32 bytes)
+        address hangarAddress; // Slot 2 (20 bytes)
+        bool isCompliant;      // Slot 2 (1 byte)
+        bool isActive;         // Slot 2 (1 byte) - Toplam 22/32 bytes kullanıldı.
+        uint256 version;       // Slot 3 (32 bytes)
     }
 
     // --- 🔔 Events (Institutional Audit Trail) ---
@@ -70,20 +72,28 @@ interface IAOXCAndromedaCore {
      * @param hangarAddress The physical address of the hangar.
      * @param version The semantic version of the anchored module.
      */
-    event ModuleAnchored(bytes32 indexed moduleId, address indexed hangarAddress, uint256 version);
+    event ModuleAnchored(bytes32 indexed moduleId, address indexed hangarAddress, uint256 indexed version);
 
-    /// @notice Emitted when the protocol transitions between operational states.
+    /**
+     * @notice Emitted when the protocol transitions between operational states.
+     * @param previousState Önceki operasyonel durum (ACTIVE, PAUSE, UPGRADE).
+     * @param newState Yeni geçilen operasyonel durum.
+     */
     event ProtocolStateTransition(ProtocolState indexed previousState, ProtocolState indexed newState);
 
-    /// @notice Emitted when a hangar's compliance status is updated by the ComplianceRegistry.
-    event ComplianceStatusUpdated(bytes32 indexed moduleId, bool status);
+    /**
+     * @notice Emitted when a hangar's compliance status is updated by the ComplianceRegistry.
+     * @param moduleId Uyumluluk durumu güncellenen modülün ID'si.
+     * @param status Yeni uyumluluk durumu (true: onaylı, false: kısıtlı).
+     */
+    event ComplianceStatusUpdated(bytes32 indexed moduleId, bool indexed status);
 
     // --- 🛠️ Core View Functions ---
 
     /**
      * @notice Retrieves the full manifest record of a specific hangar.
      * @param moduleId The unique Keccak256 identifier of the hangar.
-     * @return HangarManifest The structured record of the requested module.
+     * @return The structured record of the requested module.
      */
     function getHangarManifest(bytes32 moduleId) external view returns (HangarManifest memory);
 
